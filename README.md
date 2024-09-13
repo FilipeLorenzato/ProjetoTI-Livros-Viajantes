@@ -1,6 +1,6 @@
-# [Nome do projeto]
+# [Livros Viajantes]
 
-[Escreva um ou dois  parágrafo resumindo o objetivo do seu projeto.]
+[Um site que proporcione troca de livros de maneira fácil e rápida]
 
 ## Alunos integrantes da equipe
 
