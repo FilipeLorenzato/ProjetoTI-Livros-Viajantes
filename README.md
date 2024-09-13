@@ -1,6 +1,6 @@
-# [Livros Viajantes]
+# Livros Viajantes
 
-[Um site que proporcione troca de livros de maneira fácil e rápida]
+Um site que proporcione troca de livros de maneira fácil e rápida.
 
 ## Alunos integrantes da equipe
 
