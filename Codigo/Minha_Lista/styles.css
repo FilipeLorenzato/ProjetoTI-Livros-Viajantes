@@ -1,0 +1,131 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fcdda4;
+}
+
+/* cabeçalho */
+header {
+    background-color: #EFE4B0;
+    color: #fcdda4;
+    padding: 5px;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;  
+}
+h1 {
+    margin: 0;
+    color: #000000;
+}
+
+img {
+    max-width: 50%;
+    display: inline-block;
+}
+
+header a img {
+    max-width: 12%;
+    text-align: left;
+    float: left;
+}
+
+/* TEXTO AO LADO DA IMAGEM - CARD */
+.book-details-content {
+    display: flex;
+    align-items: flex-start;
+}
+
+.book-details-info {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px; /* Ajuste a margem conforme necessário */
+}
+
+.book-details-info img {
+    max-width: 200px; /* Ajuste o tamanho da imagem conforme necessário */
+    width: 200px; /* Tamanho fixo para manter a proporção */
+    height: auto; /* Mantém a proporção da imagem */
+}
+
+.book-details-description p {
+    margin-bottom: 10px; /* Ajuste a margem conforme necessário */
+}
+
+/* card dos livros */
+#my-library {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 10px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* card dos livros */
+.book-card {
+    width: 200px;
+    margin: 10px;
+    text-align: center;
+    background-color: #fdedcb;
+    border-radius: 10px;
+    padding: 10px;
+    color: #030303;
+    position: static;
+    cursor: pointer;
+}
+
+.book-card img {
+    max-width: 100%;
+}
+
+.book-card h3 {
+    font-size: 1.2em;
+}
+
+.book-card p {
+    font-size: 0.9em;
+}
+
+#book-details {
+    display: none;
+    background-color: rgba(0, 0, 0, 0.7);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    align-items: center;
+    justify-content: center;
+}
+
+.book-details-content {
+    background-color: #fdedcb;
+    border-radius: 10px;
+    padding: 20px;
+    color: #070707;
+    max-width: 800px; /* Ajuste a largura máxima conforme necessário */
+    max-height: 90vh; /* Ajuste a altura máxima conforme necessário */
+    overflow-y: auto; /* Adiciona rolagem se o conteúdo exceder a altura máxima */
+}
+
+/* botão */
+#close-details {
+    background-color: #F5F5F5;
+    border: none;
+    color: black;
+    padding: 5px 10px; /* Ajuste o padding conforme necessário */
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: flex-end; /* Alinha o botão ao canto superior direito */
+}
+
+/* filtro */
+#genre-filter {
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+    color: #030303;
+}
