@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Troca de Livros</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo"><img src="img/LogoProjeto.jpeg" alt="LogoProjeto"></div>
+        <div class="search-bar">
+            <input type="text" placeholder="Busque aqui">
+            <button>🔍</button>
+        </div>
+        <div class="user-icon">👤</div>
+    </header>
+
+    <main>
+        <section class="exchange-history">
+            <div class="title-bar">
+                <h2>Troca de Livros</h2>
+                <button class="filter-btn">Filtros</button>
+            </div>
+            <ul class="book-list">
+                <!-- Os itens dos livros são adicionados dinamicamente via JavaScript -->
+            </ul>
+        </section>
+    </main>
+
+    <!-- Modal de Filtros -->
+    <div class="filter-modal" id="filterModal">
+        <div class="filter-content">
+            <span class="close-btn" id="closeFilter">&times;</span>
+            <h3>Filtrar Livros</h3>
+            <form id="filterForm">
+                <label for="category">Categoria:</label>
+                <select id="category" name="category">
+                    <option value="">Todas</option>
+                    <option value="Ficção">Ficção</option>
+                    <option value="Romance">Romance</option>
+                    <option value="Mistério">Mistério</option>
+                    <option value="Terror">Terror</option>
+                </select>
+
+                <label for="price">Faixa de Preço:</label>
+                <select id="price" name="price">
+                    <option value="">Qualquer</option>
+                    <option value="10-49.99">R$10,00 - R$49,99</option>
+                    <option value="50-99.99">R$50,00 - R$99,99</option>
+                    <option value="100-500">R$100,00 - R$500,00</option>
+                    <option value="501+">Acima de R$501,00</option>
+                </select>
+
+                <button type="submit">Aplicar Filtros</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
