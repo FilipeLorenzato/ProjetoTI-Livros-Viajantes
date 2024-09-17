@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Postagem de Livros</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-container">
+                <img src="images/LivrosViajantes.jfif" alt="Logo" class="logo">
+            </div>
+            <nav class="header-nav">
+                <a href="login.html" class="header-button">Login</a>
+                <a href="register.html" class="header-button">Register</a>
+                <a href="meus-livros.html" class="header-button">Meus Livros</a> <!-- Botão Meus Livros -->
+            </nav>
+        </div>
+        <div class="header-buttons">
+            <a href="cadastrar-livro.html" class="register-button">Registrar Novo Livro</a>
+        </div>
+    </header>
+    
+    <main>
+        <!-- Carrossel de livros de programação -->
+        <section id="carousel-container">
+            <h2>Livros de Programação</h2>
+            <div class="carousel" id="programming-carousel">
+                <button class="carousel-button prev" onclick="moveCarousel('programming', -1)">&#10094;</button>
+                <div id="programming-book-list" class="carousel-items">
+                    <!-- Exemplo de cartão de livro -->
+                </div>
+                <button class="carousel-button next" onclick="moveCarousel('programming', 1)">&#10095;</button>
+            </div>
+        </section>
+
+        <!-- Carrossel de livros de terror -->
+        <section id="carousel-container">
+            <h2>Livros de Terror</h2>
+            <div class="carousel" id="terror-carousel">
+                <button class="carousel-button prev" onclick="moveCarousel('terror', -1)">&#10094;</button>
+                <div id="terror-book-list" class="carousel-items">
+                    <!-- Exemplo de cartão de livro -->
+                </div>
+                <button class="carousel-button next" onclick="moveCarousel('terror', 1)">&#10095;</button>
+            </div>
+        </section>
+
+        <!-- Carrossel de livros de aventura -->
+        <section id="carousel-container">
+            <h2>Livros de Aventura</h2>
+            <div class="carousel" id="aventura-carousel">
+                <button class="carousel-button prev" onclick="moveCarousel('aventura', -1)">&#10094;</button>
+                <div id="aventura-book-list" class="carousel-items">
+                    <!-- Exemplo de cartão de livro -->
+                </div>
+                <button class="carousel-button next" onclick="moveCarousel('aventura', 1)">&#10095;</button>
+            </div>
+        </section>
+
+        <!-- Carrossel de livros de fantasia -->
+        <section id="carousel-container">
+            <h2>Livros de Fantasia</h2>
+            <div class="carousel" id="fantasia-carousel">
+                <button class="carousel-button prev" onclick="moveCarousel('fantasia', -1)">&#10094;</button>
+                <div id="fantasia-book-list" class="carousel-items">
+                    <!-- Exemplo de cartão de livro -->
+                </div>
+                <button class="carousel-button next" onclick="moveCarousel('fantasia', 1)">&#10095;</button>
+            </div>
+        </section>
+
+        <!-- Carrossel de livros de romance -->
+        <section id="carousel-container">
+            <h2>Livros de Romance</h2>
+            <div class="carousel" id="romance-carousel">
+                <button class="carousel-button prev" onclick="moveCarousel('romance', -1)">&#10094;</button>
+                <div id="romance-book-list" class="carousel-items">
+                    <!-- Exemplo de cartão de livro -->
+                </div>
+                <button class="carousel-button next" onclick="moveCarousel('romance', 1)">&#10095;</button>
+            </div>
+        </section>
+
+        <!-- Carrossel de livros de ficção -->
+        <section id="carousel-container">
+            <h2>Livros de Ficção</h2>
+            <div class="carousel" id="ficcao-carousel">
+                <button class="carousel-button prev" onclick="moveCarousel('ficcao', -1)">&#10094;</button>
+                <div id="ficcao-book-list" class="carousel-items">
+                    <!-- Exemplo de cartão de livro -->
+                </div>
+                <button class="carousel-button next" onclick="moveCarousel('ficcao', 1)">&#10095;</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Rodapé com informações de contato, links e redes sociais -->
+    <footer class="footer">
+        <div class="footer-content">
+            <!-- Informações de Contato -->
+            <p><strong>Contato:</strong></p>
+            <p>Email: contato@livrosviajantes.com</p>
+            <p>Telefone: (31) 3131-2800</p>
+            <p>Endereço: PUC Minas, Rua Cláudio Manoel, 1162</p>
+
+            <!-- Links importantes -->
+            <nav>
+                <a href="cadastrar-livro.html">Cadastrar Livro</a> |
+                <a href="login.html">Login</a> |
+                <a href="privacy-policy.html">Política de Privacidade</a> |
+                <a href="terms.html">Termos de Uso</a>
+            </nav>
+
+            <!-- Redes Sociais -->
+            <p>Siga-nos:</p>
+            <a href="https://facebook.com" target="_blank">Facebook</a> |
+            <a href="https://twitter.com" target="_blank">Twitter</a> |
+            <a href="https://instagram.com" target="_blank">Instagram</a>
+
+            <!-- Assinatura de Newsletter -->
+            <form action="subscribe-newsletter.html" method="post">
+                <label for="email">Assine nossa Newsletter:</label>
+                <input type="email" id="email" name="email" placeholder="Seu e-mail" required>
+                <button type="submit">Inscrever-se</button>
+            </form>
+
+            <!-- Copyright -->
+            <p>&copy; 2024 Livros Viajantes. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
