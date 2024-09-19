@@ -1,0 +1,189 @@
+/* Estilos globais */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fcdda4;
+}
+
+/* Cabeçalho */
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #EFE4B0;
+    padding: 10px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    align-items: center;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    max-height: 120px;
+    max-width: 200px;
+}
+
+/* Navegação */
+header nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+header nav li {
+    margin: 0 10px;
+}
+
+header nav button {
+    padding: 10px 15px;
+    background-color: #fcdda4;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+header nav button:hover {
+    background-color: #f5f5f5;
+}
+
+/* Título da página */
+h1 {
+    margin: 20px 0;
+    color: #000000;
+    text-align: center;
+    font-size: 36px;
+    letter-spacing: 2px;
+}
+
+/* Filtro de gêneros */
+#genre-filter {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+    color: #000000;
+    display: block;
+    margin: 20px auto;
+    font-size: 16px;
+}
+
+/* Cards de livros */
+#my-library {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    justify-items: center;
+}
+
+.book-card {
+    width: 200px;
+    margin: 10px;
+    text-align: center;
+    background-color: #fdedcb;
+    border-radius: 10px;
+    padding: 10px;
+    color: #030303;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.book-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.book-card h3 {
+    font-size: 1.2em;
+    margin-top: 10px;
+}
+
+.book-card p {
+    font-size: 0.9em;
+}
+
+/* Modal de detalhes do livro */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: #fdedcb;
+    border-radius: 10px;
+    padding: 20px;
+    color: #070707;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Detalhes do livro no modal */
+.book-details-content {
+    display: flex;
+    align-items: flex-start;
+}
+
+.book-details-info {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+}
+
+.book-details-info img {
+    width: 200px;
+    height: auto;
+    border-radius: 8px;
+}
+
+.book-details-description p {
+    margin-bottom: 10px;
+}
+
+/* Botão para fechar o modal */
+#close-details {
+    background-color: #F5F5F5;
+    border: none;
+    color: black;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: flex-end;
+}
+
+/* Tornar a página responsiva */
+@media screen and (max-width: 600px) {
+    #my-library {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+
+    .modal-content {
+        max-width: 90%;
+    }
+}

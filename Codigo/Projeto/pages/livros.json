@@ -1,0 +1,43 @@
+[
+    {
+      "titulo": "Harry Potter e a Pedra Filosofal",
+      "categoria": "Ficção",
+      "preco": "R$38.59",
+      "distancia": "1.2 km de distância",
+      "descricao": "Harry Potter, um menino órfão, descobre que é um bruxo no seu 11º aniversário e é convidado a estudar na Escola de Magia e Bruxaria de Hogwarts. Lá, ele descobre seu passado, faz novos amigos e enfrenta o perigoso Lord Voldemort.",
+      "avaliacao": 4,
+      "imagem": "https://m.media-amazon.com/images/I/81ibfYk4qmL._SY466_.jpg",
+      "dataTroca": "09-05-2019"
+    },
+    {
+      "titulo": "Fogo & Sangue – Volume 1",
+      "categoria": "Ficção",
+      "preco": "R$150.00",
+      "distancia": "7.5 km de distância",
+      "descricao": "A história se passa séculos antes dos eventos de A guerra dos tronos, A Casa Targaryen, única família de senhores dos dragões a sobreviver à destruição de Valíria. A história de Fogo e sangue começa com o lendário Aegon, o Conquistador, criador do Trono de Ferro, e segue narrando as gerações de Targaryen que lutaram para manter o assento, até a guerra civil que quase destruiu sua dinastia. O que realmente aconteceu durante a Dança dos Dragões? Por que era tão perigoso visitar Valíria depois da Destruição? Qual é a origem dos três ovos de dragão que chegaram a Daenerys? Essas são algumas das questões respondidas neste livro essencial, relatadas por um sábio meistre da Cidadela.",
+      "avaliacao": 5,
+      "imagem": "https://m.media-amazon.com/images/I/818yNY0mMZL._SY466_.jpg",
+      "dataTroca": "10-05-2023"
+    },
+    {
+      "titulo": "A empregada está de olho",
+      "categoria": "Mistério",
+      "preco": "R$89.90",
+      "distancia": "0.8 km de distância",
+      "descricao": "Acostumada a limpar a casa dos outros, Millie mal consegue acreditar que agora esta realmente pertence a ela. A cozinha charmosa, a tranquila rua sem saída, o quintal enorme. Ela e o marido, Enzo, economizaram por muitos anos para poder dar aos dois filhos a vida que eles merecem.",
+      "avaliacao": 3,
+      "imagem": "https://m.media-amazon.com/images/I/81kDnEqe-ZL._SY466_.jpg",
+      "dataTroca": "26-07-2024"
+    },
+    {
+      "titulo": "A culpa é das estrelas",
+      "categoria": "Romance",
+      "preco": "R$506.00",
+      "distancia": "1.2 km de distância",
+      "descricao": "Inspirador, corajoso, irreverente e brutal, A culpa é das estrelas é a obra mais ambiciosa e emocionante de John Green, sobre a alegria e a tragédia que é viver e amar.",
+      "avaliacao": 4,
+      "imagem": "https://m.media-amazon.com/images/I/51M9IbBqxCL._SY466_.jpg",
+      "dataTroca": "30-08-2021"
+    }
+  ]
+  

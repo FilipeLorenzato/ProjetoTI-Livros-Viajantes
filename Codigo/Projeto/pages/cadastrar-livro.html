@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Livro</title>
+    <link rel="stylesheet" href="../style/cadastrar-livros.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-container">
+                <img src="img/LivrosViajantes.jfif" alt="Logo" class="logo">
+            </div>
+            <nav class="header-nav">
+                <a href="login.html" class="header-button">Login</a>
+                <a href="postagem-livros.html" class="header-button">Postagem de Livros</a>
+            </nav>
+        </div>
+    </header>
+    
+    <main>
+        <h1>Cadastrar Novo Livro</h1>
+        <div class="form-container">
+            <form id="book-form">
+                <div class="form-group">
+                    <label for="book-name">Nome:</label>
+                    <input type="text" id="book-name" name="book-name" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="book-genre">Gênero:</label>
+                    <select id="book-genre" name="book-genre" required>
+                        <option value="terror">Terror</option>
+                        <option value="suspense">Suspense</option>
+                        <option value="ficcao">Ficção</option>
+                        <option value="fantasia">Fantasia</option>
+                        <option value="aventura">Aventura</option>
+                        <option value="romance">Romance</option>
+                        <option value="utopia">Utopia</option>
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="book-synopsis">Sinopse:</label>
+                    <textarea id="book-synopsis" name="book-synopsis" required></textarea>
+                </div>
+    
+                <div class="form-group">
+                    <label for="book-pages">Número de páginas:</label>
+                    <input type="number" id="book-pages" name="book-pages" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="book-author">Autor(a):</label>
+                    <input type="text" id="book-author" name="book-author" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="book-image-url">URL da Imagem do Livro:</label>
+                    <input type="url" id="book-image-url" name="book-image-url">
+                </div>
+    
+                <div class="form-group">
+                    <label for="book-image">Ou faça upload da Imagem do Livro:</label>
+                    <input type="file" id="book-image" name="book-image">
+                </div>
+    
+                <button type="submit" class="submit-button">Cadastrar Livro</button>
+            </form>
+        </div>
+    </main>
+    
+
+    <!-- Rodapé com informações de contato, links e redes sociais -->
+    <footer class="footer">
+        <div class="footer-content">
+            <!-- Informações de Contato -->
+            <p><strong>Contato:</strong></p>
+            <p>Email: contato@livrosviajantes.com</p>
+            <p>Telefone: (31) 3131-2800</p>
+            <p>Endereço: PUC Minas, Rua Cláudio Manoel, 1162</p>
+
+            <!-- Links importantes -->
+            <nav>
+                <a href="cadastrar-livro.html">Cadastrar Livro</a> |
+                <a href="login.html">Login</a> |
+                <a href="privacy-policy.html">Política de Privacidade</a> |
+                <a href="terms.html">Termos de Uso</a>
+            </nav>
+
+            <!-- Redes Sociais -->
+            <p>Siga-nos:</p>
+            <a href="https://facebook.com" target="_blank">Facebook</a> |
+            <a href="https://twitter.com" target="_blank">Twitter</a> |
+            <a href="https://instagram.com" target="_blank">Instagram</a>
+
+            <!-- Assinatura de Newsletter -->
+            <form action="subscribe-newsletter.html" method="post">
+                <label for="email">Assine nossa Newsletter:</label>
+                <input type="email" id="email" name="email" placeholder="Seu e-mail" required>
+                <button type="submit">Inscrever-se</button>
+            </form>
+
+            <!-- Copyright -->
+            <p>&copy; 2024 Livros Viajantes. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="../js/register-book.js"></script>
+</body>
+</html>

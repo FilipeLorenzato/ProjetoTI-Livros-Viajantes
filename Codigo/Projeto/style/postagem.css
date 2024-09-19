@@ -1,0 +1,306 @@
+/* Estilos para o corpo da página */
+body {
+    background-color: #fcdda4;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Cabeçalho */
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #EFE4B0;
+    padding: 10px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    align-items: center;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    max-height: 120px;
+    max-width: 200px;
+}
+
+
+.header-nav {
+    display: flex;
+}
+
+.header-button {
+    margin-left: 15px;
+    padding: 10px 20px;
+    background-color: #fcdda4;
+    color: #000;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.header-button:hover {
+    background-color: #f5f5f5;
+}
+
+/* Alinha o botão "Registrar Novo Livro" à direita */
+.header-buttons {
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 20px;
+}
+
+.register-button {
+    padding: 10px 20px;
+    background-color: #fcdda4;
+    color: #000;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.register-button:hover {
+    background-color: #f5f5f5;
+}
+
+/* Estilos do carrossel */
+#carousel-container {
+    margin: 20px auto;
+    max-width: 1200px;
+    overflow: hidden; /* Garante que nada saia dos limites do carrossel */
+}
+
+.carousel {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    scroll-behavior: smooth;
+}
+
+.carousel-items {
+    display: flex;
+    transition: transform 0.3s ease;
+    will-change: transform;
+    width: 100%; /* Garante que a largura seja bem definida */
+}
+
+/* Botões do carrossel */
+.carousel-button {
+    background-color: #fcdda4;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.carousel-button.prev {
+    left: 0;
+}
+
+.carousel-button.next {
+    right: 0;
+}
+
+.carousel-button:hover {
+    background-color: #f5f5f5;
+}
+
+/* Estilo para os cards do carrossel, chato de fazer, muito chato */
+.card {
+    background-color: #fdedcb;
+    border: 1px solid #EFE4B0;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
+    min-width: 200px;
+    max-width: 200px; /* Adiciona um limite máximo */
+    flex-shrink: 0; /* Garante que o card não diminua de tamanho */
+    text-align: center;
+    overflow: hidden;
+    opacity: 1; /* Garante que os cards estejam visíveis */
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* Transição suave para várias propriedades */
+}
+
+/* Efeito de hover nos cards */
+.card:hover {
+    background-color: #ffffff; /* Muda o fundo do card para branco */
+    transform: translateY(-5px); /* Pequeno efeito de elevação */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adiciona uma sombra bem de leve ao passar o mouse em cima */
+}
+
+.card a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.card img {
+    max-width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.card h3, .card p {
+    margin: 10px 0;
+    font-size: 14px;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Estilos para o rodapé */
+.footer {
+    background-color: #EFE4B0;
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid #ddd;
+    margin-top: 20px;
+}
+
+.footer p, .footer nav, .footer a, .footer form {
+    margin: 5px 0;
+    color: #333;
+    font-size: 14px;
+}
+
+.footer a {
+    text-decoration: none;
+    color: #333;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+.footer form input[type="email"] {
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.footer form button {
+    padding: 10px 20px;
+    background-color: #fcdda4;
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.footer form button:hover {
+    background-color: #f5f5f5;
+}
+
+/* Ajustes de responsividade para dispositivos menores que 768px */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .header-nav {
+        flex-direction: column;
+        margin-bottom: 10px;
+    }
+
+    .header-button {
+        margin: 5px 0;
+    }
+
+    .header-buttons {
+        justify-content: center;
+    }
+
+    .carousel-button {
+        display: block; /* Exibe as setas em resoluções menores */
+        padding: 8px; /* Tamanho reduzido para as setas */
+    }
+
+    .card {
+        width: 100%; /* Cards ocupam 100% da largura da tela */
+        min-width: auto;
+    }
+
+    #carousel-container {
+        width: 100%;
+    }
+
+    .footer {
+        text-align: left;
+        padding: 15px;
+    }
+
+    .footer-content p,
+    .footer-content a,
+    .footer-content form {
+        font-size: 12px;
+        margin: 8px 0;
+    }
+
+    .footer form input[type="email"] {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .footer form button {
+        width: 100%;
+    }
+
+    .card {
+        flex: 0 0 100%; /* Cards ocupam toda a largura disponível em resoluções menores */
+    }
+}
+
+/* Responsividade para dispositivos menores que 320px */
+@media (max-width: 320px) {
+    .header-button, .register-button {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+
+    .card {
+        width: 100%;
+        padding: 8px;
+        margin: 5px;
+    }
+
+    .card h3, .card p {
+        font-size: 14px;
+        margin: 5px 0;
+    }
+
+    .footer {
+        padding: 10px;
+    }
+
+    .footer p, .footer a, .footer form {
+        font-size: 10px;
+    }
+
+    .footer form input[type="email"] {
+        padding: 8px;
+    }
+
+    .footer form button {
+        padding: 8px;
+    }
+
+    /* Menor tamanho para as setas do carrossel em dispositivos muito pequenos */
+    .carousel-button {
+        padding: 6px;
+    }
+}

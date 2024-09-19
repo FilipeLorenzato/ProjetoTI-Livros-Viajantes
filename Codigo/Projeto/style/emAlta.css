@@ -1,0 +1,202 @@
+/* Estilos globais */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fcdda4;
+    color: #000000;
+    margin: 0;
+    padding: 0;
+}
+
+/* Cabeçalho */
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #EFE4B0;
+    padding: 10px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    align-items: center;
+}
+
+.header-nav {
+    display: flex;
+}
+
+.header-button {
+    margin-left: 15px;
+    padding: 10px 20px;
+    background-color: #fcdda4;
+    color: #000;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.header-button:hover {
+    background-color: #f5f5f5;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    max-height: 120px;
+    max-width: 200px;
+}
+
+/* Título da página */
+h1 {
+    margin: 20px 0;
+    color: #000000;
+    text-align: center;
+    font-size: 36px;
+    letter-spacing: 2px;
+}
+
+/* Estilos para o filtro de gênero */
+#genre-filter {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #F5F5F5;
+    color: #000000;
+    display: block;
+    margin: 0 auto 20px auto;
+    font-size: 16px;
+}
+
+/* Para o container de livros */
+.books-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    justify-items: center;
+}
+
+/* Para cada livro */
+.book {
+    margin: 10px;
+    text-align: center;
+    cursor: pointer;
+    max-width: 200px;
+}
+
+/* Imagem de cada livro */
+.book img {
+    border: 5px solid white;
+    box-sizing: border-box;
+    width: 200px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Para o título do livro */
+.book h3 {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #000000;
+    white-space: normal;
+}
+
+/* Botão para adicionar à lista */
+.add-to-list-btn {
+    margin-top: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #080808;
+    text-align: center;
+    padding: 8px;
+    background-color: #F5F5F5;
+    border: none;
+    border-radius: 4px;
+}
+
+/* Estilos para o modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Para o conteúdo do modal */
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fdedcb;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 90%;
+    max-height: 90%;
+    overflow: auto;
+}
+
+/* Para o título no modal */
+.book-details-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #080808;
+    text-align: center;
+}
+
+/* Para a imagem no modal */
+.modal-content img {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* Para o texto no modal */
+.book-details p {
+    margin: 5px 0;
+    color: #d9d9d9;
+}
+
+/* Para o botão de fechar no modal */
+.close-btn {
+    display: block;
+    margin-top: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #080808;
+    text-align: center;
+    padding: 10px;
+    background-color: #d9d9d9;
+    border: none;
+    border-radius: 4px;
+}
+
+/* Tornar a página responsiva */
+@media screen and (max-width: 600px) {
+    .books-container {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+
+    .modal-content {
+        max-width: 90%;
+    }
+}

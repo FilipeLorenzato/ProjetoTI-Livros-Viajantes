@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style/emAlta.css">
+    <title>Minha Lista de Livros</title>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-container">
+                <a href="#"><img src="img/logo.png" alt="Logo" class="logo"></a>
+            </div>
+            <nav class="header-nav">
+                <a href="login.html" class="header-button">Login</a>
+                <a href="CadastroUsuarios.html" class="header-button">Cadastrar</a>
+            </nav>
+        </div>
+    </header>
+
+    <h1>BESTSELLERS</h1>
+
+    <!-- Filtro de gêneros -->
+    <select id="genre-filter">
+        <option value="all">Todos</option>
+        <option value="fiction">Ficção</option>
+        <option value="non-fiction">Não-ficção</option>
+        <option value="romance">Romance</option>
+        <option value="fantasy">Fantasia</option>
+        <option value="mystery">Mistério</option>
+        <option value="biography">Biografia</option>
+    </select>
+
+    <section id="books-container" class="books-container">
+        <!-- A lista de livros será renderizada aqui via JavaScript -->
+    </section>
+
+    <section id="modal" class="modal">
+        <div id="modal-content" class="modal-content">
+            <!-- Conteúdo do modal será inserido via JavaScript -->
+        </div>
+    </section>
+
+    <script src="../js/emAlta.js"></script>
+</body>
+</html>
