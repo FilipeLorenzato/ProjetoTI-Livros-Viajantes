@@ -10,129 +10,141 @@
     <header class="header">
         <div class="header-content">
             <div class="logo-container">
-                <img src="img/LivrosViajantes.jfif" alt="Logo" class="logo">
+                <img src="img/LivrosViajantes.jfif" alt="Logo" class="logo"> <!-- Aqui exibo a logo do site -->
             </div>
             <nav class="header-nav">
                 <a href="login.html" class="header-button">Login</a>
                 <a href="CadastroUsuarios.html" class="header-button">Cadastrar</a>
                 <a href="meus-livros.html" class="header-button">Meus Livros</a> <!-- Botão Meus Livros -->
                 <a href="emAlta.html" class="header-button">Em Alta</a>
+            
             </nav>
+            <div class="search-container">
+                <!-- Aqui está o campo de busca e o botão "Buscar" -->
+                <input type="text" id="search-input" placeholder="Buscar livro...">
+                <button id="search-button">Buscar</button>
+            </div>
         </div>
         <div class="header-buttons">
+            <!-- Aqui coloco o botão para registrar um novo livro -->
             <a href="cadastrar-livro.html" class="register-button">Registrar Novo Livro</a>
         </div>
     </header>
     
     <main>
         <!-- Carrossel de livros de programação -->
+        <!-- Exibo livros de programação em um carrossel com botões para mover os livros para a esquerda e direita -->
         <section id="carousel-container">
             <h2>Livros de Programação</h2>
             <div class="carousel" id="programming-carousel">
                 <button class="carousel-button prev" onclick="moveCarousel('programming', -1)">&#10094;</button>
                 <div id="programming-book-list" class="carousel-items">
-                    <!-- Exemplo de cartão de livro -->
+                    <!-- Aqui são exibidos os livros de programação -->
                 </div>
                 <button class="carousel-button next" onclick="moveCarousel('programming', 1)">&#10095;</button>
             </div>
         </section>
 
         <!-- Carrossel de livros de terror -->
+        <!-- Mesma lógica do carrossel anterior, agora para livros de terror -->
         <section id="carousel-container">
             <h2>Livros de Terror</h2>
             <div class="carousel" id="terror-carousel">
                 <button class="carousel-button prev" onclick="moveCarousel('terror', -1)">&#10094;</button>
                 <div id="terror-book-list" class="carousel-items">
-                    <!-- Exemplo de cartão de livro -->
+                    <!-- Aqui são exibidos os livros de terror -->
                 </div>
                 <button class="carousel-button next" onclick="moveCarousel('terror', 1)">&#10095;</button>
             </div>
         </section>
 
         <!-- Carrossel de livros de aventura -->
+        <!-- Mesma lógica do carrossel anterior, agora para livros de aventura -->
         <section id="carousel-container">
             <h2>Livros de Aventura</h2>
             <div class="carousel" id="aventura-carousel">
                 <button class="carousel-button prev" onclick="moveCarousel('aventura', -1)">&#10094;</button>
                 <div id="aventura-book-list" class="carousel-items">
-                    <!-- Exemplo de cartão de livro -->
+                    <!-- Aqui são exibidos os livros de aventura -->
                 </div>
                 <button class="carousel-button next" onclick="moveCarousel('aventura', 1)">&#10095;</button>
             </div>
         </section>
 
         <!-- Carrossel de livros de fantasia -->
+        <!-- Mesma lógica do carrossel anterior, agora para livros de fantasia -->
         <section id="carousel-container">
             <h2>Livros de Fantasia</h2>
             <div class="carousel" id="fantasia-carousel">
                 <button class="carousel-button prev" onclick="moveCarousel('fantasia', -1)">&#10094;</button>
                 <div id="fantasia-book-list" class="carousel-items">
-                    <!-- Exemplo de cartão de livro -->
+                    <!-- Aqui são exibidos os livros de fantasia -->
                 </div>
                 <button class="carousel-button next" onclick="moveCarousel('fantasia', 1)">&#10095;</button>
             </div>
         </section>
 
         <!-- Carrossel de livros de romance -->
+        <!-- Mesma lógica do carrossel anterior, agora para livros de romance -->
         <section id="carousel-container">
             <h2>Livros de Romance</h2>
             <div class="carousel" id="romance-carousel">
                 <button class="carousel-button prev" onclick="moveCarousel('romance', -1)">&#10094;</button>
                 <div id="romance-book-list" class="carousel-items">
-                    <!-- Exemplo de cartão de livro -->
+                    <!-- Aqui são exibidos os livros de romance -->
                 </div>
                 <button class="carousel-button next" onclick="moveCarousel('romance', 1)">&#10095;</button>
             </div>
         </section>
 
         <!-- Carrossel de livros de ficção -->
+        <!-- Mesma lógica do carrossel anterior, agora para livros de ficção -->
         <section id="carousel-container">
             <h2>Livros de Ficção</h2>
             <div class="carousel" id="ficcao-carousel">
                 <button class="carousel-button prev" onclick="moveCarousel('ficcao', -1)">&#10094;</button>
                 <div id="ficcao-book-list" class="carousel-items">
-                    <!-- Exemplo de cartão de livro -->
+                    <!-- Aqui são exibidos os livros de ficção -->
                 </div>
                 <button class="carousel-button next" onclick="moveCarousel('ficcao', 1)">&#10095;</button>
             </div>
         </section>
     </main>
 
-    <!-- Rodapé com informações de contato, links e redes sociais -->
     <footer class="footer">
         <div class="footer-content">
-            <!-- Informações de Contato -->
+            <!-- Exibo informações de contato -->
             <p><strong>Contato:</strong></p>
             <p>Email: contato@livrosviajantes.com</p>
             <p>Telefone: (31) 3131-2800</p>
             <p>Endereço: PUC Minas, Rua Cláudio Manoel, 1162</p>
 
-            <!-- Links importantes -->
+            <!-- Exibo links importantes no rodapé -->
             <nav>
                 <a href="cadastrar-livro.html">Cadastrar Livro</a> |
-                <a href="login.html">Login</a> |
                 <a href="privacy-policy.html">Política de Privacidade</a> |
                 <a href="terms.html">Termos de Uso</a>
             </nav>
 
-            <!-- Redes Sociais -->
+            <!-- Exibo links das redes sociais -->
             <p>Siga-nos:</p>
             <a href="https://facebook.com" target="_blank">Facebook</a> |
             <a href="https://twitter.com" target="_blank">Twitter</a> |
             <a href="https://instagram.com" target="_blank">Instagram</a>
 
-            <!-- Assinatura de Newsletter -->
+            <!-- Formulário para assinar a newsletter -->
             <form action="subscribe-newsletter.html" method="post">
                 <label for="email">Assine nossa Newsletter:</label>
                 <input type="email" id="email" name="email" placeholder="Seu e-mail" required>
                 <button type="submit">Inscrever-se</button>
             </form>
 
-            <!-- Copyright -->
+            <!-- Exibo direitos autorais no rodapé -->
             <p>&copy; 2024 Livros Viajantes. Todos os direitos reservados.</p>
         </div>
     </footer>
 
+    <!-- Importo o script JavaScript para fazer o carrossel e outras funcionalidades funcionarem -->
     <script src="../js/postagem.js"></script>
 </body>
 </html>

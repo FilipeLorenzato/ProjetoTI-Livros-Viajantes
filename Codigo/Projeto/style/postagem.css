@@ -72,6 +72,31 @@ body {
     background-color: #f5f5f5;
 }
 
+/* Estilos para o campo de busca no cabeçalho */
+.search-container {
+    display: flex;
+    align-items: center;
+}
+
+.search-container input {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-right: 10px;
+}
+
+.search-container button {
+    padding: 8px 15px;
+    background-color: #fcdda4;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.search-container button:hover {
+    background-color: #f5f5f5;
+}
+
 /* Estilos do carrossel */
 #carousel-container {
     margin: 20px auto;
