@@ -7,9 +7,20 @@ document.addEventListener("DOMContentLoaded", function() {
     const bookTitle = document.getElementById("book-title");
     const bookDescription = document.getElementById("book-description");
     const genreFilter = document.getElementById("genre-filter");
+    const logoutBtn = document.getElementById("logout-btn");
 
     const favoriteBooks = [];
 
+    // Função para lidar com o logout
+    logoutBtn.addEventListener("click", function() {
+        // Exemplo simples: Limpar o localStorage ou sessionStorage
+        localStorage.clear(); 
+
+        // Redireciona o usuário para a página de login
+        window.location.href = "login.html";
+    });
+    
+    
     // Estrutura JSON com os dados dos livros
     const bookList = [
         {
