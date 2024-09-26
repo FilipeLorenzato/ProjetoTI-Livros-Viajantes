@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../style/emAlta.css">
-    <title>Minha Lista de Livros</title>
+    <title>BESTSELLERS</title>
 </head>
 <body>
     <header class="header">
         <div class="header-content">
             <div class="logo-container">
-                <a href="#"><img src="img/logo.png" alt="Logo" class="logo"></a>
+                <a href="postagem-livros.html"><img src="img/logo.png" alt="Logo" class="logo"></a>
             </div>
             <nav class="header-nav">
-                <a href="login.html" class="header-button">Login</a>
-                <a href="CadastroUsuarios.html" class="header-button">Cadastrar</a>
+                <a href="meus-livros.html" class="header-button">Meus Livros</a>
+                <a href="postagem-livros.html" class="header-button">Postagem de Livros</a>
+                <a href="cadastrar-livro.html" class="header-button">Cadastrar Livro</a>
+                <a href="historico.html" class="header-button">Histórico de Troca</a>
+           
             </nav>
         </div>
     </header>
@@ -36,11 +39,45 @@
         <!-- A lista de livros será renderizada aqui via JavaScript -->
     </section>
 
-    <section id="modal" class="modal">
+    <section id="modal" class="modal" style="display: none;"> <!-- Modal inicialmente oculto -->
         <div id="modal-content" class="modal-content">
-            <!-- Conteúdo do modal será inserido via JavaScript -->
+            <h2 class="book-details-title">Título do Livro</h2>
+            <img src="url-da-imagem.jpg" alt="Título do Livro">
+            <p><strong>Autor:</strong> Autor do Livro</p>
+            <p><strong>Sinopse:</strong> Sinopse do Livro</p>
+            <button class="close-btn">Fechar</button>
+            <a href="historico.html" class="trade-btn">Quero Trocar</a> <!-- Botão Quero Trocar com href -->
         </div>
     </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p><strong>Contato:</strong></p>
+            <p>Email: contato@trocalivros.com</p>
+            <p>Telefone: (31) 3131-2800</p>
+            <p>Endereço: PUC Minas, Rua Cláudio Manoel, 1162</p>
+
+            <nav>
+                <a href="cadastrar-livro.html">Cadastrar Livro</a> |
+                <a href="login.html">Login</a> |
+                <a href="privacy-policy.html">Política de Privacidade</a> |
+                <a href="terms.html">Termos de Uso</a>
+            </nav>
+
+            <p>Siga-nos:</p>
+            <a href="https://facebook.com" target="_blank">Facebook</a> |
+            <a href="https://twitter.com" target="_blank">Twitter</a> |
+            <a href="https://instagram.com" target="_blank">Instagram</a>
+
+            <form action="subscribe-newsletter.html" method="post">
+                <label for="email">Assine nossa Newsletter:</label>
+                <input type="email" id="email" name="email" placeholder="Seu e-mail" required>
+                <button type="submit">Inscrever-se</button>
+            </form>
+
+            <p>&copy; 2024 Troca de Livros. Todos os direitos reservados.</p>
+        </div>
+    </footer>
 
     <script src="../js/emAlta.js"></script>
 </body>
