@@ -1,4 +1,4 @@
-/* Estilos globais */
+/* Estilos globais */ 
 body {
     font-family: Arial, sans-serif;
     background-color: #fcdda4;
@@ -6,14 +6,19 @@ body {
     margin: 0;
     padding: 0;
 }
-
-/* Cabeçalho */
-.header {
+header {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    background-color: #EFE4B0;
-    padding: 10px;
+    padding: 10px 20px;
+    background-color: #EFE4B0;/* Cor de fundo mais clara */
+}
+
+header img {
+    width: 100px;
+    height: auto;
+    margin-right: 15px;
+    border-radius: 5px;
 }
 
 .header-content {
@@ -23,6 +28,18 @@ body {
     max-width: 1200px;
     align-items: center;
 }
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    max-height: 120px;
+    max-width: 200px;
+}
+
 
 .header-nav {
     display: flex;
@@ -41,16 +58,6 @@ body {
     background-color: #f5f5f5;
 }
 
-.logo-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.logo {
-    max-height: 120px;
-    max-width: 200px;
-}
 
 /* Título da página */
 h1 {
@@ -88,6 +95,8 @@ h1 {
     text-align: center;
     cursor: pointer;
     max-width: 200px;
+    display: inline-block; /* Permite que quebre linhas */
+    word-wrap: break-word; /* Quebra palavras longas */
 }
 
 /* Imagem de cada livro */
@@ -106,8 +115,13 @@ h1 {
 .book h3 {
     margin-top: 10px;
     font-size: 16px;
-    color: #000000;
-    white-space: normal;
+    color: #000000; 
+    font-weight: bold;
+    white-space: nowrap; /* Não permite quebras de linha */
+    overflow: hidden; /* Esconde o excesso de texto */
+    text-overflow: ellipsis; /* Adiciona '...' se o texto for muito longo */
+    max-width: 100%; /* Limita a largura do título ao tamanho do contêiner */
+    display: block; /* Garante que o elemento se comporte como bloco */
 }
 
 /* Botão para adicionar à lista */
@@ -158,7 +172,6 @@ h1 {
     font-weight: bold;
     margin-bottom: 10px;
     color: #080808;
-    text-align: center;
 }
 
 /* Para a imagem no modal */
@@ -177,7 +190,8 @@ h1 {
 }
 
 /* Para o botão de fechar no modal */
-.close-btn {
+.close-btn,
+.trade-btn {
     display: block;
     margin-top: 10px;
     cursor: pointer;
@@ -189,14 +203,47 @@ h1 {
     border: none;
     border-radius: 4px;
 }
+/* Para o botão "Quero Trocar" */
+.trade-btn {
+    display: block;
+    margin-top: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #080808;
+    text-align: center;
+    padding: 10px;
+    background-color: #d9d9d9;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none; /* Remover sublinhado */
+}
 
-/* Tornar a página responsiva */
-@media screen and (max-width: 600px) {
-    .books-container {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    }
 
-    .modal-content {
-        max-width: 90%;
+/* Rodapé */
+.footer {
+    background-color: #EFE4B0;
+    padding: 10px;
+    text-align: center;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+.footer-content a {
+    color: #000;
+    text-decoration: none;
+}
+
+.footer-content a:hover {
+    text-decoration: underline;
+}
+/* Responsividade */
+@media (max-width: 768px) {
+    .book-item {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }
