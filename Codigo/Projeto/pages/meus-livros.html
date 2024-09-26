@@ -11,16 +11,16 @@
     <header class="header">
         <div class="header-content">
             <div class="logo-container">
-                <a href="#"><img src="img/logo.png" alt="logo" class="logo"></a>
+                <a href="postagem-livros.html"><img src="img/logo.png" alt="logo" class="logo"></a>
             </div>
             <!-- Botões de navegação -->
             <nav>
-                <ul>
-                    <li><a href="emAlta.html"><button>Em Alta</button></a></li>
-                    <li><a href="historico.html"><button>Histórico de Troca</button></a></li>
-                    <li><a href="cadastrar-livro.html"><button>Cadastrar Livro</button></a></li>
-                    <button id="logout-btn">Sair</button>
-                </ul>
+                    <a href="emAlta.html"><button>Em Alta</button></a>
+                    <a href="historico.html"><button>Histórico de Troca</button></a>
+                    <a href="cadastrar-livro.html"><button>Cadastrar Livro</button></a>
+                    <a href="postagem-livros.html" class="header-button">Postagem de Livros</a>
+                    
+                   
             </nav>
         </div>
     </header>
@@ -55,6 +55,38 @@
             </div>
         </div>
     </section>     
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p><strong>Contato:</strong></p>
+            <p>Email: contato@trocalivros.com</p>
+            <p>Telefone: (31) 3131-2800</p>
+            <p>Endereço: PUC Minas, Rua Cláudio Manoel, 1162</p>
+
+            <nav>
+                <a href="cadastrar-livro.html">Cadastrar Livro</a> |
+                <a href="login.html">Login</a> |
+                <a href="privacy-policy.html">Política de Privacidade</a> |
+                <a href="terms.html">Termos de Uso</a>
+            </nav>
+
+            <p>Siga-nos:</p>
+            <a href="https://facebook.com" target="_blank">Facebook</a> |
+            <a href="https://twitter.com" target="_blank">Twitter</a> |
+            <a href="https://instagram.com" target="_blank">Instagram</a>
+
+            <form action="subscribe-newsletter.html" method="post">
+                <label for="email">Assine nossa Newsletter:</label>
+                <input type="email" id="email" name="email" placeholder="Seu e-mail" required>
+                <button type="submit">Inscrever-se</button>
+            </form>
+
+            <p>&copy; 2024 Troca de Livros. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+
+
     <script src="../js/script.js"></script>
 </body>
 </html>
