@@ -15,7 +15,7 @@ function logarUsuario(event) {
     }
 
     // Verifica os dados no backend
-    fetch('http://localhost:3001/usuarios', {
+    fetch('http://localhost:8000/pages/login.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -38,6 +38,8 @@ function logarUsuario(event) {
             console.error('Erro ao fazer login:', error);
             alert('Ocorreu um erro ao fazer login. Tente novamente.');
         });
+    console.log('Dados enviados:', { email, senha });
+
 }
 
 

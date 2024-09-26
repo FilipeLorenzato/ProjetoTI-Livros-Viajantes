@@ -1,31 +1,28 @@
 cff-version: 1.0.1
 message: Please cite this software using these metadata.
-title: 
+title: Proporcionar uma troca de livros de maneira fácil e rápida.
 authors:
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names:
+  - family-names: Lorenzato Cardoso Rodrigues
+    given-names: Filipe
+  - family-names: Franco Xavier
+    given-names: Gabryelle
+  - family-names: Saad Furtunato Fialho
+    given-names: Iuri
+  - family-names: Oliveira Andrade de Vasconcelos
+    given-names: Rodrigo
   - name-suffix: Professor
     affiliation: PUC Minas
-    family-names: 
-    given-names: 
+    family-names: Soares Vieira de Vasconcelos
+    given-names: Amália
   - name-suffix: Professor
     affiliation: PUC Minas
-    family-names: 
-    given-names: 
+    family-names: do Val Machado
+    given-names: Max
 keywords:
-  - 
-  - 
-repository-code: 
+  - Troca de livros
+  - Livros
+  - Leitura
+repository-code: https://github.com/ICEI-PUC-Minas-CC-TI/plmg-cc-ti2-2024-2-g05-livrosviajantes
 license: CC-BY-4.0
 version: 1.0.0
-date-released: 2022-07-14
+date-released: 2024-09-20

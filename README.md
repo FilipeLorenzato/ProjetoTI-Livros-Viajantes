@@ -4,16 +4,16 @@ Um site que proporcione troca de livros de maneira fácil e rápida.
 
 ## Alunos integrantes da equipe
 
-* [Nome completo do aluno 1]
-* [Nome completo do aluno 2]
-* [Nome completo do aluno 3]
-* [Nome completo do aluno 4]
+* Filipe Lorenzato Cardoso Rodrigues.
+* Gabryelle Franco Xavier.
+* Iuri Saad Furtunato Fialho.
+* Rodrigo Oliveira Andrade de Vasconcelos.
 
 ## Professores responsáveis
 
-* [Nome completo do professor 1]
-* [Nome completo do professor 2]
+* Amália Soares Vieira de Vasconcelos.
+* Max do Val Machado.
 
 ## Instruções de utilização
 
-[Assim que a primeira versão do sistema estiver disponível, deverá complementar com as instruções de utilização. Descreva como instalar eventuais dependências e como executar a aplicação.]
+Assim que a primeira versão do sistema estiver disponível, deverá complementar com as instruções de utilização. Descreva como instalar eventuais dependências e como executar a aplicação.

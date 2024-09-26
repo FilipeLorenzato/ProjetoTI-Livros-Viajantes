@@ -51,7 +51,7 @@ function cadastrarUsuario(event) {
     };
 
     // Enviando os dados para o servidor
-    fetch('http://localhost:3001/usuarios', {
+    fetch('http://localhost:8000/pages/cadastrarusuario.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
