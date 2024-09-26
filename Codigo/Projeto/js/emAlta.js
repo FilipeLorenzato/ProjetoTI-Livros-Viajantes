@@ -29,15 +29,19 @@ async function searchBooksNYT() {
             const description = book.description || 'Sinopse não disponível';
             const authors = book.author || 'Autor desconhecido';
 
-            // Quebrar o título em múltiplas linhas se necessário
-            const formattedTitle = title.split(' ').join('<br>'); // Simples quebra por espaço, pode ajustar conforme necessário
+            // Limitar o comprimento do título e remover quebras de linha
+            const maxLength = 50; // Número máximo de caracteres
+            const formattedTitle = title.length > maxLength ? title.slice(0, maxLength) + '...' : title;
+
+            // Remove quebras de linha e espaços em branco
+            const cleanedTitle = formattedTitle.replace(/\s+/g, ' ').trim();
 
             // Adiciona um espaço reservado para a imagem do livro
             const imageUrl = await getResizedImage(thumbnail);
 
             bookElement.innerHTML = `
                 <img src="${imageUrl}" alt="${title}">
-                <h3>${formattedTitle}</h3>
+                <h3>${cleanedTitle}</h3>
                 <button class="add-to-list-btn">Adicionar à Lista</button>
             `;
 
@@ -93,12 +97,19 @@ function openModal(title, description, imageUrl, authors) {
         <p><strong>Autor:</strong> ${authors}</p>
         <p><strong>Sinopse:</strong> ${description}</p>
         <button class="close-btn">Fechar</button>
+        <a href="#" class="trade-btn" id="trade-btn">Quero Trocar</a> <!-- Adicionado id ao link -->
     `;
     modal.style.display = 'block';
 
     // Evento para fechar o modal
     modal.querySelector('.close-btn').addEventListener('click', () => {
         modal.style.display = 'none';
+    });
+
+    // Adiciona um evento ao botão "Quero Trocar"
+    document.getElementById('trade-btn').addEventListener('click', (event) => {
+        event.preventDefault(); // Previne o comportamento padrão do link
+        window.location.href = "historico.html"; // Redireciona para a página desejada
     });
 }
 
