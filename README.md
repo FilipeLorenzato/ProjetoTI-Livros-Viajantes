@@ -1,6 +1,6 @@
 # Livros Viajantes
 
-Um site que proporcione troca de livros de maneira fácil e rápida.
+ Uma plataforma de troca de livros, onde os usuários podem cadastrar livros que não utilizam mais e trocá-los com outros membros da comunidade. A proposta incentiva o compartilhamento de conhecimento e promove o acesso a novos livros sem a necessidade de compra.
 
 ## Alunos integrantes da equipe
 
