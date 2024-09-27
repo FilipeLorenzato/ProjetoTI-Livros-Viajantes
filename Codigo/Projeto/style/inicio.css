@@ -45,6 +45,7 @@ nav a {
     color: black;
     text-align: center;
     padding: 100px 20px;
+    margin-bottom: 0; 
 }
 
 #banner h1 {
@@ -54,11 +55,13 @@ nav a {
 
 #banner p {
     font-size: 20px;
+    margin-bottom: 0;
 }
 
 .container {
     padding: 20px;
     text-align: center;
+    margin-top: -40px;
 }
 
 .books {
