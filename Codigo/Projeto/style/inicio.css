@@ -1,0 +1,99 @@
+/* Estilos básicos para a página */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fcdda4;
+}
+
+header {
+    background-color: #EFE4B0;
+    color: #000000;
+    padding: 20px;
+    text-align: center;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    max-height: 120px;
+    max-width: 200px;
+}
+
+nav {
+    margin: 0;
+    padding: 10px;
+    background-color: #f2bb68;
+    text-align: center;
+}
+
+nav a {
+    color: black;
+    margin: 0 15px;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+#banner {
+    background: url('banner.jpg') no-repeat center center/cover;
+    height: 300px;
+    color: black;
+    text-align: center;
+    padding: 100px 20px;
+}
+
+#banner h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+#banner p {
+    font-size: 20px;
+}
+
+.container {
+    padding: 20px;
+    text-align: center;
+}
+
+.books {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.book {
+    background-color: white;
+    padding: 15px;
+    margin: 10px;
+    border: 1px solid #ccc;
+    width: 200px;
+    text-align: center;
+}
+
+.book img {
+    max-width: 100%;
+    height: auto;
+}
+
+.cta {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+footer {
+    background-color: #f2bb68;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 20px;
+}
