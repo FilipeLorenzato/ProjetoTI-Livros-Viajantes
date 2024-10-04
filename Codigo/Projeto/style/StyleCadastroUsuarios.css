@@ -1,219 +1,268 @@
-/* Estilos Globais */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #fcdda4;
+:root {
+    --primary-color: #6a5acd; /* Roxo suave */
+    --secondary-color: #ffffff;
+    --accent-hover: #d5a6d4;
+    --background-overlay: rgba(0, 0, 0, 0.1);
+    --input-bg: rgba(255, 255, 255, 0.9);
+    --border-color: #ddd;
+    --text-color: #333;
+    --font-primary: 'Roboto', sans-serif;
+    --spacing-small: 0.5rem; /* Ajustado para rem */
+    --spacing-medium: 1rem; /* Ajustado para rem */
+    --spacing-large: 1.5rem; /* Ajustado para rem */
+    --transition-speed: 0.3s;
+}
+
+/* Reset básico */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-img {
-    max-width: 200px;
-    display: block;
-    margin: 30px auto 0;
-}
-
-/* Container principal */
-.container {
-    width: 100%;
-    max-width: 960px;
-    padding: 15px;
-    box-sizing: border-box;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.row {
+/* Corpo da página */
+body {
+    font-family: var(--font-primary);
+    min-height: 100vh;
+    width: 100vw;
+    background-image: linear-gradient(rgba(106, 90, 205, 0.3), rgba(106, 90, 205, 0.3)), url('/Codigo/Projeto/pages/img/fundoLivros.png');
+    background-size: cover;
+    background-position: bottom;
+    background-repeat: no-repeat;
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    overflow: auto;
+}
+
+/* Overlay para melhorar a legibilidade */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--background-overlay);
+    z-index: 0;
+}
+
+/* Cabeçalho */
+.header {
+    width: 100%;
+    background-color: transparent;
+    padding: var(--spacing-small) 0;
+    border-bottom: 2px solid rgba(106, 90, 205, 0.5);
+    z-index: 1000;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    width: 90%;
+    margin: 0 auto;
+    flex-wrap: wrap; /* Permite que os itens quebrem em dispositivos menores */
+}
+
+.logo-container img {
+    max-height: 80px;
+}
+
+.header-nav {
+    display: flex;
+}
+
+.header-button {
+    margin-left: var(--spacing-small);
+    padding: var(--spacing-small) var(--spacing-medium); /* Ajuste para rem */
+    background-color: transparent;
+    color: #ffffff;
+    text-decoration: none;
+    border: 2px solid var(--primary-color);
+    border-radius: 25px;
+    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+    display: flex;
+    align-items: center;
+}
+
+.header-button:hover {
+    background-color: var(--primary-color);
+}
+
+/* Main */
+main {
+    flex-grow: 1;
+    padding: var(--spacing-large);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    z-index: 1;
+    max-width: 1200px;
+    margin-top: var(--spacing-large);
+}
+
+main h1 {
+    margin-bottom: var(--spacing-large);
+    font-size: 2rem; /* Ajustado para rem */
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Contêiner do Formulário */
+.form-container {
+    background-color: transparent;
+    border: 2px solid rgba(106, 90, 205, 0.5);
+    border-radius: 15px;
+    padding: var(--spacing-large);
+    width: 90%; /* Ajustado para porcentagem */
+    max-width: 600px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+    margin: auto; /* Centraliza o contêiner */
+}
+
+.form-container:hover {
+    transform: translateY(-5px);
+}
+
+/* Grupos de Formulário */
+.form-group {
+    margin-bottom: var(--spacing-medium);
+    position: relative;
+}
+
+.form-group label {
+    margin-bottom: 0.5rem; /* Ajustado para rem */
+    color: #ffffff;
+    font-weight: 500;
+    display: block;
+}
+
+/* Campos de Entrada com Ícones */
+.input-icon {
+    position: relative;
+}
+
+.input-icon .icon {
+    position: absolute;
+    top: 70%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 1.2rem; /* Ajustado para rem */
+}
+
+.input-icon input,
+.input-icon select,
+.input-icon textarea {
+    padding: 12px 12px 12px 45px;
+    border: 1px solid var(--border-color);
+    border-radius: 25px;
+    background-color: var(--input-bg);
+    width: 100%;
+    font-size: 1rem; /* Ajustado para rem */
+    color: var(--text-color);
+    transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+
+.input-icon input::placeholder,
+.input-icon select::placeholder,
+.input-icon textarea::placeholder {
+    color: #999;
+}
+
+.input-icon input:focus,
+.input-icon select:focus,
+.input-icon textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(106, 90, 205, 0.5);
+    outline: none;
+}
+
+textarea {
+    resize: vertical;
+    height: 100px;
+}
+
+/* Botão de Envio */
+.submit-button {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1.1rem; /* Ajustado para rem */
+    font-weight: 500;
+    text-align: center;
+    transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.submit-button:hover {
+    background-color: var(--accent-hover);
+}
+
+/* Rodapé */
+.footer {
+    width: 100%;
+    padding: var(--spacing-large);
+    margin-top: var(--spacing-large); /* Espaço acima do footer */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100px;
+}
+
+.footer a:hover {
+    color: var(--accent-hover);
+    text-decoration: underline;
+}
+
+.footer form {
+    margin-top: var(--spacing-medium);
+    display: flex;
+    justify-content: center;
+    align-items: center;
     flex-wrap: wrap;
 }
 
-.col-md-2,
-.col-md-8 {
-    box-sizing: border-box;
-}
-
-.col-md-2 {
-    flex: 0 0 16.6667%;
-    max-width: 16.6667%;
-}
-
-.col-md-8 {
-    flex: 0 0 66.6667%;
-    max-width: 66.6667%;
-}
-
-/* Card de Formulário */
-.my-5 {
-    margin-top: 3rem;
-    margin-bottom: 3rem;
-}
-
-.mx-auto {
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.form-container {
-    background-color: #fdedcb;
-    border-radius: 10px;
-    padding: 20px;
-}
-
-h3 {
-    color: #000000;
-    text-align: center;
-}
-
-/* Estilos de Formulário */
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-label {
-    color: #000000;
-    display: block;
-    margin-bottom: 0.5rem;
-}
-
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="date"],
-input[type="tel"],
-select,
-textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #F5F5F5;
-    box-sizing: border-box;
-}
-
-button {
-    display: flex;
-    padding: 10px 20px;
-    border: 2px solid #ffffff;
-    background-color: #eac9f1;
-    color: #000000;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    text-align: center;
-    text-decoration: none;
-    margin: auto;
-}
-
-button:hover {
-    background-color: #d5a6d4;
-}
 
 /* Responsividade */
 @media screen and (max-width: 768px) {
-    .container {
-        padding: 10px;
+    .header-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .header-button {
+        margin: var(--spacing-small) 0;
     }
 
     .form-container {
-        padding: 15px;
+        padding: var(--spacing-medium);
     }
 
-    input[type="text"],
-    input[type="number"],
-    textarea,
-    select {
-        padding: 8px;
+    main h1 {
+        font-size: 2rem; /* Ajustado para rem */
     }
 
-    button {
-        padding: 8px 15px;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    img {
-        max-width: 150px;
+    .submit-button {
+        font-size: 1rem; /* Ajuste para melhor responsividade */
     }
 
-    .form-container {
-        padding: 10px;
-    }
-
-    button {
-        padding: 7px 10px;
-    }
-}
-
-/* Estilos para telas pequenas (320px) */
-@media screen and (max-width: 320px) {
-    body {
-        font-size: 16px;
-    }
-
-    .container {
-        padding: 15px;
-    }
-
-    img {
-        max-width: 180px;
-    }
-
-    .form-control,
-    .form-control-file,
-    .form-control-file input {
-        font-size: 16px;
-        padding: 8px;
-    }
-
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    button {
-        font-size: 16px;
-        padding: 10px 15px;
-    }
-
-    textarea {
-        font-size: 16px;
-        padding: 8px;
-    }
-}
-
-/* Estilos para telas muito pequenas (240px) */
-@media screen and (max-width: 240px) {
-    body {
-        font-size: 14px;
-    }
-
-    .container {
-        padding: 10px;
-    }
-
-    img {
-        max-width: 150px;
-    }
-
-    .form-control,
-    .form-control-file,
-    .form-control-file input {
-        font-size: 14px;
-        padding: 5px;
-    }
-
-    .form-group {
-        margin-bottom: 10px;
-    }
-
-    button {
-        font-size: 14px;
-        padding: 8px 12px;
-    }
-
-    textarea {
-        font-size: 14px;
-        padding: 5px;
+    .footer form input[type="email"] {
+        flex: 1 1 100%; /* Ajuste para dispositivos menores */
+        max-width: none; /* Remover limite de largura */
     }
 }

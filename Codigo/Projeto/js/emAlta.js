@@ -1,5 +1,5 @@
 const apiKeyNYT = 'kWAJ52Y0zbACzaOqfLGyCayRqEq9QnOa';  // Chave da API do NYT
-const apiKeyGoogleBooks = 'AIzaSyAGsmI-fG7fZ9G5At3hcvaunFzdAiTGhLQ';  // Chave da API do Google Books
+const apiKeyGoogleBooks = 'AIzaSyAGsmI-fG7fZ9G5At3hcvaunFzdAiTGhLQ';  // Chave da API do Google Books (não utilizada no momento)
 const booksContainer = document.getElementById('books-container');
 const modal = document.getElementById('modal');
 const modalContent = document.getElementById('modal-content');
@@ -21,7 +21,7 @@ async function searchBooksNYT() {
         // Adicionar livros ao DOM
         books.forEach(async (book) => {
             const bookElement = document.createElement('div');
-            bookElement.classList.add('book');
+            bookElement.classList.add('book'); // Garante que a classe "book" seja aplicada
             const genre = book.genre ? book.genre.toLowerCase() : 'unknown'; // Supondo que o gênero esteja disponível
 
             const thumbnail = book.book_image || '';
@@ -40,14 +40,16 @@ async function searchBooksNYT() {
             const imageUrl = await getResizedImage(thumbnail);
 
             bookElement.innerHTML = `
-                <img src="${imageUrl}" alt="${title}">
+                <img src="${imageUrl}" alt="${title}" class="book-image">
                 <h3>${cleanedTitle}</h3>
+                <p class="book-author">${authors}</p>
+                <p class="book-description">${description}</p>
                 <button class="add-to-list-btn">Adicionar à Lista</button>
             `;
 
             // Evento para abrir o modal com informações detalhadas do livro
             bookElement.querySelector('img').addEventListener('click', () => openModal(title, description, imageUrl, authors));
-            
+
             // Evento para adicionar o livro à lista
             bookElement.querySelector('.add-to-list-btn').addEventListener('click', () => addToMyList(title, description, imageUrl, authors));
 
@@ -56,6 +58,7 @@ async function searchBooksNYT() {
         });
     } catch (error) {
         console.error('Erro ao buscar livros:', error);
+        booksContainer.innerHTML = '<p class="error-message">Não foi possível carregar os livros no momento. Tente novamente mais tarde.</p>';
     }
 }
 
@@ -97,7 +100,7 @@ function openModal(title, description, imageUrl, authors) {
         <p><strong>Autor:</strong> ${authors}</p>
         <p><strong>Sinopse:</strong> ${description}</p>
         <button class="close-btn">Fechar</button>
-        <a href="#" class="trade-btn" id="trade-btn">Quero Trocar</a> <!-- Adicionado id ao link -->
+        <a href="historico.html" class="trade-btn">Quero Trocar</a>
     `;
     modal.style.display = 'block';
 
@@ -107,7 +110,7 @@ function openModal(title, description, imageUrl, authors) {
     });
 
     // Adiciona um evento ao botão "Quero Trocar"
-    document.getElementById('trade-btn').addEventListener('click', (event) => {
+    modal.querySelector('.trade-btn').addEventListener('click', (event) => {
         event.preventDefault(); // Previne o comportamento padrão do link
         window.location.href = "historico.html"; // Redireciona para a página desejada
     });
@@ -129,7 +132,7 @@ function filterBooksByGenre(genre) {
     const books = Array.from(booksContainer.getElementsByClassName('book'));
     books.forEach(book => {
         if (genre === 'all' || book.innerText.toLowerCase().includes(genre)) {
-            book.style.display = 'block';
+            book.style.display = 'flex';
         } else {
             book.style.display = 'none';
         }
@@ -137,7 +140,9 @@ function filterBooksByGenre(genre) {
 }
 
 // Inicializa a busca e adiciona o evento de filtragem
-searchBooksNYT();
-genreFilter.addEventListener('change', (event) => {
-    filterBooksByGenre(event.target.value.toLowerCase());
+document.addEventListener('DOMContentLoaded', () => {
+    searchBooksNYT();
+    genreFilter.addEventListener('change', (event) => {
+        filterBooksByGenre(event.target.value.toLowerCase());
+    });
 });

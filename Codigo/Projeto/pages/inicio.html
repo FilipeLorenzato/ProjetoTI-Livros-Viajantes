@@ -4,48 +4,90 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Livros Viajantes</title>
-    <link rel="stylesheet" href="../style/inicio.css"> 
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style/inicio.css">
 </head>
 <body>
 
+    <!-- Overlay para melhorar a legibilidade -->
+    <div class="background-overlay"></div>
+
     <!-- Cabeçalho -->
-    <header>
-        <h1>Livros Viajantes</h1>
-        <p>Livros que viajam, histórias que ficam!</p>
-        <div class="logo-container">
-            <img src="img/logo.png" alt="Logo" class="logo"> 
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-container">
+                <a href="inicio.html"><img src="img/logo1-removebg-preview.png" alt="Logo" class="logo"></a>
+            </div>
+            <nav class="header-nav">
+                <a href="comofunciona.html" class="header-button">Como Funciona</a>
+                <a href="login.html" class="header-button">Login</a>
+                <a href="CadastroUsuarios.html" class="header-button">Cadastrar</a>
+                <a href="postagem-livros.html" class="header-button">Catálogo de Livros</a>
+                <a href="login.html" class="header-button">Troque Agora</a>
+            </nav>
         </div>
     </header>
 
-    <!-- Menu de navegação -->
-    <nav>
-        <a href="comofunciona.html">Como Funciona</a>
-        <a href="login.html" class="header-button">Login</a>
-        <a href="CadastroUsuarios.html" class="header-button">Cadastrar</a>
-        <a href="postagem-livros.html" class="header-button">Catálogo de Livros</a>
-        <a href="login.html" class="header-button">Troque Agora</a>
-    </nav>
-
     <!-- Banner -->
-    <section id="banner">
+    <section id="banner" class="banner">
         <h1>Seu próximo livro está apenas uma troca de distância!</h1>
         <p>Com o Livros Viajantes, cada livro ganha novos destinos. Participe dessa jornada literária global.</p>
     </section>
 
     <!-- Seção de Livros Famosos -->
-    <section class="container">
-        <h2>Livros Famosos Disponíveis para Troca</h2>
-        <div class="books" id="book-list">
-            <!-- Livros serão inseridos aqui via JavaScript -->
+    <main>
+        <section class="container">
+            <h2>Livros Famosos Disponíveis para Troca</h2>
+            <div id="book-list" class="books-container">
+                <!-- Livros serão inseridos aqui via JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal -->
+    <section id="modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <button class="close-btn">&times;</button>
+            <h2 class="book-details-title">Título do Livro</h2>
+            <img src="url-da-imagem.jpg" alt="Título do Livro" class="modal-book-image">
+            <p><strong>Autor:</strong> Autor do Livro</p>
+            <p><strong>Sinopse:</strong> Sinopse do Livro</p>
+            <a href="historico.html" class="trade-btn">Quero Trocar</a>
         </div>
     </section>
 
     <!-- Rodapé -->
-    <footer>
-        <p>&copy; 2024 Livros Viajantes. Todos os direitos reservados.</p>
-        <p>Conecte-se nas redes sociais: Facebook | Instagram | Twitter</p>
+    <footer class="footer">
+        <div class="footer-content">
+            <p><strong>Contato:</strong></p>
+            <p>Email: contato@trocalivros.com</p>
+            <p>Telefone: (31) 3131-2800</p>
+            <p>Endereço: PUC Minas, Rua Cláudio Manoel, 1162</p>
+
+            <nav class="footer-nav">
+                <a href="cadastrar-livro.html">Cadastrar Livro</a> |
+                <a href="login.html">Login</a> |
+                <a href="privacy-policy.html">Política de Privacidade</a> |
+                <a href="terms.html">Termos de Uso</a>
+            </nav>
+
+            <p>Siga-nos:</p>
+            <div class="social-links">
+                <a href="https://facebook.com" target="_blank">Facebook</a> |
+                <a href="https://twitter.com" target="_blank">Twitter</a> |
+                <a href="https://instagram.com" target="_blank">Instagram</a>
+            </div>
+
+            <form action="subscribe-newsletter.html" method="post" class="newsletter-form">
+                <label for="email">Assine nossa Newsletter:</label>
+                <input type="email" id="email" name="email" placeholder="Seu e-mail" required>
+                <button type="submit" class="submit-button">Inscrever-se</button>
+            </form>
+
+            <p>&copy; 2024 Livros Viajantes. Todos os direitos reservados.</p>
+        </div>
     </footer>
 
-    <script src="../js/inicio.js"></script> 
+    <script src="../js/inicio.js"></script>
 </body>
 </html>

@@ -1,9 +1,9 @@
-document.addEventListener("DOMContentLoaded", function() {
+
+document.addEventListener("DOMContentLoaded", function () {
     const myLibrary = document.getElementById("my-library");
     const closeDetailsButton = document.getElementById("close-details");
     const bookDetails = document.getElementById("book-details");
     const bookImageDetails = document.getElementById("image-details");
-    const bookDetailsContent = document.querySelector(".book-details-content");
     const bookTitle = document.getElementById("book-title");
     const bookDescription = document.getElementById("book-description");
     const genreFilter = document.getElementById("genre-filter");
@@ -12,15 +12,11 @@ document.addEventListener("DOMContentLoaded", function() {
     const favoriteBooks = [];
 
     // Função para lidar com o logout
-    logoutBtn.addEventListener("click", function() {
-        // Exemplo simples: Limpar o localStorage ou sessionStorage
-        localStorage.clear(); 
-
-        // Redireciona o usuário para a página de login
-        window.location.href = "login.html";
+    logoutBtn.addEventListener("click", function () {
+        localStorage.clear(); // Limpar localStorage ou sessionStorage
+        window.location.href = "login.html"; // Redireciona o usuário para a página de login
     });
-    
-    
+
     // Estrutura JSON com os dados dos livros
     const bookList = [
         {
@@ -79,34 +75,28 @@ document.addEventListener("DOMContentLoaded", function() {
             image_url: "img/livro8.jpg",
             inMyList: true
         }
+        // Adicione os outros livros aqui...
     ];
 
     // Adiciona livros à lista de favoritos
-    for(let i = 0; i < bookList.length; i++){
-        if(bookList[i].inMyList) {
-            favoriteBooks.push(bookList[i]);
+    bookList.forEach(book => {
+        if (book.inMyList) {
+            favoriteBooks.push(book);
         }
-    } 
+    });
 
     // Renderiza a lista de livros na página
     renderMyLibrary();
 
     // Exibe detalhes do livro quando clicado
     myLibrary.addEventListener("click", (event) => {
-        const clickedElement = event.target;
-
-        if (clickedElement.classList.contains("book-card")) {
-            // Se o clique ocorreu em um elemento com a classe "book-card"
+        const clickedElement = event.target.closest(".book-card");
+        if (clickedElement) {
             const index = clickedElement.getAttribute("data-index");
-            showBookDetails(index);
-        } else if (clickedElement.tagName === "IMG" && clickedElement.closest(".book-card")) {
-            // Se o clique ocorreu em uma imagem dentro de um elemento com a classe "book-card"
-            const bookCard = clickedElement.closest(".book-card");
-            const index = bookCard.getAttribute("data-index");
             showBookDetails(index);
         }
     });
-    
+
     // Fecha a janela de detalhes do livro
     closeDetailsButton.addEventListener("click", () => {
         bookDetails.style.display = "none";
@@ -118,26 +108,27 @@ document.addEventListener("DOMContentLoaded", function() {
         if (selectedGenre === 'all') {
             renderMyLibrary();
         } else {
-            const filteredBooks = bookList.filter(book => book.genre === selectedGenre);
+            const filteredBooks = favoriteBooks.filter(book => book.genre === selectedGenre);
             renderMyLibrary(filteredBooks);
         }
     });
 
-    function renderMyLibrary(books) {
+    function renderMyLibrary(books = favoriteBooks) {
         myLibrary.innerHTML = "";
-        (books || favoriteBooks).forEach((book, index) => {
+        books.forEach((book, index) => {
             const bookCard = document.createElement("div");
             bookCard.classList.add("book-card");
             bookCard.setAttribute("data-index", index);
             bookCard.innerHTML = `
-                <img src="${book.image_url}" alt="${book.title}">
-                <h3>${book.title}</h3>
+                <img src="${book.image_url}" alt="${book.title}" class="book-image">
+                <h3 class="book-title">${book.title}</h3>
                 <p class="remove-button">${book.inMyList ? 'Remover da Minha Biblioteca' : 'Adicionar à Minha Biblioteca'}</p>
             `;
             myLibrary.appendChild(bookCard);
 
             // Remove o livro da Minha Biblioteca
-            bookCard.querySelector('.remove-button').addEventListener('click', () => {
+            bookCard.querySelector('.remove-button').addEventListener('click', (event) => {
+                event.stopPropagation(); // Impede que o evento de clique propague para a exibição dos detalhes
                 favoriteBooks[index].inMyList = !favoriteBooks[index].inMyList;
                 if (!favoriteBooks[index].inMyList) {
                     favoriteBooks.splice(index, 1);
@@ -148,9 +139,10 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function showBookDetails(index) {
-        bookImageDetails.src = favoriteBooks[index].image_url;
-        bookTitle.textContent = favoriteBooks[index].title;
-        bookDescription.textContent = favoriteBooks[index].description;
+        const book = favoriteBooks[index];
+        bookImageDetails.src = book.image_url;
+        bookTitle.textContent = book.title;
+        bookDescription.textContent = book.description;
         bookDetails.style.display = 'flex';
     }
 });

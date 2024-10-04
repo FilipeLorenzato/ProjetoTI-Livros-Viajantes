@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Troca de Livros</title>
+    <title>Histórico de Troca de Livros</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style/historico.css">
 </head>
+
 <body>
     <header class="header">
         <div class="header-content">
             <div class="logo-container">
-                <a href="inicio.html"><img src="img/logo.png" alt="logo" class="logo"></a>
+                <a href="inicio.html"><img src="img/logo1-removebg-preview.png" alt="logo" class="logo"></a>
             </div>
             <nav class="header-nav">
                 <a href="meus-livros.html" class="header-button">Meus Livros</a>
@@ -19,13 +22,21 @@
                 <a href="cadastrar-livro.html" class="header-button">Cadastrar Livro</a>
                 <a href="historico.html" class="header-button">Histórico de Troca</a>
             </nav>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Buscar livro...">
+                <button id="search-button">Buscar</button>
+            </div>
+        </div>
+        <div class="header-buttons">
+            <a href="cadastrar-livro.html" class="register-button">Registrar Novo Livro</a>
         </div>
     </header>
 
     <main>
+        <!-- Seção de Histórico de Troca -->
         <section class="exchange-history">
             <div class="title-bar">
-                <h2>Troca de Livros</h2>
+                <h2>Histórico de Troca de Livros</h2>
                 <button class="filter-btn">Filtros</button>
             </div>
             <ul class="book-list">
@@ -63,6 +74,7 @@
         </div>
     </div>
 
+    <!-- Rodapé -->
     <footer class="footer">
         <div class="footer-content">
             <p><strong>Contato:</strong></p>
@@ -94,4 +106,5 @@
 
     <script src="../js/historico.js"></script>
 </body>
+
 </html>

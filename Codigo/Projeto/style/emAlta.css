@@ -1,249 +1,499 @@
-/* Estilos globais */ 
-body {
-    font-family: Arial, sans-serif;
-    background-color: #fcdda4;
-    color: #000000;
+:root {
+    /* Cores */
+    --primary-color: #6a5acd;
+    /* Roxo suave */
+    --secondary-color: #ffffff;
+    --accent-hover: #d5a6d4;
+    --background-overlay: rgba(0, 0, 0, 0.3);
+    /* Overlay com menor opacidade */
+    --input-bg: rgba(255, 255, 255, 0.8);
+    --border-color: #ddd;
+    --text-color: #333;
+
+    /* Fontes */
+    --font-primary: 'Roboto', sans-serif;
+
+    /* Espaçamento */
+    --spacing-small: 8px;
+    --spacing-medium: 16px;
+    --spacing-large: 24px;
+
+    /* Transições */
+    --transition-speed: 0.3s;
+}
+
+/* Reset básico */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
-header {
+
+/* Corpo da página */
+body {
+    font-family: var(--font-primary);
+    min-height: 100vh;
+    width: 100vw;
+    background-image: linear-gradient(rgba(106, 90, 205, 0.3), rgba(106, 90, 205, 0.3)), url('/Codigo/Projeto/pages/img/fundoLivros.png');
+    background-size: cover;
+    background-position: bottom;
+    background-repeat: no-repeat;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    padding: 10px 20px;
-    background-color: #EFE4B0;/* Cor de fundo mais clara */
+    justify-content: flex-start;
+    position: relative;
+    overflow: auto;
 }
 
-header img {
-    width: 100px;
-    height: auto;
-    margin-right: 15px;
-    border-radius: 5px;
+/* Overlay para melhorar a legibilidade */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--background-overlay);
+    z-index: 0;
+}
+
+/* Cabeçalho */
+.header {
+    width: 100%;
+    background-color: transparent;
+    padding: var(--spacing-small) 0;
+    border-bottom: 2px solid rgba(106, 90, 205, 0.5);
+    z-index: 1000;
 }
 
 .header-content {
     display: flex;
     justify-content: space-between;
-    width: 100%;
+    align-items: center;
     max-width: 1200px;
-    align-items: center;
+    width: 90%;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    /* Permite que os itens quebrem em dispositivos menores */
 }
 
-.logo-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.logo-container img {
+    max-height: 80px;
 }
-
-.logo {
-    max-height: 120px;
-    max-width: 200px;
-}
-
 
 .header-nav {
     display: flex;
 }
 
 .header-button {
-    margin-left: 15px;
-    padding: 10px 20px;
-    background-color: #fcdda4;
-    color: #000;
+    margin-left: var(--spacing-small);
+    padding: var(--spacing-small) var(--spacing-medium);
+    background-color: transparent;
+    color: #ffffff;
     text-decoration: none;
-    border-radius: 5px;
+    border: 2px solid var(--primary-color);
+    border-radius: 25px;
+    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+    display: flex;
+    align-items: center;
 }
 
 .header-button:hover {
-    background-color: #f5f5f5;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    /* Ajuste de cor ao texto no hover */
 }
 
+/* Main */
+main {
+    flex-grow: 1;
+    padding: var(--spacing-large);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    z-index: 1;
+    max-width: 1200px;
+    margin-top: var(--spacing-large);
+}
 
-/* Título da página */
-h1 {
-    margin: 20px 0;
-    color: #000000;
+main h1 {
+    margin-bottom: var(--spacing-large);
+    font-size: 2rem;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: center;
-    font-size: 36px;
-    letter-spacing: 2px;
 }
 
-/* Estilos para o filtro de gênero */
-#genre-filter {
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #F5F5F5;
-    color: #000000;
+/* Filtro de gêneros */
+.form-group {
+    position: relative;
+    margin-bottom: var(--spacing-medium);
+    width: 100%;
+    max-width: 400px;
+}
+
+.form-group label {
     display: block;
-    margin: 0 auto 20px auto;
-    font-size: 16px;
+    margin-bottom: var(--spacing-small);
+    color: var(--secondary-color);
+    font-weight: 500;
 }
 
-/* Para o container de livros */
-.books-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-    padding: 20px;
-    justify-items: center;
-}
-
-/* Para cada livro */
-.book {
-    margin: 10px;
-    text-align: center;
-    cursor: pointer;
-    max-width: 200px;
-    display: inline-block; /* Permite que quebre linhas */
-    word-wrap: break-word; /* Quebra palavras longas */
-}
-
-/* Imagem de cada livro */
-.book img {
-    border: 5px solid white;
+.input-icon select {
+    width: 100%;
+    padding: 10px 10px 10px 45px;
+    border: 1px solid var(--border-color);
+    border-radius: 25px;
+    background-color: var(--input-bg);
     box-sizing: border-box;
-    width: 200px;
-    height: 300px;
-    object-fit: cover;
-    border-radius: 8px;
-    display: block;
-    margin: 0 auto;
+    font-size: 16px;
+    color: var(--text-color);
+    transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
 }
 
-/* Para o título do livro */
+.input-icon select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 5px rgba(106, 90, 205, 0.5);
+    outline: none;
+    background-color: #ffffff;
+}
+
+/* Container de livros */
+.books-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-large);
+    padding: var(--spacing-large);
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* Cartão de livro individual */
+.book {
+    background-color: rgba(255, 255, 255, 0.1);
+    /* Fundo semi-transparente */
+    border-radius: 15px;
+    padding: var(--spacing-medium);
+    margin: var(--spacing-small);
+    width: 220px;
+    /* Largura fixa para os cartões */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.book:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Imagem do livro */
+.book img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: var(--spacing-small);
+}
+
+/* Título do livro */
 .book h3 {
-    margin-top: 10px;
+    color: var(--secondary-color);
+    font-size: 18px;
+    margin-bottom: var(--spacing-small);
+}
+
+/* Autor do livro */
+.book p.book-author {
+    color: var(--secondary-color);
     font-size: 16px;
-    color: #000000; 
-    font-weight: bold;
-    white-space: nowrap; /* Não permite quebras de linha */
-    overflow: hidden; /* Esconde o excesso de texto */
-    text-overflow: ellipsis; /* Adiciona '...' se o texto for muito longo */
-    max-width: 100%; /* Limita a largura do título ao tamanho do contêiner */
-    display: block; /* Garante que o elemento se comporte como bloco */
+    margin-bottom: var(--spacing-small);
+}
+
+/* Sinopse do livro */
+.book p.book-description {
+    color: var(--text-color);
+    font-size: 14px;
+    margin-bottom: var(--spacing-small);
 }
 
 /* Botão para adicionar à lista */
 .add-to-list-btn {
-    margin-top: 10px;
-    cursor: pointer;
-    font-size: 14px;
-    color: #080808;
-    text-align: center;
-    padding: 8px;
-    background-color: #F5F5F5;
+    display: inline-block;
+    width: 100%;
+    padding: 10px;
     border: none;
-    border-radius: 4px;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
 }
 
-/* Estilos para o modal */
+.add-to-list-btn:hover {
+    background-color: var(--accent-hover);
+    transform: translateY(-2px);
+}
+
+.add-to-list-btn:active {
+    transform: translateY(0);
+}
+
+/* Modal */
 .modal {
-    display: none;
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-}
-
-/* Para o conteúdo do modal */
-.modal-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fdedcb;
-    padding: 15px;
-    border-radius: 8px;
-    text-align: left;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
     display: flex;
-    flex-direction: column;
     align-items: center;
-    max-width: 90%;
-    max-height: 90%;
-    overflow: auto;
+    justify-content: center;
+    z-index: 1001;
 }
 
-/* Para o título no modal */
-.book-details-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #080808;
+.modal-content {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: var(--spacing-large);
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    color: var(--secondary-color);
 }
 
-/* Para a imagem no modal */
 .modal-content img {
     width: 100%;
-    max-width: 200px;
     height: auto;
-    border-radius: 8px;
-    margin-bottom: 20px;
+    border-radius: 10px;
+    margin-bottom: var(--spacing-medium);
 }
 
-/* Para o texto no modal */
-.book-details p {
-    margin: 5px 0;
-    color: #d9d9d9;
-}
-
-/* Para o botão de fechar no modal */
-.close-btn,
-.trade-btn {
-    display: block;
-    margin-top: 10px;
-    cursor: pointer;
-    font-size: 18px;
-    color: #080808;
-    text-align: center;
-    padding: 10px;
-    background-color: #d9d9d9;
+.modal-content .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: var(--accent-hover);
+    color: var(--secondary-color);
     border: none;
-    border-radius: 4px;
-}
-/* Para o botão "Quero Trocar" */
-.trade-btn {
-    display: block;
-    margin-top: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 18px;
-    color: #080808;
-    text-align: center;
-    padding: 10px;
-    background-color: #d9d9d9;
-    border: none;
-    border-radius: 4px;
-    text-decoration: none; /* Remover sublinhado */
+    transition: background-color var(--transition-speed) ease;
 }
 
+.modal-content .close-btn:hover {
+    background-color: var(--primary-color);
+}
+
+.trade-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border: none;
+    border-radius: 25px;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
+}
+
+.trade-btn:hover {
+    background-color: var(--accent-hover);
+    transform: translateY(-2px);
+}
+
+.trade-btn:active {
+    transform: translateY(0);
+}
 
 /* Rodapé */
 .footer {
-    background-color: #EFE4B0;
-    padding: 10px;
+    width: 100%;
+    padding: var(--spacing-large);
+    background-color: transparent;
     text-align: center;
+    margin-top: var(--spacing-large);
+    color: var(--text-color);
 }
 
-.footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 10px;
-}
-
-.footer-content a {
-    color: #000;
+.footer a {
+    color: var(--secondary-color);
     text-decoration: none;
+    margin: 0 5px;
+    transition: color var(--transition-speed) ease;
 }
 
-.footer-content a:hover {
+.footer a:hover {
+    color: var(--accent-hover);
     text-decoration: underline;
 }
+
+.footer form {
+    margin-top: var(--spacing-medium);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.footer form label {
+    margin-right: var(--spacing-small);
+    color: var(--secondary-color);
+}
+
+.footer form input[type="email"] {
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 25px;
+    background-color: var(--input-bg);
+    margin-right: var(--spacing-small);
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.footer form input[type="email"]:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 5px rgba(106, 90, 205, 0.5);
+    outline: none;
+    background-color: #ffffff;
+}
+
+.footer form button {
+    padding: 10px 20px;
+    border: none;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
+}
+
+.footer form button:hover {
+    background-color: var(--accent-hover);
+    transform: translateY(-2px);
+}
+
+.footer form button:active {
+    transform: translateY(0);
+}
+
 /* Responsividade */
-@media (max-width: 768px) {
-    .book-item {
+@media screen and (max-width: 768px) {
+    .header-content {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
     }
+
+    .header-button {
+        margin: var(--spacing-small) 0;
+    }
+
+    .form-group {
+        max-width: 100%;
+    }
+
+    .books-container {
+        gap: var(--spacing-medium);
+        padding: var(--spacing-medium);
+    }
+
+    .book {
+        width: 180px;
+        padding: var(--spacing-small);
+    }
+
+    main h1 {
+        font-size: 1.8rem;
+    }
+
+    .trade-btn {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .books-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .book {
+        width: 90%;
+        max-width: 300px;
+    }
+
+    .modal-content {
+        padding: var(--spacing-medium);
+    }
+
+    .modal-content img {
+        max-width: 100%;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    body {
+        font-size: 14px;
+    }
+
+    .logo-container img {
+        max-height: 60px;
+    }
+
+    .book h3 {
+        font-size: 16px;
+    }
+
+    .book p.book-author {
+        font-size: 14px;
+    }
+
+    .book p.book-description {
+        font-size: 12px;
+    }
+
+    .add-to-list-btn {
+        font-size: 14px;
+    }
+
+    .trade-btn {
+        font-size: 14px;
+    }
+}
+
+/* Acessibilidade */
+button:focus,
+input:focus,
+a.header-button:focus,
+.close-btn:focus,
+.trade-btn:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Mensagens de Erro */
+.error-message {
+    font-size: 14px;
+    color: red;
+    margin-top: 5px;
+    text-align: left;
 }
