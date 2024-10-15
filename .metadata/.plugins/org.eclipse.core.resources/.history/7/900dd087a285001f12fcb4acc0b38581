@@ -1,0 +1,11 @@
+
+package app;
+
+import static spark.Spark.*;
+
+public class OiMundo {
+	public static void main(String[] arg) {
+		port(4567); // ou qualquer outra porta livre
+		get("/oi", (request, response) -> "Oi Mundo!");
+	}
+}

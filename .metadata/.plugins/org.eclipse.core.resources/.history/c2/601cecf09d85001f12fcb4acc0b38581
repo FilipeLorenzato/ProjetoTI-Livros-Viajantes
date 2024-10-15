@@ -1,0 +1,9 @@
+
+import static spark.Spark.*;
+
+public class OiMundo {
+	public static void main(String[] arg) {
+		port(4569); // Altera para a porta 4568
+		get("/oi", (req, res) -> "Oi Mundo!");
+	}
+}
