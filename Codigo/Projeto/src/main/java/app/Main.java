@@ -10,6 +10,7 @@ import model.Livro;
 import model.Usuario;
 import service.LivroService;
 import service.UsuarioService;
+
 import spark.ModelAndView;
 import static spark.Spark.before;
 import static spark.Spark.get;
@@ -18,6 +19,7 @@ import static spark.Spark.port;
 import static spark.Spark.post;
 import static spark.Spark.staticFiles;
 import spark.template.velocity.VelocityTemplateEngine;
+
 
 public class Main {
     public static void main(String[] args) {
