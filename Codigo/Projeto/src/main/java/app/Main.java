@@ -2,22 +2,13 @@ package app;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import model.Historico;
-import model.Inicio;
 import model.Livro;
-import model.MeusLivros;
 import model.Usuario;
-import service.EmAltaService;
-import service.HistoricoService;
-import service.InicioService;
 import service.LivroService;
-import service.MeusLivrosService;
-import service.PostagemLivroService;
 import service.UsuarioService;
 import spark.ModelAndView;
 import static spark.Spark.before;
@@ -39,11 +30,6 @@ public class Main {
         // Instanciar os serviços
         LivroService livroService = new LivroService();
         UsuarioService usuarioService = new UsuarioService();
-        EmAltaService emAltaService = new EmAltaService();
-        PostagemLivroService postagemLivroService = new PostagemLivroService();
-        HistoricoService historicoService = new HistoricoService();
-        MeusLivrosService meusLivrosService = new MeusLivrosService();
-        InicioService inicioService = new InicioService();
 
         // ----------------- Rotas de Login -----------------
 
@@ -64,12 +50,9 @@ public class Main {
             Usuario usuario = usuarioService.autenticarUsuario(email, senha);
 
             if (usuario != null) {
-                // Armazena informações do usuário na sessão
                 req.session(true).attribute("usuario", usuario);
-                // Redireciona para a página inicial ou dashboard
                 res.redirect("/inicio");
             } else {
-                // Redireciona para a página de login com erro
                 res.redirect("/login?erro=true");
             }
             return null;
@@ -103,19 +86,13 @@ public class Main {
             String numeroStr = req.queryParams("numero");
             int numero = Integer.parseInt(numeroStr);
 
-            // Cria o endereço
-            model.Endereco endereco = new model.Endereco(cidade, rua, estado, cep, String.valueOf(numero));
-
-            // Cria o usuário
             LocalDate dataNascimentoLocalDate = LocalDate.parse(dataNascimento, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            model.Usuario usuario = new model.Usuario(nome, email, senha, dataNascimentoLocalDate, telefone, cidade, rua, estado, cep, numeroStr);
+            Usuario usuario = new Usuario(nome, email, senha, dataNascimentoLocalDate, telefone, cidade, rua, estado, cep, String.valueOf(numero));
             boolean sucesso = usuarioService.cadastrarUsuario(usuario);
 
             if (sucesso) {
-                // Redireciona para o login após cadastro bem-sucedido
                 res.redirect("/login");
             } else {
-                // Redireciona para uma página de erro
                 res.redirect("/erro.html");
             }
             return null;
@@ -139,10 +116,8 @@ public class Main {
             boolean sucesso = livroService.cadastrarLivro(livro);
 
             if (sucesso) {
-                // Redireciona para a página de listagem de livros
                 res.redirect("/meusLivros");
             } else {
-                // Redireciona para uma página de erro
                 res.redirect("/erro.html");
             }
             return null;
@@ -156,18 +131,15 @@ public class Main {
                 return null;
             }
 
-            // Obtém os livros postados pelo usuário
-            List<MeusLivros> meusLivros = meusLivrosService.getMeusLivros(usuario.getIdUsuario());
-
             Map<String, Object> model = new HashMap<>();
+            List<Livro> meusLivros = livroService.getLivrosPorUsuario(usuario.getIdUsuario());
             model.put("meusLivros", meusLivros);
             model.put("usuario", usuario);
             return render(model, "meusLivros.html");
         });
 
-        // ----------------- Rotas de "Em Alta" -----------------
+        // ----------------- Rota "Em Alta" -----------------
 
-        // Rota para exibir a página "Em Alta"
         get("/emAlta", (req, res) -> {
             Usuario usuario = req.session().attribute("usuario");
             if (usuario == null) {
@@ -175,9 +147,8 @@ public class Main {
                 return null;
             }
 
-            // Define o limite de livros em alta
-            int limite = 10;
-            List<model.LivroEmAlta> livrosEmAlta = emAltaService.getLivrosEmAlta(limite);
+            int limite = 10;  // Número máximo de livros a exibir
+            List<Livro> livrosEmAlta = livroService.getLivrosEmAlta(limite);
 
             Map<String, Object> model = new HashMap<>();
             model.put("livrosEmAlta", livrosEmAlta);
@@ -185,7 +156,7 @@ public class Main {
             return render(model, "emAlta.html");
         });
 
-        // ----------------- Rotas de "Postagem de Livros" -----------------
+        // ----------------- Rotas "Postagem de Livros" -----------------
 
         // Rota para exibir o formulário de postagem de livros
         get("/postagemLivros", (req, res) -> {
@@ -212,40 +183,21 @@ public class Main {
             String autor = req.queryParams("autor");
             String genero = req.queryParams("genero");
             String sinopse = req.queryParams("sinopse");
-            String status = "Disponível"; // Status inicial
 
-            // Cria o livro
             Livro livro = new Livro(titulo, autor, genero, sinopse);
             boolean livroInserido = livroService.cadastrarLivro(livro);
 
-            if (!livroInserido) {
-                res.redirect("/erro.html");
-                return null;
-            }
-
-            // Define a data de postagem
-            LocalDate dataPostagem = LocalDate.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            String dataFormatada = dataPostagem.format(formatter);
-
-            // Cria a postagem de livro
-            model.PostagemLivro postagemLivro = new model.PostagemLivro(livro, usuario, dataFormatada, status);
-            boolean postagemInserida = postagemLivroService.cadastrarPostagemLivro(postagemLivro);
-
-            if (postagemInserida) {
-                // Redireciona para a página de "Meus Livros"
+            if (livroInserido) {
                 res.redirect("/meusLivros");
             } else {
-                // Redireciona para uma página de erro
                 res.redirect("/erro.html");
             }
 
             return null;
         });
 
-        // ----------------- Rotas de "Histórico" -----------------
+        // ----------------- Rota "Histórico" -----------------
 
-        // Rota para exibir a página "Histórico"
         get("/historico", (req, res) -> {
             Usuario usuario = req.session().attribute("usuario");
             if (usuario == null) {
@@ -253,18 +205,17 @@ public class Main {
                 return null;
             }
 
-            // Obtém o histórico de trocas do usuário
-            List<Historico> historicos = historicoService.getHistoricoPorUsuario(usuario.getIdUsuario());
+            // Histórico de livros postados pelo usuário (simulado para usar com LivroService)
+            List<Livro> historicoLivros = livroService.getLivrosPorUsuario(usuario.getIdUsuario());
 
             Map<String, Object> model = new HashMap<>();
-            model.put("historicos", historicos);
+            model.put("historicoLivros", historicoLivros);
             model.put("usuario", usuario);
             return render(model, "historico.html");
         });
 
-        // ----------------- Rotas de "Início" -----------------
+        // ----------------- Rota "Início" -----------------
 
-        // Rota para exibir a página "Início"
         get("/inicio", (req, res) -> {
             Usuario usuario = req.session().attribute("usuario");
             if (usuario == null) {
@@ -272,38 +223,26 @@ public class Main {
                 return null;
             }
 
-            // Obtém as estatísticas de início do usuário
-            Inicio estatisticas = inicioService.getEstatisticasInicio(usuario.getIdUsuario());
-
             Map<String, Object> model = new HashMap<>();
-            model.put("estatisticas", estatisticas);
             model.put("usuario", usuario);
             return render(model, "inicio.html");
         });
 
         // ----------------- Filtros de Autenticação -----------------
 
-        // Filtro para proteger rotas que exigem autenticação
         before((req, res) -> {
             String path = req.pathInfo();
-            // Defina as rotas que não exigem autenticação
-            List<String> openRoutes = Arrays.asList("/login", "/cadastroUsuario", "/erro.html", "/public/");
-
-            boolean isOpen = openRoutes.stream().anyMatch(route -> path.startsWith(route));
-
-            if (!isOpen) {
-                Usuario usuario = req.session().attribute("usuario");
-                if (usuario == null) {
-                    res.redirect("/login");
-                    halt();
-                }
+            if (!path.equals("/login") && !path.equals("/cadastroUsuario") && req.session().attribute("usuario") == null) {
+                res.redirect("/login");
+                halt();
             }
         });
     }
 
     /**
      * Método auxiliar para renderizar templates HTML usando Velocity.
-     * @param model Mapa de dados para o template.
+     * 
+     * @param model        Mapa de dados para o template.
      * @param templatePath Caminho do template HTML.
      * @return Conteúdo renderizado.
      */

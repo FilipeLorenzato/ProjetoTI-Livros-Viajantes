@@ -7,8 +7,8 @@ import java.sql.SQLException;
 public class DatabaseConnection {
     // URL de conexão corrigida para PostgreSQL
     private static final String URL = "jdbc:postgresql://localhost:5432/livrosviajantes";
-    private static final String USER = "postgres"; // Seu usuário do PostgreSQL
-    private static final String PASSWORD = "1321"; // Sua senha do PostgreSQL
+    private static final String USER = "ti2cc"; // Seu usuário do PostgreSQL
+    private static final String PASSWORD = "ti@cc"; // Sua senha do PostgreSQL
 
     static {
         try {

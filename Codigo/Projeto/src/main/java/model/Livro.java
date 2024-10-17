@@ -68,6 +68,7 @@ public class Livro {
     public void setSinopse(String sinopse) {
         this.sinopse = sinopse;
     }
+    
 
     @Override
     public String toString() {

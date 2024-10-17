@@ -2,29 +2,24 @@ package service;
 
 import java.util.List;
 
-import dao.EnderecoDAO;
 import dao.UsuarioDAO;
-import model.Endereco;
 import model.Usuario;
 
 public class UsuarioService {
     private UsuarioDAO usuarioDAO;
-    private EnderecoDAO enderecoDAO;
 
     public UsuarioService() {
         this.usuarioDAO = new UsuarioDAO();
-        this.enderecoDAO = new EnderecoDAO();
     }
 
     public boolean cadastrarUsuario(Usuario usuario) {
-        // Primeiro, insere o endereço
-        Endereco endereco = usuario.getEndereco();
-        boolean enderecoInserido = enderecoDAO.inserirEndereco(endereco);
-        if (!enderecoInserido) {
+        // Validação do usuário e outros checks antes de inserção
+        if (usuario == null || usuario.getNome().isEmpty() || usuario.getEmail().isEmpty()) {
             return false;
         }
 
-        // Agora, insere o usuário com o ID do endereço
+        // Insere o usuário diretamente, assumindo que o endereço faz parte do modelo de
+        // usuário
         return usuarioDAO.inserirUsuario(usuario);
     }
 
