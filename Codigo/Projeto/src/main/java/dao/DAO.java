@@ -5,8 +5,8 @@ import java.sql.*;
 public class DAO {
     public static Connection conectar() {
         String url = " ";
-        String username = "trabalhoti2";
-        String password = "Joaoepobe26@";
+        String username = "ti2cc";
+        String password = "ti@cc";
         Connection conexao = null;
         try {
             conexao = DriverManager.getConnection(url, username, password);
