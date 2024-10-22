@@ -15,6 +15,9 @@ public class DAO {
      * @return Objeto Connection ou null se houver erro.
 
     public static Connection conectar() {
+        String url = " ";
+        String username = "trabalhoti2";
+        String password = "Joaoepobe26@";
         Connection conexao = null;
         try {
             conexao = DriverManager.getConnection(URL, USERNAME, PASSWORD);
@@ -43,4 +46,3 @@ public class DAO {
         return status;
     }
 }
-*/
