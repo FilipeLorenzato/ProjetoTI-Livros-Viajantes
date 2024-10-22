@@ -6,15 +6,74 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Captura os dados do formulário
         const bookName = document.getElementById('book-name').value.trim();
+        const bookAuthor = document.getElementById('book-author').value.trim();
         const bookGenre = document.getElementById('book-genre').value;
         const bookSynopsis = document.getElementById('book-synopsis').value.trim();
-        const bookPages = parseInt(document.getElementById('book-pages').value);
+        // Se você tiver mais campos, adicione aqui
+
+        // Validação simples
+        if (!bookName || !bookAuthor || !bookGenre || !bookSynopsis) {
+            alert('Preencha todos os campos corretamente.');
+            return;
+        }
+
+        // Cria um objeto com os dados do livro
+        const bookData = {
+            name: bookName,
+            author: bookAuthor,
+            genre: bookGenre,
+            synopsis: bookSynopsis,
+            // Adicione outros campos conforme necessário
+        };
+
+        // Envia os dados para o servidor
+        fetch('http://localhost:4567/livro', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(bookData) // Converte os dados do livro em JSON
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao cadastrar o livro: ' + response.statusText);
+            }
+            return response.json(); // Converte a resposta em JSON
+        })
+        .then(data => {
+            // Verifica se o servidor retornou uma mensagem de sucesso
+            alert(data.mensagem || 'Livro cadastrado com sucesso!');
+            window.location.href = 'postagem-livros.html'; // Redireciona após o cadastro
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Ocorreu um erro ao cadastrar o livro. Tente novamente.');
+        });
+    });
+});
+
+
+
+
+
+
+/*document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('book-form');
+
+    form.addEventListener('submit', (event) => {
+        event.preventDefault(); // Impede o envio padrão do formulário
+
+        // Captura os dados do formulário
+        const bookName = document.getElementById('book-name').value.trim();
         const bookAuthor = document.getElementById('book-author').value.trim();
+        const bookGenre = document.getElementById('book-genre').value;
+        const bookSynopsis = document.getElementById('book-synopsis').value.trim();
+        /*const bookPages = parseInt(document.getElementById('book-pages').value);
         const bookImage = document.getElementById('book-image').files[0]; // Imagem do arquivo
         const bookImageUrl = document.getElementById('book-image-url').value.trim(); // URL da imagem
 
         // Validação simples
-        if (!bookName || bookPages <= 0 || !bookAuthor || !bookSynopsis || (!bookImage && !bookImageUrl)) {
+        if (!bookName || !bookAuthor || !bookGenre || !bookSynopsis) {
             alert('Preencha todos os campos corretamente e forneça uma imagem.');
             return;
         }
@@ -61,4 +120,4 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Livro cadastrado com sucesso!');
         window.location.href = 'postagem-livros.html';
     }
-});
+})});*/

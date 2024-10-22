@@ -10,60 +10,78 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Troca;
+//import dao.DAO;
 
 public class TrocaDAO {
     private Connection conexao;
 
-    public TrocaDAO() {
+    public Connection conectar() {
+        String driverName = "org.postgresql.Driver";
+        String serverName = "localhost";
+        String mydatabase = "postgres";
+        int porta = 5432;
+        String url = "jdbc:postgresql://" + serverName + ":" + porta + "/" + mydatabase;
+        String username = "ti2cc";
+        String password = "ti@cc";
+        Connection conn = null;
+
         try {
-            Class.forName("org.postgresql.Driver");
-            conexao = DriverManager.getConnection("jdbc:postgresql://localhost:5432/livros_viajantes", "user",
-                    "password");
-        } catch (Exception e) {
-            e.printStackTrace();
+            Class.forName(driverName);
+            conexao = DriverManager.getConnection(url, username, password);
+            conn = conexao;
+            System.out.println("Conexão efetuada com o postgres!");
+        } catch (ClassNotFoundException e) {
+            System.err.println("Conexão NÃO efetuada com o postgres -- Driver não encontrado -- " + e.getMessage());
+        } catch (SQLException e) {
+            System.err.println("Conexão NÃO efetuada com o postgres -- " + e.getMessage());
         }
+
+        return conn;
     }
 
     // Inserir nova troca
     public boolean inserir(Troca troca) {
-        try {
-            String sql = "INSERT INTO troca (id_livro, usuario_ofertante, usuario_contemplado, status) VALUES (?, ?, ?, ?)";
-            PreparedStatement stmt = conexao.prepareStatement(sql);
+        String sql = "INSERT INTO troca (id_livro, usuario_ofertante, usuario_contemplado, status) VALUES (?, ?, ?, ?)";
+        try (Connection conexao = this.conectar();
+                PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
             stmt.setInt(1, troca.getIdLivro());
             stmt.setInt(2, troca.getUsuarioOfertante());
             stmt.setInt(3, troca.getUsuarioContemplado());
             stmt.setString(4, troca.getStatus());
             stmt.executeUpdate();
-            stmt.close();
             return true;
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erro ao inserir troca: " + e.getMessage());
             return false;
         }
     }
 
     // Atualizar status da troca
     public boolean atualizarStatus(int idTroca, String novoStatus) {
-        try {
-            String sql = "UPDATE troca SET status = ? WHERE id_troca = ?";
-            PreparedStatement stmt = conexao.prepareStatement(sql);
+        String sql = "UPDATE troca SET status = ? WHERE id_troca = ?";
+
+        try (Connection conn = this.conectar();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, novoStatus);
             stmt.setInt(2, idTroca);
             stmt.executeUpdate();
-            stmt.close();
             return true;
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erro ao atualizar status da troca: " + e.getMessage());
             return false;
         }
     }
 
     // Obter uma troca por ID
     public Troca getById(int idTroca) {
+        String sql = "SELECT * FROM troca WHERE id_troca = ?";
         Troca troca = null;
-        try {
-            String sql = "SELECT * FROM troca WHERE id_troca = ?";
-            PreparedStatement stmt = conexao.prepareStatement(sql);
+
+        try (Connection conexao = this.conectar();
+                PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setInt(1, idTroca);
             ResultSet rs = stmt.executeQuery();
 
@@ -77,9 +95,8 @@ public class TrocaDAO {
             }
 
             rs.close();
-            stmt.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erro ao obter troca por ID: " + e.getMessage());
         }
         return troca;
     }
@@ -87,10 +104,10 @@ public class TrocaDAO {
     // Listar todas as trocas
     public List<Troca> listarTodas() {
         List<Troca> lista = new ArrayList<>();
-        try {
-            String sql = "SELECT * FROM troca";
-            Statement stmt = conexao.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
+        String sql = "SELECT * FROM troca";
+        try (Connection conexao = this.conectar();
+                Statement stmt = conexao.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 Troca troca = new Troca(
@@ -102,25 +119,24 @@ public class TrocaDAO {
                 lista.add(troca);
             }
 
-            rs.close();
-            stmt.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erro ao listar trocas: " + e.getMessage());
         }
         return lista;
     }
 
     // Remover troca por ID
     public boolean remover(int idTroca) {
-        try {
-            String sql = "DELETE FROM troca WHERE id_troca = ?";
-            PreparedStatement stmt = conexao.prepareStatement(sql);
+        String sql = "DELETE FROM troca WHERE id_troca = ?";
+
+        try (Connection conexao = this.conectar();
+                PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setInt(1, idTroca);
             stmt.executeUpdate();
-            stmt.close();
             return true;
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erro ao remover troca: " + e.getMessage());
             return false;
         }
     }

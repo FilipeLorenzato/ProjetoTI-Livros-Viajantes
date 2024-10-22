@@ -10,49 +10,41 @@ public class Usuario {
     private String senha;
     private LocalDate dataNascimento;
     private String telefone;
+    private String rua; // Alteração: endereço agora é uma String
     private String cidade;
-    private String rua;
     private String estado;
     private String cep;
-    private String numero;
 
     // Construtor vazio
     public Usuario() {
     }
 
     // Construtor sem ID (para inserção)
-    public Usuario(String nome, String email, String senha, LocalDate dataNascimento,
-            String telefone, String cidade, String rua, String estado, String cep, String numero) {
+    public Usuario(String nome, String email, String senha, String telefone, String rua, String cidade, String estado, String cep) {
         this.nome = nome;
         this.email = email;
         this.senha = senha;
-        this.dataNascimento = dataNascimento;
         this.telefone = telefone;
-        this.cidade = cidade;
         this.rua = rua;
+        this.cidade = cidade;
         this.estado = estado;
         this.cep = cep;
-        this.numero = numero;
     }
 
     // Construtor com todos os campos (inclui o ID do usuário)
-    public Usuario(int idUsuario, String nome, String email, String senha, LocalDate dataNascimento,
-            String telefone, String cidade, String rua, String estado, String cep, String numero) {
+    public Usuario(int idUsuario, String nome, String email, String senha, String telefone, String rua, String cidade, String estado, String cep) {
         this.idUsuario = idUsuario;
         this.nome = nome;
         this.email = email;
         this.senha = senha;
-        this.dataNascimento = dataNascimento;
         this.telefone = telefone;
-        this.cidade = cidade;
         this.rua = rua;
+        this.cidade = cidade;
         this.estado = estado;
         this.cep = cep;
-        this.numero = numero;
     }
 
     // Getters e Setters
-
     public int getIdUsuario() {
         return idUsuario;
     }
@@ -106,21 +98,20 @@ public class Usuario {
         this.telefone = telefone;
     }
 
-    // Endereço
+    public String getrua() {
+        return rua;
+    }
+
+    public void setrua(String rua) {
+        this.rua = rua;
+    }
+
     public String getCidade() {
         return cidade;
     }
 
     public void setCidade(String cidade) {
         this.cidade = cidade;
-    }
-
-    public String getRua() {
-        return rua;
-    }
-
-    public void setRua(String rua) {
-        this.rua = rua;
     }
 
     public String getEstado() {
@@ -139,12 +130,8 @@ public class Usuario {
         this.cep = cep;
     }
 
-    public String getNumero() {
-        return numero;
-    }
-
-    public void setNumero(String numero) {
-        this.numero = numero;
+    public String getPerfilData() {
+        return "Perfil data for user: " + this.nome; // Exemplo de implementação
     }
 
     // Sobrescrevendo toString para formatar a exibição dos dados do usuário
@@ -152,8 +139,8 @@ public class Usuario {
     public String toString() {
         return "Usuario [idUsuario=" + idUsuario + ", nome=" + nome + ", email=" + email +
                 ", dataNascimento=" + dataNascimento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) +
-                ", telefone=" + telefone + ", endereco=" + cidade + ", " + rua + ", " + estado +
-                ", " + cep + ", " + numero + "]";
+                ", telefone=" + telefone + ", rua=" + rua + ", cidade=" + cidade +
+                ", estado=" + estado + ", cep=" + cep + "]";
     }
 
     // Método para imprimir o usuário no console

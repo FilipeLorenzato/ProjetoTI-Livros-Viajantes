@@ -1,16 +1,96 @@
 package app;
 
+import service.LivroService;
+import service.UsuarioService;
+import static spark.Spark.*;
+
+public class Main {
+
+    private static UsuarioService usuarioService = new UsuarioService();
+    private static LivroService livroService = new LivroService();
+
+    public static void main(String[] args) {
+        port(4567);
+
+        // Configurar CORS
+        options("/*", (request, response) -> {
+            String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
+            if (accessControlRequestHeaders != null) {
+                response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
+            }
+
+            String accessControlRequestMethod = request.headers("Access-Control-Request-Method");
+            if (accessControlRequestMethod != null) {
+                response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
+            }
+
+            return "OK";
+        });
+
+        before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
+
+        // ----------------- Rotas de Usuário -----------------
+
+        // Criar novo usuário (Cadastro)
+        post("/usuario", (request, response) -> usuarioService.cadastrarUsuario(request, response));
+
+        // Obter usuário por ID
+        get("/usuario/:id", (request, response) -> usuarioService.getUsuarioById(request, response));
+
+        // Atualizar usuário
+        put("/usuario/:id", (request, response) -> usuarioService.atualizarUsuario(request, response));
+
+        // Deletar usuário
+        delete("/usuario/:id", (request, response) -> usuarioService.deletarUsuario(request, response));
+
+        // Listar todos os usuários
+        get("/usuarios", (request, response) -> usuarioService.listarTodosUsuarios(response));
+
+        // Autenticação (Login)
+        post("/login", (request, response) -> usuarioService.login(request, response));
+
+        // ----------------- Rotas de Livros -----------------
+
+        // Cadastrar novo livro
+        post("/livro", (request, response) -> livroService.cadastrarLivro(request, response));
+
+        // Obter livro por ID
+        get("/livro/:id", (request, response) -> livroService.getLivroById(request, response));
+
+        // Atualizar livro
+        put("/livro/:id", (request, response) -> livroService.updateLivro(request, response));
+
+        // Deletar livro
+        delete("/livro/:id", (request, response) -> livroService.deletarLivro(request, response));
+
+        // Listar todos os livros
+        get("/livros", (request, response) -> livroService.listarTodosLivros(response));
+        
+        // ----------------- Rotas "Em Alta" e "Histórico" -----------------
+
+        // Listar livros "em alta"
+        get("/livros/emAlta", (request, response) -> livroService.getLivrosEmAlta(response));
+
+        // Listar histórico de livros postados por um usuário
+        get("/livros/historico/:idUsuario", (request, response) -> livroService.getHistoricoLivrosUsuario(request, response));
+
+    }
+}
+
+
+/*package app;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import model.Endereco;
 import model.Livro;
 import model.Usuario;
 import service.LivroService;
 import service.UsuarioService;
-
 import spark.ModelAndView;
 import static spark.Spark.before;
 import static spark.Spark.get;
@@ -37,6 +117,7 @@ public class Main {
 
         // Rota para exibir o formulário de login
         get("/login", (req, res) -> {
+        	System.out.println("estou a	qui 123445");
             Map<String, Object> model = new HashMap<>();
             if (req.queryParams("erro") != null) {
                 model.put("mensagemErro", "Email ou senha inválidos.");
@@ -46,10 +127,13 @@ public class Main {
 
         // Rota para processar o login
         post("/login", (req, res) -> {
+        	System.out.println("estou a	qui 123445");
             String email = req.queryParams("email");
             String senha = req.queryParams("senha");
 
             Usuario usuario = usuarioService.autenticarUsuario(email, senha);
+            
+            System.out.println(usuario);
 
             if (usuario != null) {
                 req.session(true).attribute("usuario", usuario);
@@ -57,6 +141,7 @@ public class Main {
             } else {
                 res.redirect("/login?erro=true");
             }
+            System.out.println(usuario);
             return null;
         });
 
@@ -89,7 +174,8 @@ public class Main {
             int numero = Integer.parseInt(numeroStr);
 
             LocalDate dataNascimentoLocalDate = LocalDate.parse(dataNascimento, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            Usuario usuario = new Usuario(nome, email, senha, dataNascimentoLocalDate, telefone, cidade, rua, estado, cep, String.valueOf(numero));
+            Endereco endereco = new Endereco(cidade, rua, estado, cep, numero);
+            Usuario usuario = new Usuario(nome, email, senha, dataNascimentoLocalDate, telefone, endereco);
             boolean sucesso = usuarioService.cadastrarUsuario(usuario);
 
             if (sucesso) {
@@ -162,6 +248,8 @@ public class Main {
 
         // Rota para exibir o formulário de postagem de livros
         get("/postagemLivros", (req, res) -> {
+        	
+        	System.out.println("estou aqui");
             Usuario usuario = req.session().attribute("usuario");
             if (usuario == null) {
                 res.redirect("/login");
@@ -201,9 +289,10 @@ public class Main {
         // ----------------- Rota "Histórico" -----------------
 
         get("/historico", (req, res) -> {
+        	System.out.println("ESTOU AQUI");
             Usuario usuario = req.session().attribute("usuario");
             if (usuario == null) {
-                res.redirect("/login");
+                res.redirect("/login.html");
                 return null;
             }
 
@@ -221,7 +310,7 @@ public class Main {
         get("/inicio", (req, res) -> {
             Usuario usuario = req.session().attribute("usuario");
             if (usuario == null) {
-                res.redirect("/login");
+                res.redirect("/login.html");
                 return null;
             }
 
@@ -247,7 +336,7 @@ public class Main {
      * @param model        Mapa de dados para o template.
      * @param templatePath Caminho do template HTML.
      * @return Conteúdo renderizado.
-     */
+     
     private static String render(Map<String, Object> model, String templatePath) {
         if (model == null) {
             model = new HashMap<>();
@@ -255,3 +344,4 @@ public class Main {
         return new VelocityTemplateEngine().render(new ModelAndView(model, templatePath));
     }
 }
+*/

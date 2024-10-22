@@ -30,37 +30,37 @@
                 <div class="form-group input-icon">
                     <label for="nome">Nome Completo</label>
                     <span class="icon">&#128100;</span>
-                    <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo" required>
+                    <input type="text" id="nome" name="nome" autocomplete="name" placeholder="Digite seu nome completo" required>
                 </div>
                 <div class="form-group input-icon">
                     <label for="email">E-mail</label>
                     <span class="icon">&#9993;</span>
-                    <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
+                    <input type="email" id="email" name="email" autocomplete="email" placeholder="Digite seu e-mail" required>
                 </div>
                 <div class="form-group input-icon">
                     <label for="senha">Senha</label>
                     <span class="icon">&#128274;</span>
-                    <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required>
+                    <input type="password" id="senha" name="senha" autocomplete="new-password" placeholder="Digite sua senha" required>
                 </div>
                 <div class="form-group input-icon">
                     <label for="telefone">Telefone</label>
                     <span class="icon">&#128222;</span>
-                    <input type="tel" id="telefone" name="telefone" placeholder="(00) 00000-0000" required>
+                    <input type="tel" id="telefone" name="telefone" autocomplete="tel" placeholder="(00) 00000-0000" required>
                 </div>
                 <div class="form-group input-icon">
-                    <label for="endereco">Endereço</label>
+                    <label for="endereco">Rua</label>
                     <span class="icon">&#127968;</span>
-                    <input type="text" id="endereco" name="endereco" placeholder="Rua, Número" required>
+                    <input type="text" id="endereco" name="endereco" autocomplete="address-line1" placeholder="Rua, Número" required>
                 </div>
                 <div class="form-group input-icon">
                     <label for="cidade">Cidade</label>
                     <span class="icon">&#127965;</span>
-                    <input type="text" id="cidade" name="cidade" placeholder="Digite sua cidade" required>
+                    <input type="text" id="cidade" name="cidade" autocomplete="address-level2" placeholder="Digite sua cidade" required>
                 </div>
                 <div class="form-group input-icon">
                     <label for="estado">Estado</label>
                     <span class="icon">&#127968;</span>
-                    <select id="estado" name="estado" required>
+                    <select id="estado" name="estado" autocomplete="address-level3" required>
                         <option value="" disabled selected>Selecione o estado</option>
                         <option value="AC">Acre</option>
                         <option value="AL">Alagoas</option>
@@ -94,7 +94,7 @@
                 <div class="form-group input-icon">
                     <label for="cep">CEP</label>
                     <span class="icon">&#128205;</span>
-                    <input type="text" id="cep" name="cep" placeholder="00000-000" required>
+                    <input type="text" id="cep" name="cep" autocomplete="postal-code" placeholder="00000-000" required>
                 </div>
                 <button type="submit" class="submit-button">Cadastrar Usuário</button>
             </form>

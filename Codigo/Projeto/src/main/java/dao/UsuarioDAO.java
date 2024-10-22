@@ -1,201 +1,303 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import app.DatabaseConnection;
 import model.Usuario;
 
 public class UsuarioDAO {
+	private List<Usuario> usuarios;
+	private Connection conexao;
+	private int maxId = 0;
 
-    // Método para inserir um novo usuário
-    public boolean inserirUsuario(Usuario usuario) {
-        String sql = "INSERT INTO usuario (nome, email, senha, data_nascimento, telefone, cidade, rua, estado, cep, numero) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	public UsuarioDAO() {
+		conexao = null;
+		this.usuarios = new ArrayList<Usuario>();
+	}
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+	public int getMaxId() {
+		return this.maxId;
+	}
 
-            pstmt.setString(1, usuario.getNome());
-            pstmt.setString(2, usuario.getEmail());
-            pstmt.setString(3, usuario.getSenha()); // Em produção, use hashing
-            pstmt.setDate(4, Date.valueOf(usuario.getDataNascimento()));
-            pstmt.setString(5, usuario.getTelefone());
-            pstmt.setString(6, usuario.getCidade());
-            pstmt.setString(7, usuario.getRua());
-            pstmt.setString(8, usuario.getEstado());
-            pstmt.setString(9, usuario.getCep());
-            pstmt.setString(10, usuario.getNumero());
+	public void incrementMaxId() {
+		this.maxId++;
+	}
 
-            int rowsAffected = pstmt.executeUpdate();
+	public Connection conectar() {
+		String driverName = "org.postgresql.Driver";
+		String serverName = "localhost";
+		String mydatabase = "postgres";
+		int porta = 5432;
+		String url = "jdbc:postgresql://" + serverName + ":" + porta + "/" + mydatabase;
+		String username = "ti2cc";
+		String password = "ti@cc";
+		Connection conn = null;
 
-            if (rowsAffected > 0) {
-                // Obtém o ID gerado automaticamente
-                ResultSet rs = pstmt.getGeneratedKeys();
-                if (rs.next()) {
-                    usuario.setIdUsuario(rs.getInt(1));
-                }
-                return true;
-            }
+		try {
+			Class.forName(driverName);
+			conexao = DriverManager.getConnection(url, username, password);
+			conn = conexao;
+			System.out.println("Conexão efetuada com o postgres!");
+		} catch (ClassNotFoundException e) {
+			System.err.println("Conexão NÃO efetuada com o postgres -- Driver não encontrado -- " + e.getMessage());
+		} catch (SQLException e) {
+			System.err.println("Conexão NÃO efetuada com o postgres -- " + e.getMessage());
+		}
 
-        } catch (SQLException e) {
-            System.err.println("Erro ao inserir usuário: " + e.getMessage());
-        }
+		return conn;
+	}
 
-        return false;
-    }
+	public boolean close() {
+		boolean status = false;
 
-    // Método para buscar usuário por email
-    public Usuario buscarUsuarioPorEmail(String email) {
-        String sql = "SELECT * FROM usuario WHERE email = ?";
-        Usuario usuario = null;
+		try {
+			conexao.close();
+			status = true;
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+		return status;
+	}
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+	public Usuario getByEmail(String email) {
+		for (Usuario usuario : usuarios) {
+			if (email.equals(usuario.getEmail())) {
+				return usuario;
+			}
+		}
+		return null;
+	}
 
-            pstmt.setString(1, email);
-            ResultSet rs = pstmt.executeQuery();
+	public Usuario buscarPorEmail(String email) {
+		Usuario usuario = null;
+		String sql = "SELECT * FROM Usuario WHERE email = ?";
+		try (Connection conn = this.conectar();
+				PreparedStatement stmt = conn.prepareStatement(sql)) {
+			stmt.setString(1, email);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				usuario = new Usuario(
+						rs.getInt("id"),
+						rs.getString("email"),
+						rs.getString("senha"),
+						rs.getString("nome"),
+						rs.getString("telefone"),
+						rs.getString("rua"),
+						rs.getString("cidade"),
+						rs.getString("estado"),
+						rs.getString("cep"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return usuario;
+	}
 
-            if (rs.next()) {
-                usuario = new Usuario(
-                        rs.getInt("id_usuario"),
-                        rs.getString("nome"),
-                        rs.getString("email"),
-                        rs.getString("senha"),
-                        rs.getDate("data_nascimento").toLocalDate(),
-                        rs.getString("telefone"),
-                        rs.getString("cidade"),
-                        rs.getString("rua"),
-                        rs.getString("estado"),
-                        rs.getString("cep"),
-                        rs.getString("numero")
-                );
-            }
+	public Usuario get(String nome) {
+		for (Usuario usuario : usuarios) {
+			if (nome.equals(usuario.getNome())) {
+				return usuario;
+			}
+		}
+		return null;
+	}
 
-        } catch (SQLException e) {
-            System.err.println("Erro ao buscar usuário por email: " + e.getMessage());
-        }
+	public List<Usuario> getAll() {
+		return usuarios;
+	}
 
-        return usuario;
-    }
+	private List<Usuario> getFromDB() {
+		usuarios.clear();
+		Usuario usuario = null;
+		try {
+			Usuario usuarios[] = this.getUsuarios();
+			System.out.println(usuarios);
+			for (int i = 0; i < usuarios.length; i++) {
+				usuario = (Usuario) usuarios[i];
+				this.usuarios.add(usuario);
+			}
+		} catch (Exception e) {
+			System.out.println("ERRO ao gravar usuario no disco!");
+			e.printStackTrace();
+		}
+		return usuarios;
+	}
 
-    // Método para buscar usuário por ID
-    public Usuario buscarUsuarioPorId(int idUsuario) {
-        String sql = "SELECT * FROM usuario WHERE id_usuario = ?";
-        Usuario usuario = null;
+	private Connection getConexao() {
+		if (conexao == null) {
+			conectar();
+		}
+		return conexao;
+	}
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+	public boolean inserirUsuario(Usuario usuario) {
+		boolean status = false;
+		try {
+			Connection conexao = getConexao();
+			String sql = "INSERT INTO usuario (email, senha, nome, telefone, rua, cidade, estado, cep) " +
+					"VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+			PreparedStatement st = conexao.prepareStatement(sql);
+			st.setString(1, usuario.getEmail());
+			st.setString(2, usuario.getSenha());
+			st.setString(3, usuario.getNome());
+			st.setString(4, usuario.getTelefone());
+			st.setString(5, usuario.getrua());
+			st.setString(6, usuario.getCidade());
+			st.setString(7, usuario.getEstado());
+			st.setString(8, usuario.getCep());
+			int rowsAffected = st.executeUpdate();
+			st.close();
+			if (rowsAffected > 0) {
+				status = true;
+				incrementMaxId();
+			}
+		} catch (SQLException e) {
+			System.out.println(e);
+			throw new RuntimeException(e);
+		}
+		return status;
+	}
 
-            pstmt.setInt(1, idUsuario);
-            ResultSet rs = pstmt.executeQuery();
+	public boolean atualizarUsuario(Usuario usuario) {
+		boolean status = false;
+		try {
+			String sql = "UPDATE usuario SET nome = ?, senha = ?, telefone = ?, email = ?, rua = ?, cidade = ?, estado = ?, cep = ?";
+			PreparedStatement st = conexao.prepareStatement(sql);
+			st.setString(1, usuario.getNome());
+			st.setString(2, usuario.getSenha());
+			st.setString(3, usuario.getTelefone());
+			st.setString(4, usuario.getEmail());
+			st.setString(5, usuario.getrua());
+			st.setString(6, usuario.getCidade());
+			st.setString(7, usuario.getEstado());
+			st.setString(8, usuario.getCep());
+			int rowsUpdated = st.executeUpdate();
+			st.close();
 
-            if (rs.next()) {
-                usuario = new Usuario(
-                        rs.getInt("id_usuario"),
-                        rs.getString("nome"),
-                        rs.getString("email"),
-                        rs.getString("senha"),
-                        rs.getDate("data_nascimento").toLocalDate(),
-                        rs.getString("telefone"),
-                        rs.getString("cidade"),
-                        rs.getString("rua"),
-                        rs.getString("estado"),
-                        rs.getString("cep"),
-                        rs.getString("numero")
-                );
-            }
+			if (rowsUpdated > 0) {
+				status = true;
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return status;
+	}
 
-        } catch (SQLException e) {
-            System.err.println("Erro ao buscar usuário por ID: " + e.getMessage());
-        }
+	public boolean excluirUsuario(int id) {
+		boolean status = false;
+		try {
+			Statement st = conexao.createStatement();
+			st.executeUpdate("DELETE FROM usuario WHERE id = " + id);
+			st.close();
+			status = true;
+		} catch (SQLException u) {
+			throw new RuntimeException(u);
+		}
+		return status;
+	}
 
-        return usuario;
-    }
+	public Usuario[] getUsuarios() {
+		Usuario[] usuarios = null;
 
-    // Método para buscar todos os usuários
-    public List<Usuario> buscarTodosUsuarios() {
-        String sql = "SELECT * FROM usuario";
-        List<Usuario> usuarios = new ArrayList<>();
+		try {
+			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = st.executeQuery("SELECT * FROM usuario");
+			if (rs.next()) {
+				rs.last();
+				usuarios = new Usuario[rs.getRow()];
+				rs.beforeFirst();
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+				for (int i = 0; rs.next(); i++) {
+					usuarios[i] = new Usuario(rs.getInt("id"), rs.getString("email"), rs.getString("senha"),
+							rs.getString("nome"), rs.getString("telefone"), rs.getString("rua"),
+							rs.getString("cidade"), rs.getString("estado"), rs.getString("cep"));
+				}
+			}
+			st.close();
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
+		return usuarios;
+	}
 
-            while (rs.next()) {
-                Usuario usuario = new Usuario(
-                        rs.getInt("id_usuario"),
-                        rs.getString("nome"),
-                        rs.getString("email"),
-                        rs.getString("senha"),
-                        rs.getDate("data_nascimento").toLocalDate(),
-                        rs.getString("telefone"),
-                        rs.getString("cidade"),
-                        rs.getString("rua"),
-                        rs.getString("estado"),
-                        rs.getString("cep"),
-                        rs.getString("numero")
-                );
-                usuarios.add(usuario);
-            }
+	public Usuario[] getUsuariosByCidade(String cidade) {
+		Usuario[] usuarios = null;
 
-        } catch (SQLException e) {
-            System.err.println("Erro ao buscar todos os usuários: " + e.getMessage());
-        }
+		try {
+			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = st.executeQuery("SELECT * FROM usuario WHERE cidade = '" + cidade + "'");
+			if (rs.next()) {
+				rs.last();
+				usuarios = new Usuario[rs.getRow()];
+				rs.beforeFirst();
 
-        return usuarios;
-    }
+				for (int i = 0; rs.next(); i++) {
+					usuarios[i] = new Usuario(rs.getInt("id"), rs.getString("email"), rs.getString("senha"),
+							rs.getString("nome"), rs.getString("telefone"), rs.getString("rua"),
+							rs.getString("cidade"), rs.getString("estado"), rs.getString("cep"));
+				}
+			}
+			st.close();
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
+		return usuarios;
+	}
 
-    // Método para atualizar um usuário
-    public boolean atualizarUsuario(Usuario usuario) {
-        String sql = "UPDATE usuario SET nome = ?, email = ?, senha = ?, data_nascimento = ?, telefone = ?, cidade = ?, rua = ?, estado = ?, cep = ?, numero = ? WHERE id_usuario = ?";
+	public Usuario getById(int id) {
+		Usuario usuario = null;
+		try {
+			Statement st = conexao.createStatement();
+			String sql = "SELECT * FROM usuario WHERE id = " + id;
+			ResultSet rs = st.executeQuery(sql);
+			if (rs.next()) {
+				// Extrair os dados do usuário do ResultSet
+				String email = rs.getString("email");
+				String senha = rs.getString("senha");
+				String nome = rs.getString("nome");
+				String telefone = rs.getString("telefone");
+				String rua = rs.getString("rua");
+				String cidade = rs.getString("cidade");
+				String estado = rs.getString("estado");
+				String cep = rs.getString("cep");
+				// Criar o objeto Usuario com os dados obtidos
+				usuario = new Usuario(id, email, senha, nome, telefone, rua, cidade, estado, cep);
+			}
+			st.close();
+		} catch (SQLException u) {
+			throw new RuntimeException(u);
+		}
+		return usuario;
+	}
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+	public List<Usuario> listarUsuarios() {
+		List<Usuario> usuarios = new ArrayList<>();
+		String sql = "SELECT id, email, senha, nome, telefone, rua, cidade, estado, cep FROM usuario";
 
-            pstmt.setString(1, usuario.getNome());
-            pstmt.setString(2, usuario.getEmail());
-            pstmt.setString(3, usuario.getSenha());
-            pstmt.setDate(4, Date.valueOf(usuario.getDataNascimento()));
-            pstmt.setString(5, usuario.getTelefone());
-            pstmt.setString(6, usuario.getCidade());
-            pstmt.setString(7, usuario.getRua());
-            pstmt.setString(8, usuario.getEstado());
-            pstmt.setString(9, usuario.getCep());
-            pstmt.setString(10, usuario.getNumero());
-            pstmt.setInt(11, usuario.getIdUsuario());
+		try (PreparedStatement stmt = conexao.prepareStatement(sql);
+				ResultSet rs = stmt.executeQuery()) {
 
-            int rowsAffected = pstmt.executeUpdate();
-            return rowsAffected > 0;
+			while (rs.next()) {
+				int id = rs.getInt("id");
+				String email = rs.getString("email");
+				String senha = rs.getString("senha");
+				String nome = rs.getString("nome");
+				String telefone = rs.getString("telefone");
+				String rua = rs.getString("rua");
+				String cidade = rs.getString("cidade");
+				String estado = rs.getString("estado");
+				String cep = rs.getString("cep");
 
-        } catch (SQLException e) {
-            System.err.println("Erro ao atualizar usuário: " + e.getMessage());
-        }
+				Usuario usuario = new Usuario(id, email, senha, nome, telefone, rua, cidade, estado, cep);
+				usuarios.add(usuario);
+			}
 
-        return false;
-    }
+		} catch (SQLException e) {
+			System.out.println("Erro ao listar usuários: " + e.getMessage());
+		}
 
-    // Método para deletar um usuário
-    public boolean deletarUsuario(int idUsuario) {
-        String sql = "DELETE FROM usuario WHERE id_usuario = ?";
+		return usuarios;
+	}
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setInt(1, idUsuario);
-            int rowsAffected = pstmt.executeUpdate();
-
-            return rowsAffected > 0;
-
-        } catch (SQLException e) {
-            System.err.println("Erro ao deletar usuário: " + e.getMessage());
-        }
-
-        return false;
-    }
 }

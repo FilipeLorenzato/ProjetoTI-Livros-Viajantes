@@ -1,45 +1,44 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const btnLogin = document.getElementById('btnLogin');
-    btnLogin.addEventListener('click', logarUsuario);
-});
+function logarUsuario() {
+    const email = document.getElementById('email').value.trim(); // Remove espaços em branco
+    const senha = document.getElementById('senha').value.trim(); // Remove espaços em branco
 
-function logarUsuario(event) {
-    event.preventDefault();
-
-    const email = document.getElementById('emailLogin').value.trim();
-    const senha = document.getElementById('senhaLogin').value;
-
+    // Validação dos campos
     if (!email || !senha) {
-        alert('Por favor, preencha todos os campos.');
-        return;
+        alert("Por favor, preencha todos os campos.");
+        return; // Sai da função se algum campo estiver vazio
     }
 
-    // Verifica os dados no backend
-    fetch('http://localhost:8000/pages/login.php', {
+    // Mostra os dados enviados para depuração
+    console.log("Dados enviados:", { email, senha });
+
+    fetch('http://localhost:4567/', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email, senha }),
+        body: JSON.stringify({ email, senha })
     })
-        .then(response => response.json())
-        .then(data => {
-            if (data.sucesso) {
-                // Salva as informações no localStorage
-                localStorage.setItem('usuarioLogado', JSON.stringify(data.usuario));
-                alert('Login realizado com sucesso!');
-                // Redirecionar para a página principal
-                window.location.href = 'pagina-principal.html';
-            } else {
-                alert('E-mail ou senha incorretos.');
+        .then(response => {
+            if (!response.ok) {
+                // Se a resposta não for OK, trata o erro baseado no status
+                return response.json().then(errData => {
+                    // Lança um erro com a mensagem recebida do servidor
+                    throw new Error(errData.mensagem || "Erro desconhecido ao fazer login.");
+                });
             }
+            return response.json(); // Converte a resposta em JSON se tudo estiver ok
+        })
+        .then(data => {
+            console.log(data.mensagem); // Exibe a mensagem retornada pelo servidor
+            alert(data.mensagem); // Exibe a mensagem para o usuário
+
+            // Redireciona para a página inicial após o login bem-sucedido
+            window.location.href = "/inicio"; // Ajuste o URL conforme necessário para sua aplicação
         })
         .catch(error => {
-            console.error('Erro ao fazer login:', error);
-            alert('Ocorreu um erro ao fazer login. Tente novamente.');
+            console.error("Erro:", error);
+            alert("Erro: " + error.message); // Exibe um alerta com a mensagem de erro
         });
-    console.log('Dados enviados:', { email, senha });
-
 }
 
 
