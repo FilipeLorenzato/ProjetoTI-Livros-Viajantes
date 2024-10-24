@@ -53,48 +53,15 @@ body::before {
 }
 
 /* Cabeçalho */
-header {
-    width: 100%;
-    background-color: var(--primary-color);
-    /* Cor de fundo do cabeçalho */
-    padding: var(--spacing-medium);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    /* Sombra para dar destaque */
-    background-color: transparent;
-}
-
-.header-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    /* Centraliza o texto */
-    margin-bottom: var(--spacing-medium);
-    /* Espaço entre o cabeçalho e o menu */
-
-}
-
-.logo-container img {
-    max-width: 150px;
-    /* Tamanho do logo */
-    height: auto;
-    /* Mantém a proporção */
-}
-
-.header-title {
-    color: var(--secondary-color);
-    font-size: 2rem;
-    /* Tamanho do texto do título */
-    margin-top: var(--spacing-small);
-    /* Espaço entre o logo e o título */
-}
-
-/* Menu de navegação */
 .header {
     width: 100%;
-    background-color: transparent;
+    background-color: transparent; /* Fundo transparente */
     padding: var(--spacing-small) 0;
-    border-bottom: 2px solid rgba(106, 90, 205, 0.5);
+    border-bottom: 2px solid rgba(106, 90, 205, 0.5); /* Borda inferior com opacidade */
+    box-shadow: none;
+
+    top: 0;
+    left: 0;
     z-index: 1000;
 }
 
@@ -105,36 +72,35 @@ header {
     max-width: 1200px;
     width: 90%;
     margin: 0 auto;
-    flex-wrap: wrap;
-    /* Permite que os itens quebrem em dispositivos menores */
 }
 
 .logo-container img {
-    max-height: 80px;
+    max-height: 120px; /* Aumento da altura máxima da logo */
+    height: auto;
+    width: auto;
 }
 
 .header-nav {
     display: flex;
-    gap: var(--spacing-small);
 }
 
-.header-button1, .header-button2, .header-button3, .header-button4, .header-button5 {
-    padding: var(--spacing-small) var(--spacing-medium);
-    background-color: transparent;
-    color: var(--secondary-color);
+.header-button {
+    margin-left: var(--spacing-small);
+    padding: 10px 20px;
+    background-color: transparent; /* Fundo transparente */
+    color: #ffffff; /* Alterado para branco */
     text-decoration: none;
-    border: 2px solid var(--primary-color);
+    border: 2px solid var(--primary-color); /* Borda sólida */
     border-radius: 25px;
     transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
     display: flex;
     align-items: center;
-    justify-content: center;
+    font-weight: 500;
 }
 
 .header-button:hover {
     background-color: var(--primary-color);
-    color: var(--secondary-color);
-    /* Ajuste de cor ao texto no hover */
+    color: #ffffff; /* Texto branco no hover */
 }
 
 /* Banner */

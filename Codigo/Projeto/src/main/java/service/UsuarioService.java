@@ -15,8 +15,12 @@ public class UsuarioService {
         usuarioDao.conectar();
     }
 
-    // Método para cadastrar um novo usuário
-    public Object cadastrarUsuario(Request request, Response response) {
+    // Inserir novo usuário
+    public String inserir(Request request, Response response) {
+        String resultado = "Erro ao criar usuário";
+        response.status(400); // Bad Request
+
+        // Validação dos parâmetros obrigatórios
         String email = request.queryParams("email");
         String senha = request.queryParams("senha");
         String nome = request.queryParams("nome");
@@ -25,30 +29,90 @@ public class UsuarioService {
         String cidade = request.queryParams("cidade");
         String estado = request.queryParams("estado");
         String cep = request.queryParams("cep");
+        
 
-        int id = usuarioDao.getMaxId() + 1;
-        Usuario usuario = new Usuario(id, email, senha, nome, telefone, rua, cidade, estado, cep);
-        usuarioDao.inserirUsuario(usuario);
+        if (email == null || senha == null || nome == null || telefone == null ||
+                rua == null || cidade == null
+                || estado == null || cep == null) {
+            return "Parâmetros obrigatórios ausentes!";
+        }
 
-        response.status(201); // 201 Created
-        return id;
+        // Criação de um novo usuário com os parâmetros fornecidos
+        Usuario usuario = new Usuario();
+        usuario.setNome(nome);
+        usuario.setEmail(email);
+        usuario.setSenha(senha);
+        usuario.setTelefone(telefone);
+        usuario.setrua(rua);
+
+        boolean sucesso = usuarioDao.inserirUsuario(usuario);
+        if (sucesso) {
+            resultado = "Usuário " + usuario.getNome() + " criado com sucesso!";
+            response.status(201); // Created
+        } else {
+            resultado = "Falha ao criar usuário";
+        }
+
+        return resultado;
     }
 
+    // Método para cadastrar um novo usuário
+    public Object cadastrarUsuario(Request request, Response response) {
+        try {
+            // Extrai o corpo da requisição como JSON
+            JSONObject jsonBody = new JSONObject(request.body());
+            
+            // Obtem os parâmetros necessários
+            String nome = jsonBody.getString("nome");
+            String email = jsonBody.getString("email");
+            String senha = jsonBody.getString("senha");
+            String telefone = jsonBody.getString("telefone");
+            String rua = jsonBody.getString("rua");
+            String cidade = jsonBody.getString("cidade");
+            String estado = jsonBody.getString("estado");
+            String cep = jsonBody.getString("cep");
+    
+            // Valida se os parâmetros não são nulos ou vazios
+            if (nome == null || email == null || senha == null || telefone == null || 
+                rua == null || cidade == null || estado == null || cep == null) {
+                response.status(400);
+                return "Parâmetros obrigatórios ausentes!";
+            }
+    
+            // Criação de um novo usuário
+            Usuario usuario = new Usuario(email, senha, nome, telefone, rua, cidade, estado, cep);
+    
+            // Insere o usuário no banco de dados
+            boolean sucesso = usuarioDao.inserirUsuario(usuario);
+            
+            if (sucesso) {
+                response.status(201); // Created
+                return "Usuário criado com sucesso!";
+            } else {
+                response.status(500);
+                return "Falha ao criar usuário";
+            }
+        } catch (Exception e) {
+            response.status(500);
+            return "Erro ao cadastrar usuário: " + e.getMessage();
+        }
+    }
+    
     // Método login
     public Object login(Request request, Response response) {
         // Obtendo os parâmetros de entrada do request
         String email = request.queryParams("email");
         String senha = request.queryParams("senha");
-    
+
         // Verificando se os parâmetros não são nulos
         if (email == null || senha == null) {
             response.status(400); // Bad Request
             return "{\"mensagem\": \"Email e senha devem ser fornecidos.\"}"; // Resposta JSON
         }
-    
+
         // Buscando o usuário pelo email
         Usuario usuario = usuarioDao.buscarPorEmail(email);
-    
+
         // Verificando se o usuário existe e se a senha está correta
         if (usuario != null && usuario.getSenha().equals(senha)) {
             response.status(200); // OK
@@ -58,7 +122,6 @@ public class UsuarioService {
             return "{\"mensagem\": \"Email ou senha inválidos.\"}"; // Resposta JSON
         }
     }
-    
 
     // Método para buscar um usuário por email
     public Usuario buscarUsuarioPorEmail(Request request, Response response) {
@@ -96,8 +159,8 @@ public class UsuarioService {
 
             if (usuario != null) {
                 JSONObject jsonResponse = new JSONObject();
-                jsonResponse.put("email", usuario.getEmail());
                 jsonResponse.put("nome", usuario.getNome());
+                jsonResponse.put("email", usuario.getEmail());
                 jsonResponse.put("telefone", usuario.getTelefone());
                 jsonResponse.put("rua", usuario.getrua());
                 jsonResponse.put("cidade", usuario.getCidade());
@@ -126,8 +189,8 @@ public class UsuarioService {
         if (usuario != null) {
             try {
                 JSONObject jsonBody = new JSONObject(request.body());
-                usuario.setEmail(jsonBody.getString("email"));
                 usuario.setNome(jsonBody.getString("nome"));
+                usuario.setEmail(jsonBody.getString("email"));
                 usuario.setTelefone(jsonBody.getString("telefone"));
                 usuario.setrua(jsonBody.getString("rua"));
                 usuario.setCidade(jsonBody.getString("cidade"));
@@ -169,8 +232,8 @@ public class UsuarioService {
         StringBuffer returnValue = new StringBuffer("<usuarios type=\"array\">");
         for (Usuario usuario : usuarioDao.getAll()) {
             returnValue.append("\n<usuario>\n" +
-                    "\t<email>" + usuario.getEmail() + "</email>\n" +
                     "\t<nome>" + usuario.getNome() + "</nome>\n" +
+                    "\t<email>" + usuario.getEmail() + "</email>\n" +
                     "\t<telefone>" + usuario.getTelefone() + "</telefone>\n" +
                     "\t<rua>" + usuario.getrua() + "</rua>\n" +
                     "\t<cidade>" + usuario.getCidade() + "</cidade>\n" +

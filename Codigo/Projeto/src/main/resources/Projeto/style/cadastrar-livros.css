@@ -200,8 +200,11 @@ main h1 {
 }
 
 textarea {
+    width: 100%;
+    padding: 12px 12px 12px 45px;
     resize: vertical; /* Permitir redimensionamento vertical */
     height: 100px; /* Altura fixa */
+    border-radius: 25px;
 }
 
 /* Botão de Envio */

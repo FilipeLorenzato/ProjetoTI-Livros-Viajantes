@@ -10,9 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Font Awesome para Ícones -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        integrity="sha512-pap/RSlcfKd+PZZA3JG5LMEeYGdH/VH2Zq8YF4/gpVYcY5ktttfXYg4e0P93kRLzGmljA/5S0tmQ3Slwg4Z/6w=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
     <!-- CSS Aprimorado -->
     <link rel="stylesheet" href="../style/Stylelogin.css">
 </head>
@@ -23,18 +21,16 @@
             <img src="imagens/logo.png" alt="Logo do Livros Viajantes" class="logo">
             <h1>Livros Viajantes</h1>
             <h3>Faça login na sua conta</h3>
-            <form action="/login" method="POST" aria-label="Formulário de Login">
+            <form onsubmit="event.preventDefault(); logarUsuario();" arial-label = "Formulário de login" >
                 <div class="input-group">
                     <i class="fas fa-envelope icon"></i>
                     <input type="email" id="emailLogin" name="emailLogin"
-                    autocomplete="email" placeholder="Digite seu e-mail" required
-                        aria-required="true">
+                        autocomplete="email" placeholder="Digite seu e-mail" required aria-required="true">
                 </div>
                 <div class="input-group">
                     <i class="fas fa-lock icon"></i>
                     <input type="password" id="senhaLogin" name="senhaLogin"
-                    autocomplete="current-password" placeholder="Digite sua senha" required
-                        aria-required="true">
+                        autocomplete="current-password" placeholder="Digite sua senha" required aria-required="true">
                 </div>
                 <button id="btnLogin" type="submit">Entrar</button>
             </form>

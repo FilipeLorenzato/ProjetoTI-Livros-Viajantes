@@ -11,11 +11,11 @@ import java.util.List;
 
 import model.Livro;
 
-public class LivroDAO {
+public class LivroDAO extends DAO {
 
     private Connection conexao;
 
-    public Connection conectar() {
+    public Connection conectarLivro() {
         String driverName = "org.postgresql.Driver";
         String serverName = "localhost";
         String mydatabase = "postgres";

@@ -3,10 +3,9 @@ package dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import model.Usuario;
 
-public class UsuarioDAO {
+public class UsuarioDAO extends DAO {
 	private List<Usuario> usuarios;
 	private Connection conexao;
 	private int maxId = 0;
@@ -24,7 +23,7 @@ public class UsuarioDAO {
 		this.maxId++;
 	}
 
-	public Connection conectar() {
+	public Connection conectarUsuario() {
 		String driverName = "org.postgresql.Driver";
 		String serverName = "localhost";
 		String mydatabase = "postgres";
@@ -72,7 +71,7 @@ public class UsuarioDAO {
 	public Usuario buscarPorEmail(String email) {
 		Usuario usuario = null;
 		String sql = "SELECT * FROM Usuario WHERE email = ?";
-		try (Connection conn = this.conectar();
+		try (Connection conn = this.conectarUsuario();
 				PreparedStatement stmt = conn.prepareStatement(sql)) {
 			stmt.setString(1, email);
 			ResultSet rs = stmt.executeQuery();
@@ -132,32 +131,27 @@ public class UsuarioDAO {
 	}
 
 	public boolean inserirUsuario(Usuario usuario) {
-		boolean status = false;
-		try {
-			Connection conexao = getConexao();
-			String sql = "INSERT INTO usuario (email, senha, nome, telefone, rua, cidade, estado, cep) " +
-					"VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-			PreparedStatement st = conexao.prepareStatement(sql);
-			st.setString(1, usuario.getEmail());
-			st.setString(2, usuario.getSenha());
-			st.setString(3, usuario.getNome());
-			st.setString(4, usuario.getTelefone());
-			st.setString(5, usuario.getrua());
-			st.setString(6, usuario.getCidade());
-			st.setString(7, usuario.getEstado());
-			st.setString(8, usuario.getCep());
-			int rowsAffected = st.executeUpdate();
-			st.close();
-			if (rowsAffected > 0) {
-				status = true;
-				incrementMaxId();
-			}
+		String sql = "INSERT INTO usuario (nome, email, senha, telefone, rua, cidade, estado, cep) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		try (Connection connection = conectar();
+			 PreparedStatement statement = connection.prepareStatement(sql)) {
+			
+			statement.setString(1, usuario.getEmail());
+			statement.setString(2, usuario.getSenha());
+			statement.setString(3, usuario.getNome());
+			statement.setString(4, usuario.getTelefone());
+			statement.setString(5, usuario.getrua());
+			statement.setString(6, usuario.getCidade());
+			statement.setString(7, usuario.getEstado());
+			statement.setString(8, usuario.getCep());
+	
+			int rowsAffected = statement.executeUpdate();
+			return rowsAffected > 0;
 		} catch (SQLException e) {
-			System.out.println(e);
-			throw new RuntimeException(e);
+			System.out.println("Erro ao inserir usuário: " + e.getMessage());
+			return false;
 		}
-		return status;
 	}
+	
 
 	public boolean atualizarUsuario(Usuario usuario) {
 		boolean status = false;

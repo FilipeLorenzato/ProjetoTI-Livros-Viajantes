@@ -1,4 +1,5 @@
 package service;
+
 //import dao.DAO;
 import java.util.List;
 
@@ -14,25 +15,39 @@ public class LivroService {
     private LivroDAO livroDAO;
 
     public LivroService() {
-        this.livroDAO = new LivroDAO();
+        livroDAO = new LivroDAO();
+        livroDAO.conectar();
     }
 
-    // Método para cadastrar um novo livro
+    // Método para cadastrar um novo livro (unificado)
     public Object cadastrarLivro(Request request, Response response) {
         try {
+            // Extrai dados do JSON no corpo da requisição
             JSONObject jsonBody = new JSONObject(request.body());
-            String titulo = jsonBody.getString("titulo");
-            String autor = jsonBody.getString("autor");
-            String genero = jsonBody.getString("genero");
-            String sinopse = jsonBody.getString("sinopse");
 
-            int id = livroDAO.getMaxId() + 1;
+            // Validação básica dos parâmetros
+            String titulo = jsonBody.optString("titulo");
+            String autor = jsonBody.optString("autor");
+            String genero = jsonBody.optString("genero");
+            String sinopse = jsonBody.optString("sinopse");
 
+            if (titulo.isEmpty() || autor.isEmpty() || genero.isEmpty() || sinopse.isEmpty()) {
+                response.status(400); // Bad Request
+                return "Parâmetros obrigatórios ausentes!";
+            }
+
+            // Criação de um novo livro com os parâmetros fornecidos
+            int id = livroDAO.getMaxId() + 1; // Certifique-se de que getMaxId funcione corretamente
             Livro livro = new Livro(id, titulo, autor, genero, sinopse);
-            livroDAO.inserirLivro(livro);
 
-            response.status(201); // 201 Created
-            return id;
+            boolean sucesso = livroDAO.inserirLivro(livro);
+            if (sucesso) {
+                response.status(201); // 201 Created
+                return "Livro " + livro.getTitulo() + " criado com sucesso! ID: " + id;
+            } else {
+                response.status(500); // Server error
+                return "Falha ao criar livro";
+            }
         } catch (Exception e) {
             response.status(500);
             return "Erro ao cadastrar livro: " + e.getMessage();

@@ -12,10 +12,10 @@ import java.util.List;
 import model.Troca;
 //import dao.DAO;
 
-public class TrocaDAO {
+public class TrocaDAO extends DAO{
     private Connection conexao;
 
-    public Connection conectar() {
+    public static Connection conectar() {
         String driverName = "org.postgresql.Driver";
         String serverName = "localhost";
         String mydatabase = "postgres";
@@ -27,8 +27,8 @@ public class TrocaDAO {
 
         try {
             Class.forName(driverName);
-            conexao = DriverManager.getConnection(url, username, password);
-            conn = conexao;
+            conn = DriverManager.getConnection(url, username, password);
+            // this.conexao = conn;
             System.out.println("Conexão efetuada com o postgres!");
         } catch (ClassNotFoundException e) {
             System.err.println("Conexão NÃO efetuada com o postgres -- Driver não encontrado -- " + e.getMessage());

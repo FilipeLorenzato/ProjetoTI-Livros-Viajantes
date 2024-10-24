@@ -54,9 +54,13 @@ body::before {
 /* Cabeçalho */
 .header {
     width: 100%;
-    background-color: transparent;
+    background-color: transparent; /* Fundo transparente */
     padding: var(--spacing-small) 0;
-    border-bottom: 2px solid rgba(106, 90, 205, 0.5);
+    border-bottom: 2px solid rgba(106, 90, 205, 0.5); /* Borda inferior com opacidade */
+    box-shadow: none;
+
+    top: 0;
+    left: 0;
     z-index: 1000;
 }
 
@@ -67,11 +71,12 @@ body::before {
     max-width: 1200px;
     width: 90%;
     margin: 0 auto;
-    flex-wrap: wrap; /* Permite que os itens quebrem em dispositivos menores */
 }
 
 .logo-container img {
-    max-height: 80px;
+    max-height: 120px; /* Aumento da altura máxima da logo */
+    height: auto;
+    width: auto;
 }
 
 .header-nav {
@@ -80,19 +85,21 @@ body::before {
 
 .header-button {
     margin-left: var(--spacing-small);
-    padding: var(--spacing-small) var(--spacing-medium); /* Ajuste para rem */
-    background-color: transparent;
-    color: #ffffff;
+    padding: 10px 20px;
+    background-color: transparent; /* Fundo transparente */
+    color: #ffffff; /* Alterado para branco */
     text-decoration: none;
-    border: 2px solid var(--primary-color);
+    border: 2px solid var(--primary-color); /* Borda sólida */
     border-radius: 25px;
     transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
     display: flex;
     align-items: center;
+    font-weight: 500;
 }
 
 .header-button:hover {
     background-color: var(--primary-color);
+    color: #ffffff; /* Texto branco no hover */
 }
 
 /* Main */
