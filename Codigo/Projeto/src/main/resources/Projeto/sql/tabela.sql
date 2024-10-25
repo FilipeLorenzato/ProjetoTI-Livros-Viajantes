@@ -17,7 +17,8 @@ CREATE TABLE Livro (
     titulo VARCHAR(255) NOT NULL,
     autor VARCHAR(100) NOT NULL,
     genero VARCHAR(50),
-    sinopse TEXT
+    sinopse TEXT,
+    imagem TEXT -- Coluna para armazenar dados binários, como imagens
 );
 
 -- Tabela Troca

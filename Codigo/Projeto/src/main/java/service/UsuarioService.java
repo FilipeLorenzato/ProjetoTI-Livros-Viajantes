@@ -21,9 +21,9 @@ public class UsuarioService {
         response.status(400); // Bad Request
 
         // Validação dos parâmetros obrigatórios
+        String nome = request.queryParams("nome");
         String email = request.queryParams("email");
         String senha = request.queryParams("senha");
-        String nome = request.queryParams("nome");
         String telefone = request.queryParams("telefone");
         String rua = request.queryParams("rua");
         String cidade = request.queryParams("cidade");
@@ -31,7 +31,7 @@ public class UsuarioService {
         String cep = request.queryParams("cep");
         
 
-        if (email == null || senha == null || nome == null || telefone == null ||
+        if (nome == null || email == null || senha == null || telefone == null ||
                 rua == null || cidade == null
                 || estado == null || cep == null) {
             return "Parâmetros obrigatórios ausentes!";
@@ -80,7 +80,7 @@ public class UsuarioService {
             }
     
             // Criação de um novo usuário
-            Usuario usuario = new Usuario(email, senha, nome, telefone, rua, cidade, estado, cep);
+            Usuario usuario = new Usuario(nome, email, senha,  telefone, rua, cidade, estado, cep);
     
             // Insere o usuário no banco de dados
             boolean sucesso = usuarioDao.inserirUsuario(usuario);

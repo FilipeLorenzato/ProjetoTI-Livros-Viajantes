@@ -3,13 +3,17 @@ package app;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.List;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import dao.DAO;
+import dao.LivroDAO;
+import model.Livro;
 import service.LivroService;
-import service.UsuarioService;
+import service.UsuarioService; // Add this import statement
 import spark.Spark;
 import static spark.Spark.before;
 import static spark.Spark.delete;
@@ -23,6 +27,7 @@ public class Main {
 
     private static UsuarioService usuarioService = new UsuarioService();
     private static LivroService livroService = new LivroService();
+    private static LivroDAO livroDAO = new LivroDAO();
 
     private static Connection connDAO;
 
@@ -112,6 +117,24 @@ public class Main {
         // Listar todos os livros
         get("/livros", (request, response) -> livroService.listarTodosLivros(response));
 
+             // Rota para obter a lista de livros
+        get("/meus-livros", (request, response) -> {
+            response.type("application/json");
+            // Chame um método do seu DAO para buscar os livros
+            List<Livro> livros = livroDAO.buscarTodosLivros(); // Exemplo
+            return new Gson().toJson(livros); // Converte a lista em JSON
+        });
+
+
+        post("/cadastrar-livro", (req, res) -> {
+            String body = req.body();
+            Livro livro = new Gson().fromJson(body, Livro.class);
+            // Salvar livro no banco de dados
+            livroService.cadastrarLivro(req, res);
+            res.status(201); // Código de sucesso
+            return "Livro cadastrado com sucesso!";
+        });
+    
         // ----------------- Rotas "Em Alta" e "Histórico" -----------------
 
         // Listar livros "em alta"

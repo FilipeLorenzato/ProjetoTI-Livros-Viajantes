@@ -1,8 +1,11 @@
 package service;
 
-//import dao.DAO;
 import java.util.List;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -19,42 +22,73 @@ public class LivroService {
         livroDAO.conectar();
     }
 
-    // Método para cadastrar um novo livro (unificado)
-    public Object cadastrarLivro(Request request, Response response) {
+    // Método para cadastrar um novo livro (com imagem)
+public Object cadastrarLivro(Request request, Response response) {
+    if (ServletFileUpload.isMultipartContent(request.raw())) {
         try {
-            // Extrai dados do JSON no corpo da requisição
-            JSONObject jsonBody = new JSONObject(request.body());
+            DiskFileItemFactory factory = new DiskFileItemFactory();
+            ServletFileUpload upload = new ServletFileUpload(factory);
+            List<FileItem> items = upload.parseRequest(request.raw());
 
-            // Validação básica dos parâmetros
-            String titulo = jsonBody.optString("titulo");
-            String autor = jsonBody.optString("autor");
-            String genero = jsonBody.optString("genero");
-            String sinopse = jsonBody.optString("sinopse");
+            String titulo = null;
+            String autor = null;
+            String genero = null;
+            String sinopse = null;
+            FileItem imagem = null;
 
-            if (titulo.isEmpty() || autor.isEmpty() || genero.isEmpty() || sinopse.isEmpty()) {
-                response.status(400); // Bad Request
+            for (FileItem item : items) {
+                if (item.isFormField()) {
+                    // Processa campos de texto
+                    switch (item.getFieldName()) {
+                        case "titulo": titulo = item.getString(); break;
+                        case "autor": autor = item.getString(); break;
+                        case "genero": genero = item.getString(); break;
+                        case "sinopse": sinopse = item.getString(); break;
+                    }
+                } else {
+                    // Processa o campo de imagem
+                    if ("book-image".equals(item.getFieldName())) {
+                        imagem = item; // Imagem enviada
+                    }
+                }
+            }
+
+            // Certifique-se de que os parâmetros essenciais estão presentes
+            if (titulo == null || autor == null || genero == null || sinopse == null || imagem == null) {
+                response.status(400);
                 return "Parâmetros obrigatórios ausentes!";
             }
 
-            // Criação de um novo livro com os parâmetros fornecidos
-            int id = livroDAO.getMaxId() + 1; // Certifique-se de que getMaxId funcione corretamente
-            Livro livro = new Livro(id, titulo, autor, genero, sinopse);
+            // Agora você pode salvar o livro e a imagem
+            Livro livro = new Livro(titulo, autor, genero, sinopse, imagem.get());
+            // Processar a imagem conforme a lógica de armazenamento
+            // ...
 
             boolean sucesso = livroDAO.inserirLivro(livro);
             if (sucesso) {
-                response.status(201); // 201 Created
-                return "Livro " + livro.getTitulo() + " criado com sucesso! ID: " + id;
+                response.status(201); // Created
+                return "Livro cadastrado com sucesso!";
             } else {
-                response.status(500); // Server error
-                return "Falha ao criar livro";
+                response.status(500);
+                return "Erro ao cadastrar o livro";
             }
-        } catch (Exception e) {
+
+        } catch (FileUploadException e) {
+            e.printStackTrace();
             response.status(500);
-            return "Erro ao cadastrar livro: " + e.getMessage();
+            return "Erro ao processar o upload: " + e.getMessage();
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.status(500);
+            return "Erro ao cadastrar o livro: " + e.getMessage();
+        }
+    } else {
+        response.status(400);
+            return "Requisição não é multipart/form-data";
         }
     }
 
-    // Método para buscar um livro pelo ID
+    // Método para buscar um livro pelo ID (com imagem)
     public Object getLivroById(Request request, Response response) {
         try {
             int id = Integer.parseInt(request.params(":id"));
@@ -66,6 +100,12 @@ public class LivroService {
                 jsonResponse.put("autor", livro.getAutor());
                 jsonResponse.put("genero", livro.getGenero());
                 jsonResponse.put("sinopse", livro.getSinopse());
+
+                // Converte a imagem para base64 para retornar como JSON
+                if (livro.getImagem() != null) {
+                    String imagemBase64 = java.util.Base64.getEncoder().encodeToString(livro.getImagem());
+                    jsonResponse.put("imagem", imagemBase64);
+                }
 
                 response.type("application/json");
                 return jsonResponse.toString();
@@ -82,7 +122,7 @@ public class LivroService {
         }
     }
 
-    // Método para listar todos os livros
+    // Método para listar todos os livros (com imagem)
     public Object listarTodosLivros(Response response) {
         List<Livro> livros = livroDAO.buscarTodosLivros();
         JSONArray jsonResponse = new JSONArray();
@@ -92,6 +132,13 @@ public class LivroService {
             jsonLivro.put("autor", livro.getAutor());
             jsonLivro.put("genero", livro.getGenero());
             jsonLivro.put("sinopse", livro.getSinopse());
+
+            // Converte a imagem para base64 para retornar como JSON
+            if (livro.getImagem() != null) {
+                String imagemBase64 = java.util.Base64.getEncoder().encodeToString(livro.getImagem());
+                jsonLivro.put("imagem", imagemBase64);
+            }
+
             jsonResponse.put(jsonLivro);
         }
 
@@ -99,7 +146,7 @@ public class LivroService {
         return jsonResponse.toString();
     }
 
-    // Método para atualizar um livro pelo ID
+    // Método para atualizar um livro pelo ID (com imagem)
     public Object updateLivro(Request request, Response response) {
         try {
             int id = Integer.parseInt(request.params(":id"));
@@ -110,6 +157,13 @@ public class LivroService {
                 livro.setAutor(jsonBody.getString("autor"));
                 livro.setGenero(jsonBody.getString("genero"));
                 livro.setSinopse(jsonBody.getString("sinopse"));
+
+                // Atualiza a imagem se fornecida
+                String imagemBase64 = jsonBody.optString("imagem");
+                if (!imagemBase64.isEmpty()) {
+                    byte[] imagem = java.util.Base64.getDecoder().decode(imagemBase64);
+                    livro.setImagem(imagem);
+                }
 
                 livroDAO.atualizarLivro(livro);
                 return id;
@@ -145,7 +199,8 @@ public class LivroService {
         }
     }
 
-    // Método para buscar livros postados por um usuário pelo ID do usuário
+    // Método para buscar livros postados por um usuário pelo ID do usuário (com
+    // imagem)
     public Object getHistoricoLivrosUsuario(Request request, Response response) {
         try {
             int idUsuario = Integer.parseInt(request.params(":idUsuario"));
@@ -159,6 +214,13 @@ public class LivroService {
                     jsonLivro.put("autor", livro.getAutor());
                     jsonLivro.put("genero", livro.getGenero());
                     jsonLivro.put("sinopse", livro.getSinopse());
+
+                    // Converte a imagem para base64 para retornar como JSON
+                    if (livro.getImagem() != null) {
+                        String imagemBase64 = java.util.Base64.getEncoder().encodeToString(livro.getImagem());
+                        jsonLivro.put("imagem", imagemBase64);
+                    }
+
                     jsonResponse.put(jsonLivro);
                 }
                 response.type("application/json");
@@ -173,7 +235,7 @@ public class LivroService {
         }
     }
 
-    // Método para listar livros "em alta" com limite especificado
+    // Método para listar livros "em alta" com limite especificado (com imagem)
     public Object getLivrosEmAlta(Response response) {
         try {
             List<Livro> livrosEmAlta = livroDAO.buscarLivrosEmAlta(10); // Limite de 10 como exemplo
@@ -184,6 +246,13 @@ public class LivroService {
                 jsonLivro.put("autor", livro.getAutor());
                 jsonLivro.put("genero", livro.getGenero());
                 jsonLivro.put("sinopse", livro.getSinopse());
+
+                // Converte a imagem para base64 para retornar como JSON
+                if (livro.getImagem() != null) {
+                    String imagemBase64 = java.util.Base64.getEncoder().encodeToString(livro.getImagem());
+                    jsonLivro.put("imagem", imagemBase64);
+                }
+
                 jsonResponse.put(jsonLivro);
             }
 
@@ -194,4 +263,6 @@ public class LivroService {
             return "Erro ao processar a solicitação: " + e.getMessage();
         }
     }
+
+    
 }

@@ -135,9 +135,9 @@ public class UsuarioDAO extends DAO {
 		try (Connection connection = conectar();
 			 PreparedStatement statement = connection.prepareStatement(sql)) {
 			
-			statement.setString(1, usuario.getEmail());
-			statement.setString(2, usuario.getSenha());
-			statement.setString(3, usuario.getNome());
+			statement.setString(1, usuario.getNome());
+			statement.setString(2, usuario.getEmail());
+			statement.setString(3, usuario.getSenha());
 			statement.setString(4, usuario.getTelefone());
 			statement.setString(5, usuario.getrua());
 			statement.setString(6, usuario.getCidade());
@@ -156,12 +156,12 @@ public class UsuarioDAO extends DAO {
 	public boolean atualizarUsuario(Usuario usuario) {
 		boolean status = false;
 		try {
-			String sql = "UPDATE usuario SET nome = ?, senha = ?, telefone = ?, email = ?, rua = ?, cidade = ?, estado = ?, cep = ?";
+			String sql = "UPDATE usuario SET nome = ?,  email = ?, senha = ?, telefone = ?, rua = ?, cidade = ?, estado = ?, cep = ?";
 			PreparedStatement st = conexao.prepareStatement(sql);
 			st.setString(1, usuario.getNome());
-			st.setString(2, usuario.getSenha());
-			st.setString(3, usuario.getTelefone());
-			st.setString(4, usuario.getEmail());
+			st.setString(2, usuario.getEmail());
+			st.setString(3, usuario.getSenha());
+			st.setString(4, usuario.getTelefone());
 			st.setString(5, usuario.getrua());
 			st.setString(6, usuario.getCidade());
 			st.setString(7, usuario.getEstado());

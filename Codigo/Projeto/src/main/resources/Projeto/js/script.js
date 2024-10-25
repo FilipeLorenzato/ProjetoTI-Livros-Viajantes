@@ -146,3 +146,36 @@ document.addEventListener("DOMContentLoaded", function () {
         bookDetails.style.display = 'flex';
     }
 });
+
+
+
+// Função para carregar livros na página de postagem
+function carregarLivrosPostagem() {
+    fetch("http://localhost:4567/meus-livros") // A URL correta para buscar os livros
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Erro ao buscar livros");
+            }
+            return response.json();
+        })
+        .then(livros => {
+            const listaLivrosPostagem = document.getElementById("lista-livros-postagem");
+            listaLivrosPostagem.innerHTML = ""; // Limpa a lista atual
+            
+            livros.forEach(livro => {
+                const item = document.createElement("li");
+                item.textContent = `${livro.titulo} - ${livro.autor}`; // Exibir título e autor
+                
+                // Aqui você pode adicionar mais detalhes ou botões de ação se necessário
+                
+                listaLivrosPostagem.appendChild(item);
+            });
+        })
+        .catch(error => {
+            console.error("Erro:", error);
+        });
+}
+
+// Chame essa função quando a página de postagem for carregada
+document.addEventListener("DOMContentLoaded", carregarLivrosPostagem);
+// Função para carregar livros na página de postagem

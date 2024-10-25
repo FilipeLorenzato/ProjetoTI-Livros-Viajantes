@@ -6,25 +6,28 @@ public class Livro {
     private String autor;
     private String genero;
     private String sinopse;
+    private byte[] imagem; // Adiciona um atributo para a imagem
 
     // Construtor vazio
     public Livro() { }
 
     // Construtor sem ID (para inserção)
-    public Livro(String titulo, String autor, String genero, String sinopse) {
+    public Livro(String titulo, String autor, String genero, String sinopse, byte[] imagem) {
         this.titulo = titulo;
         this.autor = autor;
         this.genero = genero;
         this.sinopse = sinopse;
+        this.imagem = null; // Inicializa o atributo imagem como null
     }
 
     // Construtor com todos os campos
-    public Livro(int idLivro, String titulo, String autor, String genero, String sinopse) {
+    public Livro(int idLivro, String titulo, String autor, String genero, String sinopse, byte[] imagem) {
         this.idLivro = idLivro;
         this.titulo = titulo;
         this.autor = autor;
         this.genero = genero;
         this.sinopse = sinopse;
+        this.imagem = null; // Inicializa o atributo imagem como null
     }
 
     // Getters e Setters
@@ -69,10 +72,17 @@ public class Livro {
         this.sinopse = sinopse;
     }
     
+    public byte[] getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(byte[] imagem) {
+        this.imagem = imagem;
+    }
 
     @Override
     public String toString() {
         return "Livro [idLivro=" + idLivro + ", titulo=" + titulo + ", autor=" + autor + 
-               ", genero=" + genero + ", sinopse=" + sinopse + "]";
+               ", genero=" + genero + ", sinopse=" + sinopse + ", imagem=" + imagem + "]";
     }
 }
