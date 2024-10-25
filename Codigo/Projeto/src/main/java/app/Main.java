@@ -102,8 +102,16 @@ public class Main {
 
         // ----------------- Rotas de Livros -----------------
 
-        // Cadastrar novo livro
-        post("/livro", (request, response) -> livroService.cadastrarLivro(request, response));
+          post("/cadastrar-livro", (req, res) -> {
+            String body = req.body();
+            Livro livro = new Gson().fromJson(body, Livro.class);
+            // Salvar livro no banco de dados
+            livroService.cadastrarLivro(req, res);
+            res.status(201); // Código de sucesso
+            return "Livro cadastrado com sucesso!";
+        });
+
+
 
         // Obter livro por ID
         get("/livro/:id", (request, response) -> livroService.getLivroById(request, response));
@@ -126,15 +134,8 @@ public class Main {
         });
 
 
-        post("/cadastrar-livro", (req, res) -> {
-            String body = req.body();
-            Livro livro = new Gson().fromJson(body, Livro.class);
-            // Salvar livro no banco de dados
-            livroService.cadastrarLivro(req, res);
-            res.status(201); // Código de sucesso
-            return "Livro cadastrado com sucesso!";
-        });
-    
+        // Cadastrar novo livro
+        post("/livro", (request, response) -> livroService.cadastrarLivro(request, response));
         // ----------------- Rotas "Em Alta" e "Histórico" -----------------
 
         // Listar livros "em alta"
