@@ -6,7 +6,7 @@
     --background-overlay: rgba(0, 0, 0, 0.3); /* Overlay com menor opacidade */
     --input-bg: rgba(255, 255, 255, 0.8);
     --border-color: #ddd;
-    --text-color: #333;
+    --text-color: #fffbfb;
 
     /* Fontes */
     --font-primary: 'Roboto', sans-serif;
@@ -29,17 +29,6 @@
     padding: 0;
 }
 
-/* Overlay para melhorar a legibilidade */
-.background-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: var(--background-overlay);
-    z-index: 0;
-}
-
 /* Corpo da página */
 body {
     font-family: var(--font-primary);
@@ -56,6 +45,7 @@ body {
     position: relative;
     overflow: auto;
     z-index: 1;
+    color: var(--text-color);
 }
 
 /* Cabeçalho */
@@ -88,11 +78,11 @@ body {
 
 .header-button {
     padding: var(--spacing-small) var(--spacing-medium);
-    background-color: transparent;
-    color: var(--secondary-color);
+    background-color: transparent; /* Fundo transparente */
+    color: var(--secondary-color); /* Texto branco */
     text-decoration: none;
-    border: 2px solid var(--primary-color);
-    border-radius: 25px;
+    border: 2px solid var(--primary-color); /* Borda sólida roxa */
+    border-radius: 25px; /* Bordas arredondadas */
     transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
     display: flex;
     align-items: center;
@@ -100,85 +90,85 @@ body {
 }
 
 .header-button:hover {
-    background-color: var(--primary-color);
-    color: var(--secondary-color); /* Ajuste de cor ao texto no hover */
+    background-color: var(--primary-color); /* Fundo roxo no hover */
+    color: var(--secondary-color); /* Texto branco */
 }
-
-/* Banner */
-.banner {
-    background: rgba(106, 90, 205, 0.8);
-    padding: var(--spacing-large);
-    border-radius: 15px;
-    text-align: center;
-    color: var(--secondary-color);
-    margin: var(--spacing-large) 0;
-    max-width: 800px;
-    width: 90%;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
-    transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-}
-
-.banner:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 16px 24px rgba(0, 0, 0, 0.4);
-}
-
-/* Seção de Livros Famosos */
-.container {
+/* Botão "Registrar Novo Livro" */
+.header-buttons {
+    margin-top: var(--spacing-small);
     width: 100%;
-    max-width: 1200px;
-    padding: var(--spacing-large);
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
-    margin-bottom: var(--spacing-large);
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 20px;
 }
 
-.container h2 {
-    text-align: center;
-    color: var(--secondary-color);
-    margin-bottom: var(--spacing-large);
-    font-size: 24px;
+.register-button {
+    padding: var(--spacing-small) var(--spacing-medium);
+    background-color: transparent; /* Fundo transparente */
+    color: var(--secondary-color); /* Texto branco */
+    text-decoration: none;
+    border: 2px solid var(--primary-color); /* Borda sólida roxa */
+    border-radius: 25px; /* Bordas arredondadas */
+    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
 }
 
-/* Filtro de gêneros */
-.form-group {
-    position: relative;
-    margin-bottom: var(--spacing-medium);
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto var(--spacing-large);
+.register-button:hover {
+    background-color: var(--primary-color); /* Fundo roxo no hover */
+    color: var(--secondary-color); /* Texto branco */
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: var(--spacing-small);
-    color: var(--secondary-color);
-    font-weight: 500;
+/* Campo de Busca */
+.search-container {
+    display: flex;
+    align-items: center;
+    margin-top: var(--spacing-small);
 }
 
-.input-icon select {
-    width: 100%;
-    padding: 10px 10px 10px 45px;
-    border: 1px solid var(--border-color);
+.search-container input {
+    padding: var(--spacing-small);
     border-radius: 25px;
+    border: 1px solid var(--border-color);
     background-color: var(--input-bg);
-    box-sizing: border-box;
+    margin-right: var(--spacing-small);
     font-size: 16px;
-    color: var(--text-color);
+    color: black; /* Aqui você define a cor das letras como preta */
     transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
 }
 
-.input-icon select:focus {
+.search-container input:focus {
     border-color: var(--primary-color);
     box-shadow: 0 0 5px rgba(106, 90, 205, 0.5);
     outline: none;
     background-color: #ffffff;
 }
 
+.search-container button {
+    padding: var(--spacing-small) var(--spacing-medium);
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 25px;
+    color: var(--secondary-color);
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
+}
+
+.search-container button:hover {
+    background-color: var(--accent-hover);
+    transform: translateY(-2px);
+}
+
+.search-container button:active {
+    transform: translateY(0);
+}
+
+
 /* Container de livros */
+.movies-container,
 .books-container {
     display: flex;
     flex-wrap: wrap;
@@ -189,7 +179,8 @@ body {
     max-width: 1200px;
 }
 
-/* Cartão de livro individual */
+/* Cartão individual */
+.movie,
 .book {
     background-color: rgba(255, 255, 255, 0.1); /* Fundo semi-transparente */
     border-radius: 15px;
@@ -206,12 +197,14 @@ body {
     color: var(--secondary-color);
 }
 
+.movie:hover,
 .book:hover {
     transform: translateY(-5px);
     box-shadow: 0 16px 24px rgba(0, 0, 0, 0.4);
 }
 
-/* Imagem do livro */
+/* Imagem */
+.movie img,
 .book img {
     width: 100%;
     height: auto;
@@ -219,64 +212,22 @@ body {
     margin-bottom: var(--spacing-small);
 }
 
-/* Título do livro */
-.book h3 {
-    color: var(--secondary-color);
-    font-size: 18px;
-    margin-bottom: var(--spacing-small);
-}
-
-/* Autor do livro */
-.book p.book-author {
-    color: var(--secondary-color);
-    font-size: 16px;
-    margin-bottom: var(--spacing-small);
-}
-
-/* Sinopse do livro */
-.book p.book-description {
-    color: var(--text-color);
-    font-size: 14px;
-    margin-bottom: var(--spacing-small);
-}
-
-/* Botão para adicionar à lista */
-.add-to-list-btn {
-    display: inline-block;
-    width: 100%;
-    padding: 10px;
-    border: none;
-    background-color: var(--primary-color);
-    color: var(--secondary-color);
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 500;
-    text-align: center;
-    transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
-}
-
-.add-to-list-btn:hover {
-    background-color: var(--accent-hover);
-    transform: translateY(-2px);
-}
-
-.add-to-list-btn:active {
-    transform: translateY(0);
-}
-
 /* Modal */
 .modal {
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
+    width: 100%;
+    height: 100%;
     background: rgba(0, 0, 0, 0.7);
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     z-index: 1001;
+}
+
+.modal.active {
+    display: flex;
 }
 
 .modal-content {
@@ -289,55 +240,93 @@ body {
     max-width: 600px;
     position: relative;
     color: var(--secondary-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
-.modal-content img.modal-book-image {
+.modal-content img {
     width: 100%;
-    height: auto;
-    border-radius: 10px;
+    max-width: 200px;
+    border-radius: 8px;
     margin-bottom: var(--spacing-medium);
 }
 
-.modal-content .close-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background-color: var(--accent-hover);
-    color: var(--secondary-color);
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color var(--transition-speed) ease;
+.modal-content h3 {
+    font-size: 24px;
+    margin-bottom: var(--spacing-medium);
+}
+
+.modal-content p {
     font-size: 16px;
+    margin-bottom: var(--spacing-medium);
 }
 
-.modal-content .close-btn:hover {
-    background-color: var(--primary-color);
-}
-
-.trade-btn {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: var(--primary-color);
-    color: var(--secondary-color);
-    border: none;
-    border-radius: 25px;
+/* Botões no modal */
+.modal-content .close-btn,
+.modal-content .favorite-btn,
+.modal-content .trade-btn,
+.modal-content .add-to-list-btn { /* Adicionando a classe add-to-list-btn aqui */
+    padding: var(--spacing-small) var(--spacing-medium);
+    background-color: #6a5acd; /* Fundo transparente */
+    color: var(--secondary-color); /* Texto branco */
     text-decoration: none;
+    border: 2px solid var(--primary-color); /* Borda roxa */
+    border-radius: 25px; /* Bordas arredondadas */
     cursor: pointer;
     font-size: 16px;
-    font-weight: 500;
-    transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
+    display: inline-block;
+    text-align: center;
+    transition: background-color var(--transition-speed) ease, 
+                color var(--transition-speed) ease, 
+                transform var(--transition-speed) ease;
 }
 
-.trade-btn:hover {
-    background-color: var(--accent-hover);
-    transform: translateY(-2px);
+/* Efeito de hover para os botões */
+.modal-content .close-btn:hover,
+.modal-content .favorite-btn:hover,
+.modal-content .trade-btn:hover,
+.modal-content .add-to-list-btn:hover { /* Hover no botão "Adicionar à Lista" */
+    background-color: var(--primary-color); /* Fundo roxo no hover */
+    color: var(--secondary-color); /* Texto branco */
+    transform: translateY(-2px); /* Elevação suave */
 }
 
-.trade-btn:active {
-    transform: translateY(0);
+/* Efeito ativo para os botões */
+.modal-content .close-btn:active,
+.modal-content .favorite-btn:active,
+.modal-content .trade-btn:active,
+.modal-content .add-to-list-btn:active { /* Ativo no botão "Adicionar à Lista" */
+    transform: translateY(0); /* Retorno ao estado normal */
 }
+/* Botão "Adicionar à Lista" */
+.add-to-list-btn {
+    padding: var(--spacing-small) var(--spacing-medium);
+    background-color: #6a5acd;
+    color: var(--secondary-color);
+    text-decoration: none;
+    border: 2px solid var(--primary-color);
+    border-radius: 25px; /* Bordas arredondadas */
+    cursor: pointer;
+    font-size: 16px;
+    display: inline-block;
+    text-align: center;
+    transition: background-color var(--transition-speed) ease, 
+                color var(--transition-speed) ease, 
+                transform var(--transition-speed) ease;
+}
+
+.add-to-list-btn:hover {
+    background-color: var(--primary-color); /* Fundo roxo no hover */
+    color: var(--secondary-color); /* Texto branco */
+    transform: translateY(-2px); /* Elevação suave */
+}
+
+.add-to-list-btn:active {
+    transform: translateY(0); /* Retorno ao estado normal */
+}
+
 
 /* Rodapé */
 .footer {
@@ -361,11 +350,7 @@ body {
     text-decoration: underline;
 }
 
-.footer .social-links a {
-    margin: 0 5px;
-}
-
-.newsletter-form {
+.footer form {
     margin-top: var(--spacing-medium);
     display: flex;
     justify-content: center;
@@ -373,12 +358,12 @@ body {
     flex-wrap: wrap;
 }
 
-.newsletter-form label {
+.footer form label {
     margin-right: var(--spacing-small);
     color: var(--secondary-color);
 }
 
-.newsletter-form input[type="email"] {
+.footer form input[type="email"] {
     padding: 10px;
     border: 1px solid var(--border-color);
     border-radius: 25px;
@@ -386,17 +371,16 @@ body {
     margin-right: var(--spacing-small);
     font-size: 16px;
     color: var(--text-color);
-    transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
 }
 
-.newsletter-form input[type="email"]:focus {
+.footer form input[type="email"]:focus {
     border-color: var(--primary-color);
     box-shadow: 0 0 5px rgba(106, 90, 205, 0.5);
     outline: none;
     background-color: #ffffff;
 }
 
-.submit-button {
+.footer form button {
     padding: 10px 20px;
     border: none;
     background-color: var(--primary-color);
@@ -407,110 +391,36 @@ body {
     transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
 }
 
-.submit-button:hover {
+.footer form button:hover {
     background-color: var(--accent-hover);
     transform: translateY(-2px);
 }
 
-.submit-button:active {
+.footer form button:active {
     transform: translateY(0);
 }
 
 /* Responsividade */
 @media screen and (max-width: 768px) {
-    .header-content {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .header-nav {
-        flex-direction: column;
-        gap: var(--spacing-small);
-        margin-top: var(--spacing-small);
-    }
-
-    .banner {
-        padding: var(--spacing-medium);
-    }
-
-    .book {
-        width: 180px;
-        padding: var(--spacing-small);
-    }
-
-    .container h2 {
-        font-size: 20px;
-    }
-
-    .trade-btn {
-        font-size: 14px;
-    }
-}
-
-@media screen and (max-width: 480px) {
+    .movies-container,
     .books-container {
         flex-direction: column;
         align-items: center;
     }
 
+    .movie,
     .book {
-        width: 90%;
-        max-width: 300px;
+        width: 180px;
+        padding: var(--spacing-small);
     }
 
     .modal-content {
         padding: var(--spacing-medium);
     }
+}
 
-    .modal-content img.modal-book-image {
+@media screen and (max-width: 480px) {
+    .modal-content img {
         max-width: 100%;
     }
-}
-
-@media screen and (max-width: 320px) {
-    body {
-        font-size: 14px;
-    }
-
-    .logo-container img {
-        max-height: 60px;
-    }
-
-    .book h3 {
-        font-size: 16px;
-    }
-
-    .book p.book-author {
-        font-size: 14px;
-    }
-
-    .book p.book-description {
-        font-size: 12px;
-    }
-
-    .add-to-list-btn {
-        font-size: 14px;
-    }
-
-    .trade-btn {
-        font-size: 14px;
-    }
-}
-
-/* Acessibilidade */
-button:focus,
-input:focus,
-a.header-button:focus,
-.close-btn:focus,
-.trade-btn:focus {
-    outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
-}
-
-/* Mensagens de Erro */
-.error-message {
-    font-size: 14px;
-    color: red;
-    margin-top: 5px;
-    text-align: left;
 }
