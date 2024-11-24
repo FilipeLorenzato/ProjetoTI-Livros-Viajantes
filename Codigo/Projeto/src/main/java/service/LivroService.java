@@ -22,7 +22,7 @@ public class LivroService {
         livroDAO.conectar();
     }
 
-    // Método para cadastrar um novo livro (com imagem)
+    // Método para cadastrar um novo livro 
 public Object cadastrarLivro(Request request, Response response) {
     if (ServletFileUpload.isMultipartContent(request.raw())) {
         try {
