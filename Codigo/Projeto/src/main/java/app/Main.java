@@ -3,7 +3,10 @@ package app;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
+
+import org.mindrot.jbcrypt.BCrypt;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -13,8 +16,8 @@ import dao.DAO;
 import dao.LivroDAO;
 import model.Livro;
 import service.LivroService;
-import service.UsuarioService; // Add this import statement
-import spark.Spark;
+import service.UsuarioService;
+import spark.Spark; // Add this import statement
 import static spark.Spark.before;
 import static spark.Spark.delete;
 import static spark.Spark.get;
@@ -147,19 +150,23 @@ public class Main {
 
     }
 
-    private static boolean validaUsuario(String email, String senha, Connection conn) {
-        try {
-            String query = "SELECT * FROM usuario WHERE email = ? AND senha = ?";
-            PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, email);
-            stmt.setString(2, senha);
-            ResultSet rs = stmt.executeQuery();
-            return rs.next();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+   private static boolean validaUsuario(String email, String senha, Connection conn) {
+    String query = "SELECT senha FROM usuario WHERE email = ?";
+    try (PreparedStatement stmt = conn.prepareStatement(query)) {
+        stmt.setString(1, email);
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            // Recupera o hash da senha armazenada no banco
+            String hashedPassword = rs.getString("senha");
+            // Compara a senha fornecida com o hash armazenado
+            return BCrypt.checkpw(senha, hashedPassword);
         }
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return false; // Retorna falso se o usuário não for encontrado ou ocorrer erro
+}
 }
 
 /*

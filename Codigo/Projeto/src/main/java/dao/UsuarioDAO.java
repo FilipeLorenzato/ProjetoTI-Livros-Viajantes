@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import model.Usuario;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class UsuarioDAO extends DAO {
 	private List<Usuario> usuarios;
@@ -130,27 +131,31 @@ public class UsuarioDAO extends DAO {
 		return conexao;
 	}
 
-	public boolean inserirUsuario(Usuario usuario) {
-		String sql = "INSERT INTO usuario (nome, email, senha, telefone, rua, cidade, estado, cep) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-		try (Connection connection = conectar();
-			 PreparedStatement statement = connection.prepareStatement(sql)) {
-			
-			statement.setString(1, usuario.getNome());
-			statement.setString(2, usuario.getEmail());
-			statement.setString(3, usuario.getSenha());
-			statement.setString(4, usuario.getTelefone());
-			statement.setString(5, usuario.getrua());
-			statement.setString(6, usuario.getCidade());
-			statement.setString(7, usuario.getEstado());
-			statement.setString(8, usuario.getCep());
 	
-			int rowsAffected = statement.executeUpdate();
-			return rowsAffected > 0;
-		} catch (SQLException e) {
-			System.out.println("Erro ao inserir usuário: " + e.getMessage());
-			return false;
-		}
-	}
+public boolean inserirUsuario(Usuario usuario) {
+    String sql = "INSERT INTO usuario (nome, email, senha, telefone, rua, cidade, estado, cep) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    try (Connection connection = conectar();
+         PreparedStatement statement = connection.prepareStatement(sql)) {
+        
+        // Criptografando a senha
+        String hashedPassword = BCrypt.hashpw(usuario.getSenha(), BCrypt.gensalt());
+
+        statement.setString(1, usuario.getNome());
+        statement.setString(2, usuario.getEmail());
+        statement.setString(3, hashedPassword); // Armazena a senha criptografada
+        statement.setString(4, usuario.getTelefone());
+        statement.setString(5, usuario.getrua());
+        statement.setString(6, usuario.getCidade());
+        statement.setString(7, usuario.getEstado());
+        statement.setString(8, usuario.getCep());
+
+        int rowsAffected = statement.executeUpdate();
+        return rowsAffected > 0;
+    } catch (SQLException e) {
+        System.out.println("Erro ao inserir usuário: " + e.getMessage());
+        return false;
+    }
+}
 	
 
 	public boolean atualizarUsuario(Usuario usuario) {
