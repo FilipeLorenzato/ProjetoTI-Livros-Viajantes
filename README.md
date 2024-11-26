@@ -1,19 +1,25 @@
-# Livros Viajantes
 
- Uma plataforma de troca de livros, onde os usuários podem cadastrar livros que não utilizam mais e trocá-los com outros membros da comunidade. A proposta incentiva o compartilhamento de conhecimento e promove o acesso a novos livros sem a necessidade de compra.
+# Livros Viajantes 📚
 
-## Alunos integrantes da equipe
+🚀 Introdução
+> Livros Viajantes é uma plataforma que permite aos usuários cadastrarem livros que não utilizam mais e trocá-los com outros membros da comunidade. Esta iniciativa visa a disseminação do conhecimento e o acesso a novos livros de forma prática e econômica.
 
-* Filipe Lorenzato Cardoso Rodrigues.
-* Gabryelle Franco Xavier.
-* Iuri Saad Furtunato Fialho.
-* Rodrigo Oliveira Andrade de Vasconcelos.
 
-## Professores responsáveis
+📋 Alunos Integrantes:
 
-* Amália Soares Vieira de Vasconcelos.
-* Max do Val Machado.
+    Filipe Lorenzato Cardoso Rodrigues
+    Gabryelle Franco Xavier
+    Iuri Saad Furtunato Fialho
+    Rodrigo Oliveira Andrade de Vasconcelos
 
-## Instruções de utilização
+🧑‍🏫 Professores Responsáveis:
 
-Assim que a primeira versão do sistema estiver disponível, deverá complementar com as instruções de utilização. Descreva como instalar eventuais dependências e como executar a aplicação.
+    Amália Soares Vieira de Vasconcelos
+    Max do Val Machado
+
+
+📌 Observações Finais
+
+Fique atento para futuras atualizações onde detalharemos as funcionalidades disponíveis e melhorias na interface.
+
+Com a colaboração de todos, faremos da Livros Viajantes um ponto de encontro para amantes da leitura.
