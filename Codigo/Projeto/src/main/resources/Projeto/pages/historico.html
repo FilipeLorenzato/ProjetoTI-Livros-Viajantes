@@ -11,28 +11,16 @@
 </head>
 
 <body>
-    <header class="header">
-        <div class="header-content">
-            <div class="logo-container">
-                <a href="inicio.html"><img src="img/logo1-removebg-preview.png" alt="logo" class="logo"></a>
-            </div>
-            <nav class="header-nav">
-                <a href="meus-livros.html" class="header-button">Meus Livros</a>
-                <a href="emAlta.html" class="header-button">Em Alta</a>
-                <a href="cadastrar-livro.html" class="header-button">Cadastrar Livro</a>
-                <a href="historico.html" class="header-button">Histórico de Troca</a>
-            </nav>
-            <div class="search-container">
-                <input type="text" id="search-input" placeholder="Buscar livro...">
-                <button id="search-button">Buscar</button>
-            </div>
-        </div>
-        <div class="header-buttons">
-            <a href="cadastrar-livro.html" class="register-button">Registrar Novo Livro</a>
-        </div>
-    </header>
+
+    <custom-header style="width: 90%"></custom-header>
+    <script src="../pages/components/custom-header.js"></script>
+
 
     <main>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Buscar livro...">
+            <button id="search-button">Buscar</button>
+        </div>
         <!-- Seção de Histórico de Troca -->
         <section class="exchange-history">
             <div class="title-bar">
@@ -84,6 +72,121 @@
     </footer>
 
     <script src="../js/historico.js"></script>
+    <script src="../pages/components/custom-header.js"></script>
 </body>
 
 </html>
+
+<style>
+
+    /* Lista de trocas */
+.book-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px auto;
+    max-width: 800px;
+  }
+  
+  /* Item de troca */
+  .book-item {
+    background: #fff;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Seções de livro */
+  .book-exchange {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  
+  .book-section {
+    flex: 1;
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .book-section img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto 10px;
+    border-radius: 4px;
+  }
+  
+  .book-section h4 {
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  
+  .book-section h3 {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  
+  .book-section p {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 6px;
+  }
+  
+  /* Informações da troca */
+  .exchange-info {
+    margin-top: 16px;
+    padding: 12px;
+    background: #f3f7fa;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .exchange-info p {
+    margin: 4px 0;
+  }
+  
+  .exchange-info .status {
+    font-weight: bold;
+    color: #4caf50;
+  }
+  
+  /* Botão no modal */
+  button.close-btn {
+    background: #d32f2f;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  button.close-btn:hover {
+    background: #b71c1c;
+  }
+  
+  a.trade-btn {
+    display: block;
+    margin: 10px auto 0;
+    background: #1976d2;
+    color: white;
+    text-align: center;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  a.trade-btn:hover {
+    background: #0d47a1;
+  }
+</style>

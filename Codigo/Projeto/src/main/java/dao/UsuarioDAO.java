@@ -4,7 +4,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import model.Usuario;
-import org.mindrot.jbcrypt.BCrypt;
 
 public class UsuarioDAO extends DAO {
 	private List<Usuario> usuarios;
@@ -78,7 +77,7 @@ public class UsuarioDAO extends DAO {
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
 				usuario = new Usuario(
-						rs.getInt("id"),
+						rs.getInt("id_usuario"),
 						rs.getString("email"),
 						rs.getString("senha"),
 						rs.getString("nome"),
@@ -104,6 +103,31 @@ public class UsuarioDAO extends DAO {
 	}
 
 	public List<Usuario> getAll() {
+		List<Usuario> usuarios = new ArrayList<>();
+		String sql = "SELECT * FROM usuario";
+
+		try (Connection conexao = this.conectar();
+				PreparedStatement stmt = conexao.prepareStatement(sql);
+				ResultSet rs = stmt.executeQuery()) {
+
+			while (rs.next()) {
+				Usuario usuario = new Usuario(
+						rs.getInt("id_usuario"),
+						rs.getString("nome"),
+						rs.getString("email"),
+						rs.getString("senha"),
+						rs.getString("telefone"),
+						rs.getString("rua"),
+						rs.getString("cidade"),
+						rs.getString("estado"),
+						rs.getString("cep"));
+				usuarios.add(usuario);
+			}
+
+		} catch (SQLException e) {
+			System.err.println("Erro ao listar usuários: " + e.getMessage());
+		}
+
 		return usuarios;
 	}
 
@@ -131,32 +155,27 @@ public class UsuarioDAO extends DAO {
 		return conexao;
 	}
 
-	
-public boolean inserirUsuario(Usuario usuario) {
-    String sql = "INSERT INTO usuario (nome, email, senha, telefone, rua, cidade, estado, cep) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    try (Connection connection = conectar();
-         PreparedStatement statement = connection.prepareStatement(sql)) {
-        
-        // Criptografando a senha
-        String hashedPassword = BCrypt.hashpw(usuario.getSenha(), BCrypt.gensalt());
+	public boolean inserirUsuario(Usuario usuario) {
+		String sql = "INSERT INTO usuario (nome, email, senha, telefone, rua, cidade, estado, cep) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		try (Connection connection = conectar();
+				PreparedStatement statement = connection.prepareStatement(sql)) {
 
-        statement.setString(1, usuario.getNome());
-        statement.setString(2, usuario.getEmail());
-        statement.setString(3, hashedPassword); // Armazena a senha criptografada
-        statement.setString(4, usuario.getTelefone());
-        statement.setString(5, usuario.getrua());
-        statement.setString(6, usuario.getCidade());
-        statement.setString(7, usuario.getEstado());
-        statement.setString(8, usuario.getCep());
+			statement.setString(1, usuario.getNome());
+			statement.setString(2, usuario.getEmail());
+			statement.setString(3, usuario.getSenha());
+			statement.setString(4, usuario.getTelefone());
+			statement.setString(5, usuario.getrua());
+			statement.setString(6, usuario.getCidade());
+			statement.setString(7, usuario.getEstado());
+			statement.setString(8, usuario.getCep());
 
-        int rowsAffected = statement.executeUpdate();
-        return rowsAffected > 0;
-    } catch (SQLException e) {
-        System.out.println("Erro ao inserir usuário: " + e.getMessage());
-        return false;
-    }
-}
-	
+			int rowsAffected = statement.executeUpdate();
+			return rowsAffected > 0;
+		} catch (SQLException e) {
+			System.out.println("Erro ao inserir usuário: " + e.getMessage());
+			return false;
+		}
+	}
 
 	public boolean atualizarUsuario(Usuario usuario) {
 		boolean status = false;
@@ -245,28 +264,31 @@ public boolean inserirUsuario(Usuario usuario) {
 	}
 
 	public Usuario getById(int id) {
+		String sql = "SELECT * FROM usuario WHERE id_usuario = ?";
 		Usuario usuario = null;
-		try {
-			Statement st = conexao.createStatement();
-			String sql = "SELECT * FROM usuario WHERE id = " + id;
-			ResultSet rs = st.executeQuery(sql);
+
+		try (Connection conexao = this.conectar();
+				PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+			stmt.setInt(1, id);
+			ResultSet rs = stmt.executeQuery();
+
 			if (rs.next()) {
-				// Extrair os dados do usuário do ResultSet
-				String email = rs.getString("email");
-				String senha = rs.getString("senha");
-				String nome = rs.getString("nome");
-				String telefone = rs.getString("telefone");
-				String rua = rs.getString("rua");
-				String cidade = rs.getString("cidade");
-				String estado = rs.getString("estado");
-				String cep = rs.getString("cep");
-				// Criar o objeto Usuario com os dados obtidos
-				usuario = new Usuario(id, email, senha, nome, telefone, rua, cidade, estado, cep);
+				usuario = new Usuario(
+						rs.getInt("id_usuario"),
+						rs.getString("nome"),
+						rs.getString("email"),
+						rs.getString("senha"), // Não retorne a senha em JSON.
+						rs.getString("telefone"),
+						rs.getString("rua"),
+						rs.getString("cidade"),
+						rs.getString("estado"),
+						rs.getString("cep"));
 			}
-			st.close();
-		} catch (SQLException u) {
-			throw new RuntimeException(u);
+		} catch (SQLException e) {
+			System.err.println("Erro ao buscar usuário por ID: " + e.getMessage());
 		}
+
 		return usuario;
 	}
 
@@ -295,6 +317,8 @@ public boolean inserirUsuario(Usuario usuario) {
 		} catch (SQLException e) {
 			System.out.println("Erro ao listar usuários: " + e.getMessage());
 		}
+
+		System.out.println(usuarios);
 
 		return usuarios;
 	}

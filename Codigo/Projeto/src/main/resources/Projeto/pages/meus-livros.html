@@ -9,20 +9,7 @@
 <ul id="lista-livros-postagem"></ul>
 <body>
     <!-- Cabeçalho -->
-    <header class="header">
-        <div class="header-content">
-            <div class="logo-container">
-                <a href="inicio.html"><img src="img/logo1-removebg-preview.png" alt="logo" class="logo"></a>
-            </div>
-            <nav>
-                <a href="emAlta.html"><button aria-label="Ver livros em alta">Em Alta</button></a>
-                <a href="historico.html"><button aria-label="Ver histórico de troca">Histórico de Troca</button></a>
-                <a href="cadastrar-livro.html"><button aria-label="Cadastrar um novo livro">Cadastrar Livro</button></a>
-                <a href="postagem-livros.html"><button aria-label="Ver lista de livros">Livros</button></a>
-                <button id="logout-btn" aria-label="Sair">Sair</button>
-            </nav>
-        </div>
-    </header>
+    <custom-header style="width: 90%"></custom-header>
 
     <main>
         <h1>MINHA BIBLIOTECA</h1>
@@ -39,30 +26,8 @@
             <option value="Infantil">Infantil</option>
         </select>
 
-        <section id="my-library" class="book-cards">
-            <!-- Exemplo de cartão de livro -->
-            <div class="book-card">
-                <img src="img/livro1.jpg" alt="Livro 1" class="book-image">
-                <div class="book-info">
-                    <h3 class="book-title">Título do Livro 1</h3>
-                    <p class="book-description">Descrição do livro 1.</p>
-                </div>
-            </div>
-            <div class="book-card">
-                <img src="img/livro2.jpg" alt="Livro 2" class="book-image">
-                <div class="book-info">
-                    <h3 class="book-title">Título do Livro 2</h3>
-                    <p class="book-description">Descrição do livro 2.</p>
-                </div>
-            </div>
-            <div class="book-card">
-                <img src="img/livro3.jpg" alt="Livro 3" class="book-image">
-                <div class="book-info">
-                    <h3 class="book-title">Título do Livro 3</h3>
-                    <p class="book-description">Descrição do livro 3.</p>
-                </div>
-            </div>
-            <!-- Adicione mais livros conforme necessário -->
+        <section id="my-library" class="books-container">
+            <!-- Todos os livros vão ser renderizados aqui -->
         </section>
 
         <section id="book-details" class="modal" aria-hidden="true">
@@ -109,5 +74,6 @@
     </footer>
 
     <script src="../js/script.js"></script>
+    <script src="../pages/components/custom-header.js"></script>
 </body>
 </html>

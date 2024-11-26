@@ -10,27 +10,25 @@
 </head>
 
 <body>
-    <header class="header">
-        <div class="header-content">
-            <div class="logo-container">
-                <a href="inicio.html"><img src="img/logo1-removebg-preview.png" alt="logo" class="logo"></a>
-            </div>
-            <nav class="header-nav">
-                <a href="meus-livros.html" class="header-button">Meus Livros</a>
-                <a href="postagem-livros.html" class="header-button">Catálogo de Livros</a>
-                <a href="historico.html" class="header-button">Troque Agora</a>
-                <a href="cadastrar-livro.html" class="register-button">Registrar Novo Livro</a>
-                
-            </nav>
-            <div class="search-container">
-                <input type="text" id="search-input" placeholder="Buscar livro...">
-                <button id="search-button">Buscar</button>
-            </div>
-        </div>
-    </header>
+    <custom-header style="width: 90%"></custom-header>
+
 
     <main>
         <h1>BESTSELLERS</h1>
+
+        <!-- Filtro de gêneros -->
+        <div class="form-group">
+            <label for="genre-filter">Filtro de Gêneros:</label>
+            <select id="genre-filter" class="input-icon">
+                <option value="all">Todos</option>
+                <option value="fiction">Ficção</option>
+                <option value="non-fiction">Não-ficção</option>
+                <option value="romance">Romance</option>
+                <option value="fantasy">Fantasia</option>
+                <option value="mystery">Mistério</option>
+                <option value="biography">Biografia</option>
+            </select>
+        </div>
 
         <section id="books-container" class="books-container">
             <!-- A lista de livros será renderizada aqui via JavaScript -->
@@ -49,14 +47,37 @@
         </section>
     </main>
 
-    <!-- Rodapé -->
     <footer class="footer">
         <div class="footer-content">
+            <p><strong>Contato:</strong></p>
+            <p>Email: contato@trocalivros.com</p>
+            <p>Telefone: (31) 3131-2800</p>
+            <p>Endereço: PUC Minas, Rua Cláudio Manoel, 1162</p>
+
+            <nav>
+                <a href="cadastrar-livro.html">Cadastrar Livro</a> |
+                <a href="login.html">Login</a> |
+                <a href="privacy-policy.html">Política de Privacidade</a> |
+                <a href="terms.html">Termos de Uso</a>
+            </nav>
+
+            <p>Siga-nos:</p>
+            <a href="https://facebook.com" target="_blank">Facebook</a> |
+            <a href="https://twitter.com" target="_blank">Twitter</a> |
+            <a href="https://instagram.com" target="_blank">Instagram</a>
+
+            <form action="subscribe-newsletter.html" method="post">
+                <label for="email">Assine nossa Newsletter:</label>
+                <input type="email" id="email" name="email" placeholder="Seu e-mail" required>
+                <button type="submit" class="submit-button">Inscrever-se</button>
+            </form>
+
             <p>&copy; 2024 Livros Viajantes. Todos os direitos reservados.</p>
         </div>
     </footer>
 
     <script src="../js/emAlta.js"></script>
+    <script src="../pages/components/custom-header.js"></script>
 </body>
 
 </html>

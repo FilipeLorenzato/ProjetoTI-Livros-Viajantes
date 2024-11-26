@@ -48,17 +48,6 @@ body {
     overflow: auto;
 }
 
-/* Overlay para melhorar a legibilidade */
-body::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: var(--background-overlay);
-    z-index: 0;
-}
 
 /* Cabeçalho */
 .header {
@@ -105,79 +94,6 @@ body::before {
     background-color: var(--primary-color);
     color: var(--secondary-color);
     /* Ajuste de cor ao texto no hover */
-}
-
-/* Botão "Registrar Novo Livro" */
-.header-buttons {
-    margin-top: var(--spacing-small);
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    padding: 0 20px;
-}
-
-.register-button {
-    padding: var(--spacing-small) var(--spacing-medium);
-    background-color: transparent; /* Fundo transparente */
-    color: var(--secondary-color); /* Texto branco */
-    text-decoration: none;
-    border: 2px solid var(--primary-color); /* Borda sólida roxa */
-    border-radius: 25px; /* Bordas arredondadas */
-    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-
-.register-button:hover {
-    background-color: var(--primary-color); /* Fundo roxo no hover */
-    color: var(--secondary-color); /* Texto branco */
-}
-
-/* Campo de Busca */
-.search-container {
-    display: flex;
-    align-items: center;
-    margin-top: var(--spacing-small);
-}
-
-.search-container input {
-    padding: var(--spacing-small);
-    border-radius: 25px;
-    border: 1px solid var(--border-color);
-    background-color: var(--input-bg);
-    margin-right: var(--spacing-small);
-    font-size: 16px;
-    color: black; /* Aqui você define a cor das letras como preta */
-    transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-}
-
-.search-container input:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 5px rgba(106, 90, 205, 0.5);
-    outline: none;
-    background-color: #ffffff;
-}
-
-.search-container button {
-    padding: var(--spacing-small) var(--spacing-medium);
-    background-color: var(--primary-color);
-    border: none;
-    border-radius: 25px;
-    color: var(--secondary-color);
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
-}
-
-.search-container button:hover {
-    background-color: var(--accent-hover);
-    transform: translateY(-2px);
-}
-
-.search-container button:active {
-    transform: translateY(0);
 }
 
 /* Main */
@@ -249,11 +165,13 @@ main h1 {
 
 /* Cartão de livro individual */
 .book {
-    background-color: rgba(255, 255, 255, 0.1); /* Fundo semi-transparente */
+    background-color: rgba(255, 255, 255, 0.1);
+    /* Fundo semi-transparente */
     border-radius: 15px;
     padding: var(--spacing-medium);
     margin: var(--spacing-small);
-    width: 220px; /* Largura fixa para os cartões */
+    width: 220px;
+    /* Largura fixa para os cartões */
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
     transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
@@ -261,7 +179,6 @@ main h1 {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    color: var(--secondary-color);
 }
 
 .book:hover {
@@ -336,9 +253,6 @@ main h1 {
     justify-content: center;
     z-index: 1001;
 }
-.modal.active {
-    display: flex;
-}
 
 .modal-content {
     background-color: rgba(255, 255, 255, 0.2);
@@ -350,110 +264,53 @@ main h1 {
     max-width: 600px;
     position: relative;
     color: var(--secondary-color);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-/* Para o conteúdo do modal */
-.modal-content {
-    background-color: rgba(255, 255, 255, 0.2);
-    padding: var(--spacing-large);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: var(--secondary-color);
-    padding: 15px;
-    border-radius: 8px;
-    text-align: left;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    max-width: 80%;
-    max-height: 80%;
-    overflow: auto;
 }
 
 .modal-content img {
     width: 100%;
-    max-width: 200px;
-    border-radius: 8px;
+    height: auto;
+    border-radius: 10px;
     margin-bottom: var(--spacing-medium);
 }
 
-.modal-content h3 {
-    font-size: 24px;
-    margin-bottom: var(--spacing-medium);
-}
-
-.modal-content p {
-    font-size: 16px;
-    margin-bottom: var(--spacing-medium);
-}
-
-/* Botões no modal */
-.modal-content .close-btn,
-.modal-content .favorite-btn,
-.modal-content .trade-btn,
-.modal-content .add-to-list-btn { /* Adicionando a classe add-to-list-btn aqui */
-    padding: var(--spacing-small) var(--spacing-medium);
-    background-color: #6a5acd; /* Fundo transparente */
-    color: var(--secondary-color); /* Texto branco */
-    text-decoration: none;
-    border: 2px solid var(--primary-color); /* Borda roxa */
-    border-radius: 25px; /* Bordas arredondadas */
-    cursor: pointer;
-    font-size: 16px;
-    display: inline-block;
-    text-align: center;
-    transition: background-color var(--transition-speed) ease, 
-                color var(--transition-speed) ease, 
-                transform var(--transition-speed) ease;
-}
-
-/* Efeito de hover para os botões */
-.modal-content .close-btn:hover,
-.modal-content .favorite-btn:hover,
-.modal-content .trade-btn:hover,
-.modal-content .add-to-list-btn:hover { /* Hover no botão "Adicionar à Lista" */
-    background-color: var(--primary-color); /* Fundo roxo no hover */
-    color: var(--secondary-color); /* Texto branco */
-    transform: translateY(-2px); /* Elevação suave */
-}
-
-/* Efeito ativo para os botões */
-.modal-content .close-btn:active,
-.modal-content .favorite-btn:active,
-.modal-content .trade-btn:active,
-.modal-content .add-to-list-btn:active { /* Ativo no botão "Adicionar à Lista" */
-    transform: translateY(0); /* Retorno ao estado normal */
-}
-/* Botão "Adicionar à Lista" */
-.add-to-list-btn {
-    padding: var(--spacing-small) var(--spacing-medium);
-    background-color: #6a5acd;
+.modal-content .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: var(--accent-hover);
     color: var(--secondary-color);
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color var(--transition-speed) ease;
+}
+
+.modal-content .close-btn:hover {
+    background-color: var(--primary-color);
+}
+
+.trade-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border: none;
+    border-radius: 25px;
     text-decoration: none;
-    border: 2px solid var(--primary-color);
-    border-radius: 25px; /* Bordas arredondadas */
     cursor: pointer;
     font-size: 16px;
-    display: inline-block;
-    text-align: center;
-    transition: background-color var(--transition-speed) ease, 
-                color var(--transition-speed) ease, 
-                transform var(--transition-speed) ease;
+    font-weight: 500;
+    transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
 }
 
-.add-to-list-btn:hover {
-    background-color: var(--primary-color); /* Fundo roxo no hover */
-    color: var(--secondary-color); /* Texto branco */
-    transform: translateY(-2px); /* Elevação suave */
+.trade-btn:hover {
+    background-color: var(--accent-hover);
+    transform: translateY(-2px);
 }
 
-.add-to-list-btn:active {
-    transform: translateY(0); /* Retorno ao estado normal */
+.trade-btn:active {
+    transform: translateY(0);
 }
 
 /* Rodapé */

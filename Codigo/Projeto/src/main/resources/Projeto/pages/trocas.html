@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faça sua troca</title>
+    <!-- Fonte Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Font Awesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+    <!-- CSS Aprimorado -->
+    <link rel="stylesheet" href="../style/trocas.css">
+</head>
+
+<body>
+    <custom-header style="width: 90%"></custom-header>
+    <div class="exchangeWrapper">
+        <h2>Escolha os livros e faça a troca!</h2>
+        <div class="exchangeContainer">
+            <div class="bookSelectWrapper">
+                <p>Livro recebido</p>
+                <div class="inputWrapper">
+                    <i class="fa-solid fa-book"></i>
+                    <select class="chooseBookSelect"></select>
+                </div>
+
+            </div>
+            <div class="exchangeIcon">
+                <i class="fa-solid fa-arrows-rotate"></i>
+            </div>
+            <div class="bookSelectWrapper">
+                <p>Livro enviado</p>
+                <div class="inputWrapper">
+                    <i class="fa-solid fa-book"></i>
+                    <select class="chooseMyBookSelect"></select>
+                </div>
+            </div>
+        </div>
+
+        <button class="exchangeButton">Realizar troca!</button>
+
+        <div class="exchangeHistory">
+            <h2>Historico de trocas</h2>
+            <div style="overflow: auto; max-height: 300px"></div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script src="../pages/components/custom-header.js"></script>
+<script src="../js/trocas.js"></script>
+
+
+

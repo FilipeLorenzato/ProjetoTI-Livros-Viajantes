@@ -131,6 +131,10 @@ select:focus {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     margin: var(--spacing-small);
     width: calc(30% - 16px);
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     /* Tamanho fixo para os cartões */
     transition: transform var(--transition-speed) ease;
 }
