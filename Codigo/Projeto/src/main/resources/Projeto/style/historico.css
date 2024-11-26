@@ -47,17 +47,6 @@ body {
     z-index: 1;
 }
 
-/* Overlay para melhorar a legibilidade */
-body::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: var(--background-overlay);
-    z-index: 0;
-}
 
 /* Cabeçalho */
 .header {

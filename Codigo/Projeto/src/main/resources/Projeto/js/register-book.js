@@ -1,55 +1,68 @@
+document
+  .getElementById("book-form")
+  .addEventListener("submit", function (event) {
+    if (localStorage.getItem("userId")) {
+      event.preventDefault(); // Prevenir o envio padrão do formulário
 
-document.getElementById("book-form").addEventListener("submit", function (event) {
-    event.preventDefault(); // Prevenir o envio padrão do formulário
+      const titulo = document.getElementById("book-name").value;
+      const autor = document.getElementById("book-author").value;
+      const genero = document.getElementById("book-genre").value;
+      const sinopse = document.getElementById("book-synopsis").value;
+      const imageFile = document.getElementById("book-image").files[0];
+      const userId = localStorage.getItem("userId");
 
-    const titulo = document.getElementById("book-name").value;
-    const autor = document.getElementById("book-author").value;
-    const genero = document.getElementById("book-genre").value;
-    const sinopse = document.getElementById("book-synopsis").value;
-    const imageFile = document.getElementById("book-image").files[0];
-
-    // Validação de campos (opcional, caso precise de validação adicional)
-    if (!titulo || !autor || !genero || !sinopse) {
+      // Validação de campos (opcional, caso precise de validação adicional)
+      if (!titulo || !autor || !genero || !sinopse) {
         alert("Preencha todos os campos obrigatórios.");
         return;
-    }
+      }
 
-    if (!imageFile) {
+      if (!imageFile) {
         alert("Por favor, selecione uma imagem para o livro.");
         return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = async function (event) {
+        const imageBase64 = event.target.result; // Obter a string Base64 da imagem
+
+        // Criar objeto do livro com a imagem em Base64
+        const livro = {
+          titulo: titulo,
+          autor: autor,
+          genero: genero,
+          sinopse: sinopse,
+          imagem: imageBase64, // Base64 no formato completo (data:image/jpeg;base64,...)
+          id_usuario: parseInt(userId),
+        };
+
+        // Enviar o objeto via POST
+        try {
+          const response = await fetch("http://localhost:4567/livro", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(livro),
+          });
+
+          if (!response.ok) {
+            throw new Error(`Erro ao cadastrar livro: ${response.statusText}`);
+          }
+
+          alert("Livro cadastrado com sucesso!");
+          document.getElementById("book-form").reset();
+          window.location.href = "meus-livros.html"; // Página de redirecionamento
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      reader.readAsDataURL(imageFile); // Ler o arquivo como DataURL
+    } else {
+      alert("Você precisa estar logado para postar um livro.");
     }
-
-    // Criação do FormData para enviar a imagem e os dados do livro
-    const formData = new FormData();
-    formData.append("titulo", titulo);
-    formData.append("autor", autor);
-    formData.append("genero", genero);
-    formData.append("sinopse", sinopse);
-    formData.append("book-image", imageFile);
-
-    // Envio da requisição POST para cadastrar o livro com imagem
-    fetch("http://localhost:4567/livro", {
-        method: "POST",
-        body: formData // Envia o FormData com o arquivo e dados do livro
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Erro ao cadastrar o livro: " + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            alert("Livro cadastrado com sucesso! ID: " + data);
-            window.location.href = "pagina-de-postagem.html"; // Altere para o nome correto da sua página
-            // Limpar o formulário após o cadastro
-            document.getElementById("book-form").reset();
-        })
-        .catch(error => {
-            console.error(error);
-            alert("Erro: " + error.message);
-        });
-});
-
+  });
 
 /*document.getElementById("book-form").addEventListener("submit", function (event) {
     event.preventDefault(); // Prevenir o envio padrão do formulário

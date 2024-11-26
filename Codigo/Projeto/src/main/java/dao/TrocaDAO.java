@@ -12,7 +12,7 @@ import java.util.List;
 import model.Troca;
 //import dao.DAO;
 
-public class TrocaDAO extends DAO{
+public class TrocaDAO extends DAO {
     private Connection conexao;
 
     public static Connection conectar() {
@@ -41,15 +41,18 @@ public class TrocaDAO extends DAO{
 
     // Inserir nova troca
     public boolean inserir(Troca troca) {
-        String sql = "INSERT INTO troca (id_livro, usuario_ofertante, usuario_contemplado, status) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO troca (id_livro_recebido, id_livro_enviado, usuario_ofertante, usuario_contemplado, status) VALUES (? , ?, ?, ?, ?)";
         try (Connection conexao = this.conectar();
                 PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
-            stmt.setInt(1, troca.getIdLivro());
-            stmt.setInt(2, troca.getUsuarioOfertante());
-            stmt.setInt(3, troca.getUsuarioContemplado());
-            stmt.setString(4, troca.getStatus());
+            // Inserir a linha para o livro enviado
+            stmt.setInt(1, troca.getIdLivroRecebido());
+            stmt.setInt(2, troca.getIdLivroEnviado());
+            stmt.setInt(3, troca.getUsuarioOfertante());
+            stmt.setInt(4, troca.getUsuarioContemplado());
+            stmt.setString(5, troca.getStatus());
             stmt.executeUpdate();
+
             return true;
 
         } catch (SQLException e) {
@@ -88,7 +91,8 @@ public class TrocaDAO extends DAO{
             if (rs.next()) {
                 troca = new Troca(
                         rs.getInt("id_troca"),
-                        rs.getInt("id_livro"),
+                        rs.getInt("id_livro_enviado"),
+                        rs.getInt("id_livro_recebido"),
                         rs.getInt("usuario_ofertante"),
                         rs.getInt("usuario_contemplado"),
                         rs.getString("status"));
@@ -112,7 +116,8 @@ public class TrocaDAO extends DAO{
             while (rs.next()) {
                 Troca troca = new Troca(
                         rs.getInt("id_troca"),
-                        rs.getInt("id_livro"),
+                        rs.getInt("id_livro_enviado"),
+                        rs.getInt("id_livro_recebido"),
                         rs.getInt("usuario_ofertante"),
                         rs.getInt("usuario_contemplado"),
                         rs.getString("status"));
@@ -139,5 +144,31 @@ public class TrocaDAO extends DAO{
             System.err.println("Erro ao remover troca: " + e.getMessage());
             return false;
         }
+    }
+
+    public List<Troca> listarPorUsuario(int userId) {
+        List<Troca> lista = new ArrayList<>();
+        String sql = "SELECT * FROM troca WHERE usuario_ofertante = ? OR usuario_contemplado = ?";
+        try (Connection conexao = this.conectar();
+                PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
+            stmt.setInt(2, userId);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Troca troca = new Troca(
+                        rs.getInt("id_troca"),
+                        rs.getInt("id_livro_enviado"), // Campo ajustado
+                        rs.getInt("id_livro_recebido"), // Campo ajustado
+                        rs.getInt("usuario_ofertante"),
+                        rs.getInt("usuario_contemplado"),
+                        rs.getString("status"));
+                lista.add(troca);
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao listar trocas do usuário: " + e.getMessage());
+        }
+        return lista;
     }
 }

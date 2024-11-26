@@ -2,6 +2,9 @@ package service;
 
 import org.json.JSONObject;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import dao.UsuarioDAO;
 import model.Usuario;
 import spark.Request;
@@ -29,7 +32,6 @@ public class UsuarioService {
         String cidade = request.queryParams("cidade");
         String estado = request.queryParams("estado");
         String cep = request.queryParams("cep");
-        
 
         if (nome == null || email == null || senha == null || telefone == null ||
                 rua == null || cidade == null
@@ -61,7 +63,7 @@ public class UsuarioService {
         try {
             // Extrai o corpo da requisição como JSON
             JSONObject jsonBody = new JSONObject(request.body());
-            
+
             // Obtem os parâmetros necessários
             String nome = jsonBody.getString("nome");
             String email = jsonBody.getString("email");
@@ -71,20 +73,20 @@ public class UsuarioService {
             String cidade = jsonBody.getString("cidade");
             String estado = jsonBody.getString("estado");
             String cep = jsonBody.getString("cep");
-    
+
             // Valida se os parâmetros não são nulos ou vazios
-            if (nome == null || email == null || senha == null || telefone == null || 
-                rua == null || cidade == null || estado == null || cep == null) {
+            if (nome == null || email == null || senha == null || telefone == null ||
+                    rua == null || cidade == null || estado == null || cep == null) {
                 response.status(400);
                 return "Parâmetros obrigatórios ausentes!";
             }
-    
+
             // Criação de um novo usuário
-            Usuario usuario = new Usuario(nome, email, senha,  telefone, rua, cidade, estado, cep);
-    
+            Usuario usuario = new Usuario(nome, email, senha, telefone, rua, cidade, estado, cep);
+
             // Insere o usuário no banco de dados
             boolean sucesso = usuarioDao.inserirUsuario(usuario);
-            
+
             if (sucesso) {
                 response.status(201); // Created
                 return "Usuário criado com sucesso!";
@@ -97,12 +99,18 @@ public class UsuarioService {
             return "Erro ao cadastrar usuário: " + e.getMessage();
         }
     }
-    
+
     // Método login
     public Object login(Request request, Response response) {
+        String body = request.body();
+        JsonObject jsonRequest = new Gson().fromJson(body, JsonObject.class);
+
         // Obtendo os parâmetros de entrada do request
-        String email = request.queryParams("email");
-        String senha = request.queryParams("senha");
+        String email = jsonRequest.get("email").getAsString();
+        String senha = jsonRequest.get("senha").getAsString();
+
+        System.out.println("Email: " + email);
+        System.out.println("Senha: " + senha);
 
         // Verificando se os parâmetros não são nulos
         if (email == null || senha == null) {
@@ -116,7 +124,11 @@ public class UsuarioService {
         // Verificando se o usuário existe e se a senha está correta
         if (usuario != null && usuario.getSenha().equals(senha)) {
             response.status(200); // OK
-            return "{\"mensagem\": \"Login realizado com sucesso.\"}"; // Resposta JSON
+            // Retorna o userId junto com a mensagem de sucesso em JSON
+            JSONObject jsonResponse = new JSONObject();
+            jsonResponse.put("userId", usuario.getIdUsuario());
+            jsonResponse.put("mensagem", "Login realizado com sucesso.");
+            return jsonResponse.toString();
         } else {
             response.status(401); // Unauthorized
             return "{\"mensagem\": \"Email ou senha inválidos.\"}"; // Resposta JSON
@@ -151,24 +163,25 @@ public class UsuarioService {
         }
     }
 
-    // Método para buscar um usuário por ID
     public Object getUsuarioById(Request request, Response response) {
         try {
             int id = Integer.parseInt(request.params(":id"));
             Usuario usuario = usuarioDao.getById(id);
 
             if (usuario != null) {
-                JSONObject jsonResponse = new JSONObject();
-                jsonResponse.put("nome", usuario.getNome());
-                jsonResponse.put("email", usuario.getEmail());
-                jsonResponse.put("telefone", usuario.getTelefone());
-                jsonResponse.put("rua", usuario.getrua());
-                jsonResponse.put("cidade", usuario.getCidade());
-                jsonResponse.put("estado", usuario.getEstado());
-                jsonResponse.put("cep", usuario.getCep());
+                // Construir manualmente a string JSON
+                String jsonResponse = "{"
+                        + "\"nome\":\"" + usuario.getNome() + "\","
+                        + "\"email\":\"" + usuario.getEmail() + "\","
+                        + "\"telefone\":\"" + usuario.getTelefone() + "\","
+                        + "\"rua\":\"" + usuario.getrua() + "\","
+                        + "\"cidade\":\"" + usuario.getCidade() + "\","
+                        + "\"estado\":\"" + usuario.getEstado() + "\","
+                        + "\"cep\":\"" + usuario.getCep() + "\""
+                        + "}";
 
                 response.type("application/json");
-                return jsonResponse.toString();
+                return jsonResponse;
             } else {
                 response.status(404); // 404 Not Found
                 return "Usuário não encontrado.";
@@ -178,6 +191,7 @@ public class UsuarioService {
             return "ID inválido.";
         } catch (Exception e) {
             response.status(500); // Internal Server Error
+            e.printStackTrace();
             return "Erro ao processar a solicitação.";
         }
     }

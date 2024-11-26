@@ -44,7 +44,7 @@ public class LivroDAO extends DAO {
      * Insere um novo livro no banco de dados.
      */
     public boolean inserirLivro(Livro livro) {
-        String sql = "INSERT INTO livro (titulo, autor, genero, sinopse, imagem) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO livro (titulo, autor, genero, sinopse, imagem, id_usuario) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = this.conectarLivro();
                 PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -53,7 +53,8 @@ public class LivroDAO extends DAO {
             pstmt.setString(2, livro.getAutor());
             pstmt.setString(3, livro.getGenero());
             pstmt.setString(4, livro.getSinopse());
-            pstmt.setBytes(5, livro.getImagem());
+            pstmt.setString(5, livro.getImagem()); // Base64 string
+            pstmt.setInt(6, livro.getidUsuario());
 
             int rowsAffected = pstmt.executeUpdate();
 
@@ -64,11 +65,9 @@ public class LivroDAO extends DAO {
                 }
                 return true;
             }
-
         } catch (SQLException e) {
             System.err.println("Erro ao inserir livro: " + e.getMessage());
         }
-
         return false;
     }
 
@@ -92,7 +91,8 @@ public class LivroDAO extends DAO {
                         rs.getString("autor"),
                         rs.getString("genero"),
                         rs.getString("sinopse"),
-                        rs.getBytes("imagem")); // Recupera a imagem do banco
+                        rs.getString("imagem"),
+                        rs.getInt("id_usuario")); // Recupera a imagem do banco
             }
 
         } catch (SQLException e) {
@@ -121,7 +121,8 @@ public class LivroDAO extends DAO {
                         resultSet.getString("autor"),
                         resultSet.getString("genero"),
                         resultSet.getString("sinopse"),
-                        resultSet.getBytes("imagem")); // Recupera a imagem do banco
+                        resultSet.getString("imagem"),
+                        resultSet.getInt("id_usuario")); // Recupera a imagem do banco
 
                 livros.add(livro);
             }
@@ -151,7 +152,8 @@ public class LivroDAO extends DAO {
                         resultSet.getString("autor"),
                         resultSet.getString("genero"),
                         resultSet.getString("sinopse"),
-                        resultSet.getBytes("imagem")); // Recupera a imagem do banco
+                        resultSet.getString("imagem"),
+                        resultSet.getInt("id_usuario")); // Recupera a imagem do banco
 
                 livrosEmAlta.add(livro);
             }
@@ -180,7 +182,8 @@ public class LivroDAO extends DAO {
                         rs.getString("autor"),
                         rs.getString("genero"),
                         rs.getString("sinopse"),
-                        rs.getBytes("imagem")); // Recupera a imagem do banco
+                        rs.getString("imagem"),
+                        rs.getInt("id_usuario")); // Recupera a imagem do banco
 
                 livros.add(livro);
             }
@@ -205,7 +208,7 @@ public class LivroDAO extends DAO {
             pstmt.setString(2, livro.getAutor());
             pstmt.setString(3, livro.getGenero());
             pstmt.setString(4, livro.getSinopse());
-            pstmt.setBytes(5, livro.getImagem());
+            pstmt.setString(5, livro.getImagem());
             pstmt.setInt(6, livro.getIdLivro());
 
             int rowsAffected = pstmt.executeUpdate();
@@ -236,33 +239,51 @@ public class LivroDAO extends DAO {
         }
     }
 
-   // Método para buscar todos os livros no banco de dados
-   public List<Livro> buscarTodos() {
-    List<Livro> livros = new ArrayList<>(); // Lista para armazenar os livros
-    String sql = "SELECT * FROM livros"; // Consulta SQL para buscar todos os livros
+    // Método para buscar todos os livros no banco de dados
+    public List<Livro> buscarTodos() {
+        List<Livro> livros = new ArrayList<>(); // Lista para armazenar os livros
+        String sql = "SELECT * FROM livros"; // Consulta SQL para buscar todos os livros
 
-    try (Connection conn = this.conectarLivro();
-         PreparedStatement statement = conn.prepareStatement(sql);
-         ResultSet resultSet = statement.executeQuery()) { // Executa a consulta
+        try (Connection conn = this.conectarLivro();
+                PreparedStatement statement = conn.prepareStatement(sql);
+                ResultSet resultSet = statement.executeQuery()) { // Executa a consulta
 
-        while (resultSet.next()) { // Percorre o ResultSet
-            // Cria um novo objeto Livro para cada registro
-            Livro livro = new Livro();
-            livro.setIdLivro(resultSet.getInt("id_livro")); // Supondo que você tenha um campo id_livro
-            livro.setTitulo(resultSet.getString("titulo"));
-            livro.setAutor(resultSet.getString("autor"));
-            livro.setGenero(resultSet.getString("genero"));
-            livro.setSinopse(resultSet.getString("sinopse"));
+            while (resultSet.next()) { // Percorre o ResultSet
+                // Cria um novo objeto Livro para cada registro
+                Livro livro = new Livro();
+                livro.setIdLivro(resultSet.getInt("id_livro")); // Supondo que você tenha um campo id_livro
+                livro.setTitulo(resultSet.getString("titulo"));
+                livro.setAutor(resultSet.getString("autor"));
+                livro.setGenero(resultSet.getString("genero"));
+                livro.setSinopse(resultSet.getString("sinopse"));
 
-            livros.add(livro); // Adiciona o livro à lista
+                livros.add(livro); // Adiciona o livro à lista
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Exibe erro, se houver
+            throw new RuntimeException("Erro ao buscar livros: " + e.getMessage());
         }
-    } catch (SQLException e) {
-        e.printStackTrace(); // Exibe erro, se houver
-        throw new RuntimeException("Erro ao buscar livros: " + e.getMessage());
+
+        return livros; // Retorna a lista de livros
     }
 
-    return livros; // Retorna a lista de livros
-}
+    public boolean atualizarUsuarioLivro(int idLivro, int novoUsuarioId) {
+        String sql = "UPDATE livro SET id_usuario = ? WHERE id_livro = ?";
+
+        try (Connection conn = this.conectarLivro();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, novoUsuarioId);
+            pstmt.setInt(2, idLivro);
+
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao atualizar id_usuario do livro: " + e.getMessage());
+            return false;
+        }
+    }
 }
 
 /*

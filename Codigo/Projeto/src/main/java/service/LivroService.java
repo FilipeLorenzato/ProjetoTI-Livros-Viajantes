@@ -22,69 +22,31 @@ public class LivroService {
         livroDAO.conectar();
     }
 
-    // Método para cadastrar um novo livro 
-public Object cadastrarLivro(Request request, Response response) {
-    if (ServletFileUpload.isMultipartContent(request.raw())) {
+    // Método para cadastrar um novo livro
+    public Object cadastrarLivro(Request request, Response response) {
         try {
-            DiskFileItemFactory factory = new DiskFileItemFactory();
-            ServletFileUpload upload = new ServletFileUpload(factory);
-            List<FileItem> items = upload.parseRequest(request.raw());
+            JSONObject body = new JSONObject(request.body());
 
-            String titulo = null;
-            String autor = null;
-            String genero = null;
-            String sinopse = null;
-            FileItem imagem = null;
+            String titulo = body.getString("titulo");
+            String autor = body.getString("autor");
+            String genero = body.getString("genero");
+            String sinopse = body.getString("sinopse");
+            String imagem = body.getString("imagem"); // Base64 diretamente
+            int idUsuario = body.getInt("id_usuario");
 
-            for (FileItem item : items) {
-                if (item.isFormField()) {
-                    // Processa campos de texto
-                    switch (item.getFieldName()) {
-                        case "titulo": titulo = item.getString(); break;
-                        case "autor": autor = item.getString(); break;
-                        case "genero": genero = item.getString(); break;
-                        case "sinopse": sinopse = item.getString(); break;
-                    }
-                } else {
-                    // Processa o campo de imagem
-                    if ("book-image".equals(item.getFieldName())) {
-                        imagem = item; // Imagem enviada
-                    }
-                }
-            }
-
-            // Certifique-se de que os parâmetros essenciais estão presentes
-            if (titulo == null || autor == null || genero == null || sinopse == null || imagem == null) {
-                response.status(400);
-                return "Parâmetros obrigatórios ausentes!";
-            }
-
-            // Agora você pode salvar o livro e a imagem
-            Livro livro = new Livro(titulo, autor, genero, sinopse, imagem.get());
-            // Processar a imagem conforme a lógica de armazenamento
-            // ...
+            Livro livro = new Livro(titulo, autor, genero, sinopse, imagem, idUsuario);
 
             boolean sucesso = livroDAO.inserirLivro(livro);
             if (sucesso) {
                 response.status(201); // Created
                 return "Livro cadastrado com sucesso!";
             } else {
-                response.status(500);
+                response.status(500); // Internal Server Error
                 return "Erro ao cadastrar o livro";
             }
-
-        } catch (FileUploadException e) {
-            e.printStackTrace();
-            response.status(500);
-            return "Erro ao processar o upload: " + e.getMessage();
         } catch (Exception e) {
-            e.printStackTrace();
-            response.status(500);
-            return "Erro ao cadastrar o livro: " + e.getMessage();
-        }
-    } else {
-        response.status(400);
-            return "Requisição não é multipart/form-data";
+            response.status(400); // Bad Request
+            return "Erro na requisição: " + e.getMessage();
         }
     }
 
@@ -100,12 +62,7 @@ public Object cadastrarLivro(Request request, Response response) {
                 jsonResponse.put("autor", livro.getAutor());
                 jsonResponse.put("genero", livro.getGenero());
                 jsonResponse.put("sinopse", livro.getSinopse());
-
-                // Converte a imagem para base64 para retornar como JSON
-                if (livro.getImagem() != null) {
-                    String imagemBase64 = java.util.Base64.getEncoder().encodeToString(livro.getImagem());
-                    jsonResponse.put("imagem", imagemBase64);
-                }
+                jsonResponse.put("imagem", livro.getImagem());
 
                 response.type("application/json");
                 return jsonResponse.toString();
@@ -122,22 +79,53 @@ public Object cadastrarLivro(Request request, Response response) {
         }
     }
 
+    // Método para listar os livros de um usuário por userId
+    public Object listarLivrosPorUsuario(Request request, Response response) {
+        try {
+            int userId = Integer.parseInt(request.params(":userId"));
+            List<Livro> livros = livroDAO.buscarLivrosPorUsuario(userId);
+
+            if (!livros.isEmpty()) {
+                JSONArray jsonResponse = new JSONArray();
+                for (Livro livro : livros) {
+                    JSONObject jsonLivro = new JSONObject();
+                    jsonLivro.put("idLivro", livro.getIdLivro());
+                    jsonLivro.put("titulo", livro.getTitulo());
+                    jsonLivro.put("autor", livro.getAutor());
+                    jsonLivro.put("genero", livro.getGenero());
+                    jsonLivro.put("sinopse", livro.getSinopse());
+                    jsonLivro.put("imagem", livro.getImagem());
+
+                    jsonResponse.put(jsonLivro);
+                }
+                response.type("application/json");
+                return jsonResponse.toString();
+            } else {
+                response.status(404);
+                return "{\"mensagem\":\"Nenhum livro encontrado para o usuário especificado.\"}";
+            }
+        } catch (NumberFormatException e) {
+            response.status(400); // Bad Request
+            return "{\"mensagem\":\"Parâmetro userId inválido.\"}";
+        } catch (Exception e) {
+            response.status(500);
+            return "{\"mensagem\":\"Erro ao processar a solicitação: " + e.getMessage() + "\"}";
+        }
+    }
+
     // Método para listar todos os livros (com imagem)
     public Object listarTodosLivros(Response response) {
         List<Livro> livros = livroDAO.buscarTodosLivros();
         JSONArray jsonResponse = new JSONArray();
         for (Livro livro : livros) {
             JSONObject jsonLivro = new JSONObject();
+            jsonLivro.put("id", livro.getIdLivro());
             jsonLivro.put("titulo", livro.getTitulo());
             jsonLivro.put("autor", livro.getAutor());
             jsonLivro.put("genero", livro.getGenero());
             jsonLivro.put("sinopse", livro.getSinopse());
-
-            // Converte a imagem para base64 para retornar como JSON
-            if (livro.getImagem() != null) {
-                String imagemBase64 = java.util.Base64.getEncoder().encodeToString(livro.getImagem());
-                jsonLivro.put("imagem", imagemBase64);
-            }
+            jsonLivro.put("id_usuario", livro.getidUsuario());
+            jsonLivro.put("imagem", livro.getImagem());
 
             jsonResponse.put(jsonLivro);
         }
@@ -157,13 +145,7 @@ public Object cadastrarLivro(Request request, Response response) {
                 livro.setAutor(jsonBody.getString("autor"));
                 livro.setGenero(jsonBody.getString("genero"));
                 livro.setSinopse(jsonBody.getString("sinopse"));
-
-                // Atualiza a imagem se fornecida
-                String imagemBase64 = jsonBody.optString("imagem");
-                if (!imagemBase64.isEmpty()) {
-                    byte[] imagem = java.util.Base64.getDecoder().decode(imagemBase64);
-                    livro.setImagem(imagem);
-                }
+                livro.setImagem(jsonBody.getString("imagem"));
 
                 livroDAO.atualizarLivro(livro);
                 return id;
@@ -214,12 +196,7 @@ public Object cadastrarLivro(Request request, Response response) {
                     jsonLivro.put("autor", livro.getAutor());
                     jsonLivro.put("genero", livro.getGenero());
                     jsonLivro.put("sinopse", livro.getSinopse());
-
-                    // Converte a imagem para base64 para retornar como JSON
-                    if (livro.getImagem() != null) {
-                        String imagemBase64 = java.util.Base64.getEncoder().encodeToString(livro.getImagem());
-                        jsonLivro.put("imagem", imagemBase64);
-                    }
+                    jsonLivro.put("imagem", livro.getImagem());
 
                     jsonResponse.put(jsonLivro);
                 }
@@ -246,12 +223,7 @@ public Object cadastrarLivro(Request request, Response response) {
                 jsonLivro.put("autor", livro.getAutor());
                 jsonLivro.put("genero", livro.getGenero());
                 jsonLivro.put("sinopse", livro.getSinopse());
-
-                // Converte a imagem para base64 para retornar como JSON
-                if (livro.getImagem() != null) {
-                    String imagemBase64 = java.util.Base64.getEncoder().encodeToString(livro.getImagem());
-                    jsonLivro.put("imagem", imagemBase64);
-                }
+                jsonLivro.put("imagem", livro.getImagem());
 
                 jsonResponse.put(jsonLivro);
             }
@@ -264,5 +236,29 @@ public Object cadastrarLivro(Request request, Response response) {
         }
     }
 
-    
+    public Object trocarUsuariosLivros(Request request, Response response) {
+        try {
+            JSONObject body = new JSONObject(request.body());
+            int idLivroEnviado = body.getInt("idLivroEnviado");
+            int idLivroRecebido = body.getInt("idLivroRecebido");
+            int novoUsuarioEnviado = body.getInt("novoUsuarioEnviado");
+            int novoUsuarioRecebido = body.getInt("novoUsuarioRecebido");
+
+            // Atualizar o id_usuario dos livros
+            boolean atualizadoEnviado = livroDAO.atualizarUsuarioLivro(idLivroEnviado, novoUsuarioEnviado);
+            boolean atualizadoRecebido = livroDAO.atualizarUsuarioLivro(idLivroRecebido, novoUsuarioRecebido);
+
+            if (atualizadoEnviado && atualizadoRecebido) {
+                response.status(200); // OK
+                return "Troca de usuários realizada com sucesso.";
+            } else {
+                response.status(500); // Internal Server Error
+                return "Erro ao realizar a troca de usuários.";
+            }
+        } catch (Exception e) {
+            response.status(400); // Bad Request
+            return "Erro ao processar a requisição: " + e.getMessage();
+        }
+    }
+
 }

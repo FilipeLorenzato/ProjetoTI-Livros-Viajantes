@@ -13,99 +13,13 @@
 <ul id="lista-livros-postagem"></ul>
 
 <body>
-    <!-- Overlay para melhorar a legibilidade -->
-    <div class="background-overlay"></div>
 
-    <!-- Cabeçalho -->
-    <header class="header">
-        <div class="header-content">
-            <div class="logo-container">
-                <a href="inicio.html"><img src="img/logo1-removebg-preview.png" alt="Logo" class="logo"></a>
-            </div>
-            <nav class="header-nav">
-                <a href="login.html" class="header-button">Login</a>
-                <a href="CadastroUsuarios.html" class="header-button">Cadastrar</a>
-                <a href="meus-livros.html" class="header-button">Meus Livros</a>
-                <a href="emAlta.html" class="header-button">Em Alta</a>
-            </nav>
-            <div class="search-container">
-                <input type="text" id="search-input" placeholder="Buscar livro...">
-                <button id="search-button">Buscar</button>
-            </div>
-        </div>
-        <div class="header-buttons">
-            <a href="cadastrar-livro.html" class="register-button">Registrar Novo Livro</a>
-        </div>
-    </header>
+    <custom-header style="width: 90%"></custom-header>
+
 
     <!-- Main Content -->
     <main>
-        <!-- Carrossel de Livros por Gênero -->
-        <section class="carousel-section">
-            <h2>Livros de Programação</h2>
-            <div class="carousel" id="programming-carousel">
-                <button class="carousel-button prev">&#10094;</button>
-                <div id="programming-book-list" class="carousel-items">
-                    <!-- Livros de Programação serão inseridos aqui via JavaScript -->
-                </div>
-                <button class="carousel-button next">&#10095;</button>
-            </div>
-        </section>
-
-        <section class="carousel-section">
-            <h2>Livros de Terror</h2>
-            <div class="carousel" id="terror-carousel">
-                <button class="carousel-button prev">&#10094;</button>
-                <div id="terror-book-list" class="carousel-items">
-                    <!-- Livros de Terror serão inseridos aqui via JavaScript -->
-                </div>
-                <button class="carousel-button next">&#10095;</button>
-            </div>
-        </section>
-
-        <section class="carousel-section">
-            <h2>Livros de Aventura</h2>
-            <div class="carousel" id="aventura-carousel">
-                <button class="carousel-button prev">&#10094;</button>
-                <div id="aventura-book-list" class="carousel-items">
-                    <!-- Livros de Aventura serão inseridos aqui via JavaScript -->
-                </div>
-                <button class="carousel-button next">&#10095;</button>
-            </div>
-        </section>
-
-        <section class="carousel-section">
-            <h2>Livros de Fantasia</h2>
-            <div class="carousel" id="fantasia-carousel">
-                <button class="carousel-button prev">&#10094;</button>
-                <div id="fantasia-book-list" class="carousel-items">
-                    <!-- Livros de Fantasia serão inseridos aqui via JavaScript -->
-                </div>
-                <button class="carousel-button next">&#10095;</button>
-            </div>
-        </section>
-
-        <section class="carousel-section">
-            <h2>Livros de Romance</h2>
-            <div class="carousel" id="romance-carousel">
-                <button class="carousel-button prev">&#10094;</button>
-                <div id="romance-book-list" class="carousel-items">
-                    <!-- Livros de Romance serão inseridos aqui via JavaScript -->
-                </div>
-                <button class="carousel-button next">&#10095;</button>
-            </div>
-        </section>
-
-        <section class="carousel-section">
-            <h2>Livros de Ficção</h2>
-            <div class="carousel" id="ficcao-carousel">
-                <button class="carousel-button prev">&#10094;</button>
-                <div id="ficcao-book-list" class="carousel-items">
-                    <!-- Livros de Ficção serão inseridos aqui via JavaScript -->
-                </div>
-                <button class="carousel-button next">&#10095;</button>
-            </div>
-        </section>
+        <div id="carousels-container"></div>
     </main>
 
     <!-- Modal para Detalhes do Livro -->
@@ -128,6 +42,7 @@
 
     <!-- Script JavaScript -->
     <script src="../js/postagem.js"></script>
+    <script src="../pages/components/custom-header.js"></script>
 </body>
 
 </html>

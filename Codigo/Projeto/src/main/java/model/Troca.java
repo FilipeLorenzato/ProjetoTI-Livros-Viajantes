@@ -2,7 +2,8 @@ package model;
 
 public class Troca {
     private int idTroca;
-    private int idLivro;
+    private int idLivroEnviado;
+    private int idLivroRecebido;
     private int usuarioOfertante;
     private int usuarioContemplado;
     private String status;
@@ -12,9 +13,11 @@ public class Troca {
     }
 
     // Construtor completo
-    public Troca(int idTroca, int idLivro, int usuarioOfertante, int usuarioContemplado, String status) {
+    public Troca(int idTroca, int idLivroEnviado, int idLivroRecebido, int usuarioOfertante, int usuarioContemplado,
+            String status) {
         this.idTroca = idTroca;
-        this.idLivro = idLivro;
+        this.idLivroEnviado = idLivroEnviado;
+        this.idLivroRecebido = idLivroRecebido;
         this.usuarioOfertante = usuarioOfertante;
         this.usuarioContemplado = usuarioContemplado;
         this.status = status;
@@ -29,12 +32,20 @@ public class Troca {
         this.idTroca = idTroca;
     }
 
-    public int getIdLivro() {
-        return idLivro;
+    public int getIdLivroEnviado() {
+        return idLivroEnviado;
     }
 
-    public void setIdLivro(int idLivro) {
-        this.idLivro = idLivro;
+    public void setIdLivroEnviado(int idLivroEnviado) {
+        this.idLivroEnviado = idLivroEnviado;
+    }
+
+    public int getIdLivroRecebido() {
+        return idLivroRecebido;
+    }
+
+    public void setIdLivroRecebido(int idLivroRecebido) {
+        this.idLivroRecebido = idLivroRecebido;
     }
 
     public int getUsuarioOfertante() {
@@ -64,7 +75,8 @@ public class Troca {
     // Método para imprimir informações da troca
     public void imprimir() {
         System.out.println("ID Troca: " + idTroca);
-        System.out.println("ID Livro: " + idLivro);
+        System.out.println("ID Livro Enviado: " + idLivroEnviado);
+        System.out.println("ID Livro Recebido: " + idLivroRecebido);
         System.out.println("Usuário Ofertante: " + usuarioOfertante);
         System.out.println("Usuário Contemplado: " + usuarioContemplado);
         System.out.println("Status: " + status);

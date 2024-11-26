@@ -3,10 +3,7 @@ package app;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
-
-import org.mindrot.jbcrypt.BCrypt;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -16,8 +13,9 @@ import dao.DAO;
 import dao.LivroDAO;
 import model.Livro;
 import service.LivroService;
-import service.UsuarioService;
-import spark.Spark; // Add this import statement
+import service.UsuarioService; // Add this import statement
+import service.TrocaService;
+import spark.Spark;
 import static spark.Spark.before;
 import static spark.Spark.delete;
 import static spark.Spark.get;
@@ -31,6 +29,7 @@ public class Main {
     private static UsuarioService usuarioService = new UsuarioService();
     private static LivroService livroService = new LivroService();
     private static LivroDAO livroDAO = new LivroDAO();
+    private static TrocaService trocaService = new TrocaService();
 
     private static Connection connDAO;
 
@@ -77,35 +76,11 @@ public class Main {
 
         // Autenticação (Login)
         // Exemplo de resposta no back-end (Java com Spark)
-        post("/login", (request, response) -> {
-            response.type("application/json");
-            String json = request.body();
-
-            // Converte o JSON em um objeto
-            JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
-
-            String email = jsonObject.get("email").getAsString();
-            String senha = jsonObject.get("senha").getAsString();
-
-            // Valida se o email e a senha estão presentes
-            if (email == null || email.isEmpty() || senha == null || senha.isEmpty()) {
-                response.status(400); // Bad Request
-                return "{\"mensagem\":\"Email e senha devem ser fornecidos.\"}";
-            }
-
-            // Chama a função de validação do usuário
-            if (validaUsuario(email, senha, connDAO)) {
-                response.status(200); // OK
-                return "{\"mensagem\":\"Login bem-sucedido!\"}";
-            } else {
-                response.status(401); // Unauthorized
-                return "{\"mensagem\":\"Credenciais inválidas.\"}";
-            }
-        });
+        post("/login", (request, response) -> usuarioService.login(request, response));
 
         // ----------------- Rotas de Livros -----------------
 
-          post("/cadastrar-livro", (req, res) -> {
+        post("/cadastrar-livro", (req, res) -> {
             String body = req.body();
             Livro livro = new Gson().fromJson(body, Livro.class);
             // Salvar livro no banco de dados
@@ -114,7 +89,16 @@ public class Main {
             return "Livro cadastrado com sucesso!";
         });
 
+        // ----------------- Rotas de Trocas -----------------
 
+        post("/troca", (request, response) -> trocaService.criarTroca(request, response));
+        get("/trocas", (request, response) -> trocaService.listarTrocas(response));
+        get("/trocas/usuario/:userId", (request, response) -> {
+            int userId = Integer.parseInt(request.params(":userId"));
+
+            // Fetch trocas from TrocaService
+            return trocaService.listarTrocasPorUsuario(userId, response);
+        });
 
         // Obter livro por ID
         get("/livro/:id", (request, response) -> livroService.getLivroById(request, response));
@@ -128,14 +112,8 @@ public class Main {
         // Listar todos os livros
         get("/livros", (request, response) -> livroService.listarTodosLivros(response));
 
-             // Rota para obter a lista de livros
-        get("/meus-livros", (request, response) -> {
-            response.type("application/json");
-            // Chame um método do seu DAO para buscar os livros
-            List<Livro> livros = livroDAO.buscarTodosLivros(); // Exemplo
-            return new Gson().toJson(livros); // Converte a lista em JSON
-        });
-
+        // Rota para obter a lista de livros
+        get("/livros/usuario/:userId", (request, response) -> livroService.listarLivrosPorUsuario(request, response));
 
         // Cadastrar novo livro
         post("/livro", (request, response) -> livroService.cadastrarLivro(request, response));
@@ -148,25 +126,23 @@ public class Main {
         get("/livros/historico/:idUsuario",
                 (request, response) -> livroService.getHistoricoLivrosUsuario(request, response));
 
+        // ----------------- Filtros de Autenticação ----------------- //
+
     }
 
-   private static boolean validaUsuario(String email, String senha, Connection conn) {
-    String query = "SELECT senha FROM usuario WHERE email = ?";
-    try (PreparedStatement stmt = conn.prepareStatement(query)) {
-        stmt.setString(1, email);
-        ResultSet rs = stmt.executeQuery();
-
-        if (rs.next()) {
-            // Recupera o hash da senha armazenada no banco
-            String hashedPassword = rs.getString("senha");
-            // Compara a senha fornecida com o hash armazenado
-            return BCrypt.checkpw(senha, hashedPassword);
+    private static boolean validaUsuario(String email, String senha, Connection conn) {
+        try {
+            String query = "SELECT * FROM usuario WHERE email = ? AND senha = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, email);
+            stmt.setString(2, senha);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
     }
-    return false; // Retorna falso se o usuário não for encontrado ou ocorrer erro
-}
 }
 
 /*

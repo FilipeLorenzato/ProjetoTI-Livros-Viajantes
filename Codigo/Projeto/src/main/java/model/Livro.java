@@ -1,33 +1,40 @@
 package model;
 
+import java.util.Base64;
+
 public class Livro {
     private int idLivro;
     private String titulo;
     private String autor;
     private String genero;
     private String sinopse;
-    private byte[] imagem; // Adiciona um atributo para a imagem
+    private String imagem; // Adiciona um atributo para a imagem
+    private Integer id_usuario;
 
     // Construtor vazio
-    public Livro() { }
+    public Livro() {
+    }
 
     // Construtor sem ID (para inserção)
-    public Livro(String titulo, String autor, String genero, String sinopse, byte[] imagem) {
+    public Livro(String titulo, String autor, String genero, String sinopse, String imagem, Integer id_usuario) {
         this.titulo = titulo;
         this.autor = autor;
         this.genero = genero;
         this.sinopse = sinopse;
-        this.imagem = null; // Inicializa o atributo imagem como null
+        this.imagem = imagem; // Inicializa o atributo imagem como null
+        this.id_usuario = id_usuario;
     }
 
     // Construtor com todos os campos
-    public Livro(int idLivro, String titulo, String autor, String genero, String sinopse, byte[] imagem) {
+    public Livro(int idLivro, String titulo, String autor, String genero, String sinopse, String imagem,
+            Integer id_usuario) {
         this.idLivro = idLivro;
         this.titulo = titulo;
         this.autor = autor;
         this.genero = genero;
         this.sinopse = sinopse;
-        this.imagem = null; // Inicializa o atributo imagem como null
+        this.imagem = imagem; // Inicializa o atributo imagem como null
+        this.id_usuario = id_usuario;
     }
 
     // Getters e Setters
@@ -71,18 +78,26 @@ public class Livro {
     public void setSinopse(String sinopse) {
         this.sinopse = sinopse;
     }
-    
-    public byte[] getImagem() {
+
+    public String getImagem() {
         return imagem;
     }
 
-    public void setImagem(byte[] imagem) {
+    public void setImagem(String imagem) {
         this.imagem = imagem;
+    }
+
+    public void setidUsuario(Integer id_usuario) {
+        this.id_usuario = id_usuario;
+    }
+
+    public Integer getidUsuario() {
+        return id_usuario;
     }
 
     @Override
     public String toString() {
-        return "Livro [idLivro=" + idLivro + ", titulo=" + titulo + ", autor=" + autor + 
-               ", genero=" + genero + ", sinopse=" + sinopse + ", imagem=" + imagem + "]";
+        return "Livro [idLivro=" + idLivro + ", titulo=" + titulo + ", autor=" + autor +
+                ", genero=" + genero + ", sinopse=" + sinopse + ", imagem=" + imagem + "]";
     }
 }
