@@ -131,42 +131,43 @@ public class Main {
 
         // ----------------- Filtros de Autenticação ----------------- //
         // Configurar suporte a uploads de arquivos
-       /* Spark.before((request, response) -> {
+        /* Spark.before((request, response) -> {
             request.attribute("org.eclipse.jetty.multipartConfig",
                     new MultipartConfigElement("/tmp"));
         });*/
+        // IA
+        post("/analyze-image", (request, response) -> {
+            // Diretório temporário dinâmico
+            String tempDir = System.getProperty("java.io.tmpdir") + "/uploads";
+            File dir = new File(tempDir);
+            if (!dir.exists()) {
+                dir.mkdirs(); // Cria o diretório se não existir
+            }
 
-     post("/analyze-image", (request, response) -> {
-    // Diretório temporário dinâmico
-    String tempDir = System.getProperty("java.io.tmpdir") + "/uploads";
-    File dir = new File(tempDir);
-    if (!dir.exists()) {
-        dir.mkdirs(); // Cria o diretório se não existir
+            // Configuração do multipart
+            request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement(tempDir));
+
+            // Processa o arquivo
+            Part filePart = request.raw().getPart("file");
+            String filePath = tempDir + "/" + filePart.getSubmittedFileName();
+            Files.copy(filePart.getInputStream(), Paths.get(filePath));
+
+            try {
+                // Seu serviço de análise
+                String result = ImageAnalysisService.searchAndVerifyBook(filePath);
+                response.status(200);
+                return result;
+            } catch (Exception e) {
+                response.status(500);
+                return "Erro ao processar a imagem: " + e.getMessage();
+            } finally {
+                // Remove arquivo temporário
+                Files.deleteIfExists(Paths.get(filePath));
+            }
+        });
     }
+    // Método para validar o login
 
-    // Configuração do multipart
-    request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement(tempDir));
-
-    // Processa o arquivo
-    Part filePart = request.raw().getPart("file");
-    String filePath = tempDir + "/" + filePart.getSubmittedFileName();
-    Files.copy(filePart.getInputStream(), Paths.get(filePath));
-
-    try {
-        // Seu serviço de análise
-        String result = ImageAnalysisService.searchAndVerifyBook(filePath);
-        response.status(200);
-        return result;
-    } catch (Exception e) {
-        response.status(500);
-        return "Erro ao processar a imagem: " + e.getMessage();
-    } finally {
-        // Remove arquivo temporário
-        Files.deleteIfExists(Paths.get(filePath));
-    }
-});
-    }
-        // Método para validar o login
     public static boolean validaUsuario(String email, String senha, Connection conn) {
         try {
             String query = "SELECT senha FROM usuario WHERE email = ?";
