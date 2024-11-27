@@ -1,8 +1,14 @@
 package app;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.http.Part;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -11,12 +17,13 @@ import com.google.gson.Gson;
 import dao.DAO;
 import dao.LivroDAO;
 import model.Livro;
+import service.ImageAnalysisService;
 import service.LivroService;
 import service.TrocaService;
 import service.UsuarioService;
 import spark.Spark;
 import static spark.Spark.before;
-import static spark.Spark.delete; // Add this import statement
+import static spark.Spark.delete;
 import static spark.Spark.get;
 import static spark.Spark.options;
 import static spark.Spark.port;
@@ -57,7 +64,6 @@ public class Main {
         before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
 
         // ----------------- Rotas de Usuário -----------------
-
         // Criar novo usuário (Cadastro)
         post("/usuario", (request, response) -> usuarioService.cadastrarUsuario(request, response));
 
@@ -78,7 +84,6 @@ public class Main {
         post("/login", (request, response) -> usuarioService.login(request, response));
 
         // ----------------- Rotas de Livros -----------------
-
         post("/cadastrar-livro", (req, res) -> {
             String body = req.body();
             Livro livro = new Gson().fromJson(body, Livro.class);
@@ -89,7 +94,6 @@ public class Main {
         });
 
         // ----------------- Rotas de Trocas -----------------
-
         post("/troca", (request, response) -> trocaService.criarTroca(request, response));
         get("/trocas", (request, response) -> trocaService.listarTrocas(response));
         get("/trocas/usuario/:userId", (request, response) -> {
@@ -126,10 +130,43 @@ public class Main {
                 (request, response) -> livroService.getHistoricoLivrosUsuario(request, response));
 
         // ----------------- Filtros de Autenticação ----------------- //
+        // Configurar suporte a uploads de arquivos
+       /* Spark.before((request, response) -> {
+            request.attribute("org.eclipse.jetty.multipartConfig",
+                    new MultipartConfigElement("/tmp"));
+        });*/
 
+     post("/analyze-image", (request, response) -> {
+    // Diretório temporário dinâmico
+    String tempDir = System.getProperty("java.io.tmpdir") + "/uploads";
+    File dir = new File(tempDir);
+    if (!dir.exists()) {
+        dir.mkdirs(); // Cria o diretório se não existir
     }
 
- // Método para validar o login
+    // Configuração do multipart
+    request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement(tempDir));
+
+    // Processa o arquivo
+    Part filePart = request.raw().getPart("file");
+    String filePath = tempDir + "/" + filePart.getSubmittedFileName();
+    Files.copy(filePart.getInputStream(), Paths.get(filePath));
+
+    try {
+        // Seu serviço de análise
+        String result = ImageAnalysisService.searchAndVerifyBook(filePath);
+        response.status(200);
+        return result;
+    } catch (Exception e) {
+        response.status(500);
+        return "Erro ao processar a imagem: " + e.getMessage();
+    } finally {
+        // Remove arquivo temporário
+        Files.deleteIfExists(Paths.get(filePath));
+    }
+});
+    }
+        // Método para validar o login
     public static boolean validaUsuario(String email, String senha, Connection conn) {
         try {
             String query = "SELECT senha FROM usuario WHERE email = ?";
@@ -147,6 +184,7 @@ public class Main {
             return false;
         }
     }
+
 }
 
 /*

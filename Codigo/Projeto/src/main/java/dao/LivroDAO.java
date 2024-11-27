@@ -1,4 +1,3 @@
-
 package dao;
 
 import java.sql.Connection;
@@ -46,8 +45,7 @@ public class LivroDAO extends DAO {
     public boolean inserirLivro(Livro livro) {
         String sql = "INSERT INTO livro (titulo, autor, genero, sinopse, imagem, id_usuario) VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (Connection conn = this.conectarLivro();
-                PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conn = this.conectarLivro(); PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setString(1, livro.getTitulo());
             pstmt.setString(2, livro.getAutor());
@@ -78,8 +76,7 @@ public class LivroDAO extends DAO {
         String sql = "SELECT * FROM livro WHERE id_livro = ?";
         Livro livro = null;
 
-        try (Connection conn = this.conectarLivro();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = this.conectarLivro(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, idLivro);
             ResultSet rs = pstmt.executeQuery();
@@ -102,6 +99,28 @@ public class LivroDAO extends DAO {
         return livro;
     }
 
+    public Livro buscarPorTitulo(String titulo) {
+        String sql = "SELECT * FROM livros WHERE titulo = ?";
+        try (Connection conn = this.conectarLivro(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, titulo);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Livro(
+                        rs.getInt("id_livro"),
+                        rs.getString("titulo"),
+                        rs.getString("autor"),
+                        rs.getString("genero"),
+                        rs.getString("sinopse"),
+                        rs.getString("imagem"),
+                        rs.getInt("id_usuario")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     /**
      * Busca livros por ID de usuário.
      */
@@ -109,8 +128,7 @@ public class LivroDAO extends DAO {
         List<Livro> livros = new ArrayList<>();
         String query = "SELECT * FROM livro WHERE id_usuario = ?";
 
-        try (Connection conn = this.conectarLivro();
-                PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+        try (Connection conn = this.conectarLivro(); PreparedStatement preparedStatement = conn.prepareStatement(query)) {
             preparedStatement.setInt(1, idUsuario);
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -140,8 +158,7 @@ public class LivroDAO extends DAO {
         List<Livro> livrosEmAlta = new ArrayList<>();
         String query = "SELECT * FROM livro ORDER BY popularidade DESC LIMIT ?";
 
-        try (Connection conn = this.conectarLivro();
-                PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+        try (Connection conn = this.conectarLivro(); PreparedStatement preparedStatement = conn.prepareStatement(query)) {
             preparedStatement.setInt(1, limite);
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -171,9 +188,7 @@ public class LivroDAO extends DAO {
         String sql = "SELECT * FROM livro";
         List<Livro> livros = new ArrayList<>();
 
-        try (Connection conn = this.conectarLivro();
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(sql)) {
+        try (Connection conn = this.conectarLivro(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 Livro livro = new Livro(
@@ -201,8 +216,7 @@ public class LivroDAO extends DAO {
     public boolean atualizarLivro(Livro livro) {
         String sql = "UPDATE livro SET titulo = ?, autor = ?, genero = ?, sinopse = ?, imagem = ? WHERE id_livro = ?";
 
-        try (Connection conn = this.conectarLivro();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = this.conectarLivro(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, livro.getTitulo());
             pstmt.setString(2, livro.getAutor());
@@ -226,8 +240,7 @@ public class LivroDAO extends DAO {
     public boolean deletarLivro(int idLivro) {
         String sql = "DELETE FROM livro WHERE id_livro = ?";
 
-        try (Connection conn = this.conectarLivro();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = this.conectarLivro(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, idLivro);
             int rowsAffected = pstmt.executeUpdate();
@@ -244,9 +257,7 @@ public class LivroDAO extends DAO {
         List<Livro> livros = new ArrayList<>(); // Lista para armazenar os livros
         String sql = "SELECT * FROM livros"; // Consulta SQL para buscar todos os livros
 
-        try (Connection conn = this.conectarLivro();
-                PreparedStatement statement = conn.prepareStatement(sql);
-                ResultSet resultSet = statement.executeQuery()) { // Executa a consulta
+        try (Connection conn = this.conectarLivro(); PreparedStatement statement = conn.prepareStatement(sql); ResultSet resultSet = statement.executeQuery()) { // Executa a consulta
 
             while (resultSet.next()) { // Percorre o ResultSet
                 // Cria um novo objeto Livro para cada registro
@@ -270,8 +281,7 @@ public class LivroDAO extends DAO {
     public boolean atualizarUsuarioLivro(int idLivro, int novoUsuarioId) {
         String sql = "UPDATE livro SET id_usuario = ? WHERE id_livro = ?";
 
-        try (Connection conn = this.conectarLivro();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = this.conectarLivro(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, novoUsuarioId);
             pstmt.setInt(2, idLivro);

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class Usuario {
+
     private int idUsuario;
     private String nome;
     private String email;
@@ -137,10 +138,10 @@ public class Usuario {
     // Sobrescrevendo toString para formatar a exibição dos dados do usuário
     @Override
     public String toString() {
-        return "Usuario [idUsuario=" + idUsuario + ", nome=" + nome + ", email=" + email +
-                ", dataNascimento=" + dataNascimento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) +
-                ", telefone=" + telefone + ", rua=" + rua + ", cidade=" + cidade +
-                ", estado=" + estado + ", cep=" + cep + "]";
+        return "Usuario [idUsuario=" + idUsuario + ", nome=" + nome + ", email=" + email
+                + ", dataNascimento=" + dataNascimento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                + ", telefone=" + telefone + ", rua=" + rua + ", cidade=" + cidade
+                + ", estado=" + estado + ", cep=" + cep + "]";
     }
 
     // Método para imprimir o usuário no console

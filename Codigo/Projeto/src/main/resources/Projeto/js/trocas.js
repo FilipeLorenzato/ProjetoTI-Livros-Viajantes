@@ -261,3 +261,44 @@ function renderTrocaHistory(trocaHistory) {
 
   historyContainer.appendChild(table);
 }
+
+// IA
+document.getElementById("analyzeImageButton").addEventListener("click", async function () {
+  const fileInput = document.getElementById("book-image");
+  const resultDiv = document.getElementById("imageAnalysisResult");
+
+  if (!fileInput.files || fileInput.files.length === 0) {
+      alert("Por favor, selecione uma imagem para analisar.");
+      return;
+  }
+
+  const file = fileInput.files[0];
+
+  // Crie um FormData para enviar a imagem
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+      const response = await fetch("http://localhost:4567/analyze-image", {
+          method: "POST",
+          body: formData,
+      });
+
+      if (response.ok) {
+          const data = await response.text();
+          resultDiv.innerText = data;
+
+          if (data.includes("Livro encontrado:")) {
+              alert("Livro identificado e disponível para troca!");
+          } else {
+              alert("O livro não foi encontrado no banco de dados.");
+          }
+      } else {
+          console.error("Erro ao analisar a imagem:", response.status, response.statusText);
+          resultDiv.innerText = "Erro ao processar a imagem.";
+      }
+  } catch (error) {
+      console.error("Erro na requisição:", error);
+      resultDiv.innerText = "Erro ao processar a imagem.";
+  }
+});

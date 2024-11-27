@@ -8,324 +8,319 @@ import java.util.List;
 import model.Usuario;
 
 public class UsuarioDAO extends DAO {
-	private List<Usuario> usuarios;
-	private Connection conexao;
-	private int maxId = 0;
 
-	public UsuarioDAO() {
-		conexao = null;
-		this.usuarios = new ArrayList<Usuario>();
-	}
+    private List<Usuario> usuarios;
+    private Connection conexao;
+    private int maxId = 0;
 
-	public int getMaxId() {
-		return this.maxId;
-	}
+    public UsuarioDAO() {
+        conexao = null;
+        this.usuarios = new ArrayList<Usuario>();
+    }
 
-	public void incrementMaxId() {
-		this.maxId++;
-	}
+    public int getMaxId() {
+        return this.maxId;
+    }
 
-	public Connection conectarUsuario() {
-		String driverName = "org.postgresql.Driver";
-		String serverName = "localhost";
-		String mydatabase = "postgres";
-		int porta = 5432;
-		String url = "jdbc:postgresql://" + serverName + ":" + porta + "/" + mydatabase;
-		String username = "ti2cc";
-		String password = "ti@cc";
-		Connection conn = null;
+    public void incrementMaxId() {
+        this.maxId++;
+    }
 
-		try {
-			Class.forName(driverName);
-			conexao = DriverManager.getConnection(url, username, password);
-			conn = conexao;
-			System.out.println("Conexão efetuada com o postgres!");
-		} catch (ClassNotFoundException e) {
-			System.err.println("Conexão NÃO efetuada com o postgres -- Driver não encontrado -- " + e.getMessage());
-		} catch (SQLException e) {
-			System.err.println("Conexão NÃO efetuada com o postgres -- " + e.getMessage());
-		}
+    public Connection conectarUsuario() {
+        String driverName = "org.postgresql.Driver";
+        String serverName = "localhost";
+        String mydatabase = "postgres";
+        int porta = 5432;
+        String url = "jdbc:postgresql://" + serverName + ":" + porta + "/" + mydatabase;
+        String username = "ti2cc";
+        String password = "ti@cc";
+        Connection conn = null;
 
-		return conn;
-	}
+        try {
+            Class.forName(driverName);
+            conexao = DriverManager.getConnection(url, username, password);
+            conn = conexao;
+            System.out.println("Conexão efetuada com o postgres!");
+        } catch (ClassNotFoundException e) {
+            System.err.println("Conexão NÃO efetuada com o postgres -- Driver não encontrado -- " + e.getMessage());
+        } catch (SQLException e) {
+            System.err.println("Conexão NÃO efetuada com o postgres -- " + e.getMessage());
+        }
 
-	public boolean close() {
-		boolean status = false;
+        return conn;
+    }
 
-		try {
-			conexao.close();
-			status = true;
-		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-		}
-		return status;
-	}
+    public boolean close() {
+        boolean status = false;
 
-	public Usuario getByEmail(String email) {
-		for (Usuario usuario : usuarios) {
-			if (email.equals(usuario.getEmail())) {
-				return usuario;
-			}
-		}
-		return null;
-	}
+        try {
+            conexao.close();
+            status = true;
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        return status;
+    }
 
-	public Usuario buscarPorEmail(String email) {
-		Usuario usuario = null;
-		String sql = "SELECT * FROM Usuario WHERE email = ?";
-		try (Connection conn = this.conectarUsuario();
-				PreparedStatement stmt = conn.prepareStatement(sql)) {
-			stmt.setString(1, email);
-			ResultSet rs = stmt.executeQuery();
-			if (rs.next()) {
-				usuario = new Usuario(
-						rs.getInt("id_usuario"),
-						rs.getString("email"),
-						rs.getString("senha"),
-						rs.getString("nome"),
-						rs.getString("telefone"),
-						rs.getString("rua"),
-						rs.getString("cidade"),
-						rs.getString("estado"),
-						rs.getString("cep"));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return usuario;
-	}
+    public Usuario getByEmail(String email) {
+        for (Usuario usuario : usuarios) {
+            if (email.equals(usuario.getEmail())) {
+                return usuario;
+            }
+        }
+        return null;
+    }
 
-	public Usuario get(String nome) {
-		for (Usuario usuario : usuarios) {
-			if (nome.equals(usuario.getNome())) {
-				return usuario;
-			}
-		}
-		return null;
-	}
+    public Usuario buscarPorEmail(String email) {
+        Usuario usuario = null;
+        String sql = "SELECT * FROM Usuario WHERE email = ?";
+        try (Connection conn = this.conectarUsuario(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                usuario = new Usuario(
+                        rs.getInt("id_usuario"),
+                        rs.getString("email"),
+                        rs.getString("senha"),
+                        rs.getString("nome"),
+                        rs.getString("telefone"),
+                        rs.getString("rua"),
+                        rs.getString("cidade"),
+                        rs.getString("estado"),
+                        rs.getString("cep"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return usuario;
+    }
 
-	public List<Usuario> getAll() {
-		List<Usuario> usuarios = new ArrayList<>();
-		String sql = "SELECT * FROM usuario";
+    public Usuario get(String nome) {
+        for (Usuario usuario : usuarios) {
+            if (nome.equals(usuario.getNome())) {
+                return usuario;
+            }
+        }
+        return null;
+    }
 
-		try (Connection conexao = this.conectar();
-				PreparedStatement stmt = conexao.prepareStatement(sql);
-				ResultSet rs = stmt.executeQuery()) {
+    public List<Usuario> getAll() {
+        List<Usuario> usuarios = new ArrayList<>();
+        String sql = "SELECT * FROM usuario";
 
-			while (rs.next()) {
-				Usuario usuario = new Usuario(
-						rs.getInt("id_usuario"),
-						rs.getString("nome"),
-						rs.getString("email"),
-						rs.getString("senha"),
-						rs.getString("telefone"),
-						rs.getString("rua"),
-						rs.getString("cidade"),
-						rs.getString("estado"),
-						rs.getString("cep"));
-				usuarios.add(usuario);
-			}
+        try (Connection conexao = this.conectar(); PreparedStatement stmt = conexao.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
 
-		} catch (SQLException e) {
-			System.err.println("Erro ao listar usuários: " + e.getMessage());
-		}
+            while (rs.next()) {
+                Usuario usuario = new Usuario(
+                        rs.getInt("id_usuario"),
+                        rs.getString("nome"),
+                        rs.getString("email"),
+                        rs.getString("senha"),
+                        rs.getString("telefone"),
+                        rs.getString("rua"),
+                        rs.getString("cidade"),
+                        rs.getString("estado"),
+                        rs.getString("cep"));
+                usuarios.add(usuario);
+            }
 
-		return usuarios;
-	}
+        } catch (SQLException e) {
+            System.err.println("Erro ao listar usuários: " + e.getMessage());
+        }
 
-	private List<Usuario> getFromDB() {
-		usuarios.clear();
-		Usuario usuario = null;
-		try {
-			Usuario usuarios[] = this.getUsuarios();
-			System.out.println(usuarios);
-			for (int i = 0; i < usuarios.length; i++) {
-				usuario = (Usuario) usuarios[i];
-				this.usuarios.add(usuario);
-			}
-		} catch (Exception e) {
-			System.out.println("ERRO ao gravar usuario no disco!");
-			e.printStackTrace();
-		}
-		return usuarios;
-	}
+        return usuarios;
+    }
 
-	private Connection getConexao() {
-		if (conexao == null) {
-			conectar();
-		}
-		return conexao;
-	}
+    private List<Usuario> getFromDB() {
+        usuarios.clear();
+        Usuario usuario = null;
+        try {
+            Usuario usuarios[] = this.getUsuarios();
+            System.out.println(usuarios);
+            for (int i = 0; i < usuarios.length; i++) {
+                usuario = (Usuario) usuarios[i];
+                this.usuarios.add(usuario);
+            }
+        } catch (Exception e) {
+            System.out.println("ERRO ao gravar usuario no disco!");
+            e.printStackTrace();
+        }
+        return usuarios;
+    }
 
-	public boolean inserirUsuario(Usuario usuario) {
-    String sql = "INSERT INTO usuario (nome, email, senha, telefone, rua, cidade, estado, cep) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    try (Connection connection = conectar();
-         PreparedStatement statement = connection.prepareStatement(sql)) {
+    private Connection getConexao() {
+        if (conexao == null) {
+            conectar();
+        }
+        return conexao;
+    }
 
-        // Criptografar a senha antes de salvar
-        String senhaCriptografada = BCrypt.hashpw(usuario.getSenha(), BCrypt.gensalt());
+    public boolean inserirUsuario(Usuario usuario) {
+        String sql = "INSERT INTO usuario (nome, email, senha, telefone, rua, cidade, estado, cep) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection connection = conectar(); PreparedStatement statement = connection.prepareStatement(sql)) {
 
-        statement.setString(1, usuario.getNome());
-        statement.setString(2, usuario.getEmail());
-        statement.setString(3, senhaCriptografada); // Senha criptografada
-        statement.setString(4, usuario.getTelefone());
-        statement.setString(5, usuario.getrua());
-        statement.setString(6, usuario.getCidade());
-        statement.setString(7, usuario.getEstado());
-        statement.setString(8, usuario.getCep());
+            // Criptografar a senha antes de salvar
+            String senhaCriptografada = BCrypt.hashpw(usuario.getSenha(), BCrypt.gensalt());
 
-        int rowsAffected = statement.executeUpdate();
-        return rowsAffected > 0;
-    } catch (SQLException e) {
-        System.out.println("Erro ao inserir usuário: " + e.getMessage());
-			return false;
-		}
-	}
+            statement.setString(1, usuario.getNome());
+            statement.setString(2, usuario.getEmail());
+            statement.setString(3, senhaCriptografada); // Senha criptografada
+            statement.setString(4, usuario.getTelefone());
+            statement.setString(5, usuario.getrua());
+            statement.setString(6, usuario.getCidade());
+            statement.setString(7, usuario.getEstado());
+            statement.setString(8, usuario.getCep());
 
-	public boolean atualizarUsuario(Usuario usuario) {
-		boolean status = false;
-		try {
-			String sql = "UPDATE usuario SET nome = ?,  email = ?, senha = ?, telefone = ?, rua = ?, cidade = ?, estado = ?, cep = ?";
-			PreparedStatement st = conexao.prepareStatement(sql);
-			st.setString(1, usuario.getNome());
-			st.setString(2, usuario.getEmail());
-			st.setString(3, usuario.getSenha());
-			st.setString(4, usuario.getTelefone());
-			st.setString(5, usuario.getrua());
-			st.setString(6, usuario.getCidade());
-			st.setString(7, usuario.getEstado());
-			st.setString(8, usuario.getCep());
-			int rowsUpdated = st.executeUpdate();
-			st.close();
+            int rowsAffected = statement.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.out.println("Erro ao inserir usuário: " + e.getMessage());
+            return false;
+        }
+    }
 
-			if (rowsUpdated > 0) {
-				status = true;
-			}
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-		return status;
-	}
+    public boolean atualizarUsuario(Usuario usuario) {
+        boolean status = false;
+        try {
+            String sql = "UPDATE usuario SET nome = ?,  email = ?, senha = ?, telefone = ?, rua = ?, cidade = ?, estado = ?, cep = ?";
+            PreparedStatement st = conexao.prepareStatement(sql);
+            st.setString(1, usuario.getNome());
+            st.setString(2, usuario.getEmail());
+            st.setString(3, usuario.getSenha());
+            st.setString(4, usuario.getTelefone());
+            st.setString(5, usuario.getrua());
+            st.setString(6, usuario.getCidade());
+            st.setString(7, usuario.getEstado());
+            st.setString(8, usuario.getCep());
+            int rowsUpdated = st.executeUpdate();
+            st.close();
 
-	public boolean excluirUsuario(int id) {
-		boolean status = false;
-		try {
-			Statement st = conexao.createStatement();
-			st.executeUpdate("DELETE FROM usuario WHERE id = " + id);
-			st.close();
-			status = true;
-		} catch (SQLException u) {
-			throw new RuntimeException(u);
-		}
-		return status;
-	}
+            if (rowsUpdated > 0) {
+                status = true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return status;
+    }
 
-	public Usuario[] getUsuarios() {
-		Usuario[] usuarios = null;
+    public boolean excluirUsuario(int id) {
+        boolean status = false;
+        try {
+            Statement st = conexao.createStatement();
+            st.executeUpdate("DELETE FROM usuario WHERE id = " + id);
+            st.close();
+            status = true;
+        } catch (SQLException u) {
+            throw new RuntimeException(u);
+        }
+        return status;
+    }
 
-		try {
-			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			ResultSet rs = st.executeQuery("SELECT * FROM usuario");
-			if (rs.next()) {
-				rs.last();
-				usuarios = new Usuario[rs.getRow()];
-				rs.beforeFirst();
+    public Usuario[] getUsuarios() {
+        Usuario[] usuarios = null;
 
-				for (int i = 0; rs.next(); i++) {
-					usuarios[i] = new Usuario(rs.getInt("id"), rs.getString("email"), rs.getString("senha"),
-							rs.getString("nome"), rs.getString("telefone"), rs.getString("rua"),
-							rs.getString("cidade"), rs.getString("estado"), rs.getString("cep"));
-				}
-			}
-			st.close();
-		} catch (Exception e) {
-			System.err.println(e.getMessage());
-		}
-		return usuarios;
-	}
+        try {
+            Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet rs = st.executeQuery("SELECT * FROM usuario");
+            if (rs.next()) {
+                rs.last();
+                usuarios = new Usuario[rs.getRow()];
+                rs.beforeFirst();
 
-	public Usuario[] getUsuariosByCidade(String cidade) {
-		Usuario[] usuarios = null;
+                for (int i = 0; rs.next(); i++) {
+                    usuarios[i] = new Usuario(rs.getInt("id"), rs.getString("email"), rs.getString("senha"),
+                            rs.getString("nome"), rs.getString("telefone"), rs.getString("rua"),
+                            rs.getString("cidade"), rs.getString("estado"), rs.getString("cep"));
+                }
+            }
+            st.close();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+        return usuarios;
+    }
 
-		try {
-			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			ResultSet rs = st.executeQuery("SELECT * FROM usuario WHERE cidade = '" + cidade + "'");
-			if (rs.next()) {
-				rs.last();
-				usuarios = new Usuario[rs.getRow()];
-				rs.beforeFirst();
+    public Usuario[] getUsuariosByCidade(String cidade) {
+        Usuario[] usuarios = null;
 
-				for (int i = 0; rs.next(); i++) {
-					usuarios[i] = new Usuario(rs.getInt("id"), rs.getString("email"), rs.getString("senha"),
-							rs.getString("nome"), rs.getString("telefone"), rs.getString("rua"),
-							rs.getString("cidade"), rs.getString("estado"), rs.getString("cep"));
-				}
-			}
-			st.close();
-		} catch (Exception e) {
-			System.err.println(e.getMessage());
-		}
-		return usuarios;
-	}
+        try {
+            Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet rs = st.executeQuery("SELECT * FROM usuario WHERE cidade = '" + cidade + "'");
+            if (rs.next()) {
+                rs.last();
+                usuarios = new Usuario[rs.getRow()];
+                rs.beforeFirst();
 
-	public Usuario getById(int id) {
-		String sql = "SELECT * FROM usuario WHERE id_usuario = ?";
-		Usuario usuario = null;
+                for (int i = 0; rs.next(); i++) {
+                    usuarios[i] = new Usuario(rs.getInt("id"), rs.getString("email"), rs.getString("senha"),
+                            rs.getString("nome"), rs.getString("telefone"), rs.getString("rua"),
+                            rs.getString("cidade"), rs.getString("estado"), rs.getString("cep"));
+                }
+            }
+            st.close();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+        return usuarios;
+    }
 
-		try (Connection conexao = this.conectar();
-				PreparedStatement stmt = conexao.prepareStatement(sql)) {
+    public Usuario getById(int id) {
+        String sql = "SELECT * FROM usuario WHERE id_usuario = ?";
+        Usuario usuario = null;
 
-			stmt.setInt(1, id);
-			ResultSet rs = stmt.executeQuery();
+        try (Connection conexao = this.conectar(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
-			if (rs.next()) {
-				usuario = new Usuario(
-						rs.getInt("id_usuario"),
-						rs.getString("nome"),
-						rs.getString("email"),
-						rs.getString("senha"), // Não retorne a senha em JSON.
-						rs.getString("telefone"),
-						rs.getString("rua"),
-						rs.getString("cidade"),
-						rs.getString("estado"),
-						rs.getString("cep"));
-			}
-		} catch (SQLException e) {
-			System.err.println("Erro ao buscar usuário por ID: " + e.getMessage());
-		}
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
 
-		return usuario;
-	}
+            if (rs.next()) {
+                usuario = new Usuario(
+                        rs.getInt("id_usuario"),
+                        rs.getString("nome"),
+                        rs.getString("email"),
+                        rs.getString("senha"), // Não retorne a senha em JSON.
+                        rs.getString("telefone"),
+                        rs.getString("rua"),
+                        rs.getString("cidade"),
+                        rs.getString("estado"),
+                        rs.getString("cep"));
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao buscar usuário por ID: " + e.getMessage());
+        }
 
-	public List<Usuario> listarUsuarios() {
-		List<Usuario> usuarios = new ArrayList<>();
-		String sql = "SELECT id, email, senha, nome, telefone, rua, cidade, estado, cep FROM usuario";
+        return usuario;
+    }
 
-		try (PreparedStatement stmt = conexao.prepareStatement(sql);
-				ResultSet rs = stmt.executeQuery()) {
+    public List<Usuario> listarUsuarios() {
+        List<Usuario> usuarios = new ArrayList<>();
+        String sql = "SELECT id, email, senha, nome, telefone, rua, cidade, estado, cep FROM usuario";
 
-			while (rs.next()) {
-				int id = rs.getInt("id");
-				String email = rs.getString("email");
-				String senha = rs.getString("senha");
-				String nome = rs.getString("nome");
-				String telefone = rs.getString("telefone");
-				String rua = rs.getString("rua");
-				String cidade = rs.getString("cidade");
-				String estado = rs.getString("estado");
-				String cep = rs.getString("cep");
+        try (PreparedStatement stmt = conexao.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
 
-				Usuario usuario = new Usuario(id, email, senha, nome, telefone, rua, cidade, estado, cep);
-				usuarios.add(usuario);
-			}
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String email = rs.getString("email");
+                String senha = rs.getString("senha");
+                String nome = rs.getString("nome");
+                String telefone = rs.getString("telefone");
+                String rua = rs.getString("rua");
+                String cidade = rs.getString("cidade");
+                String estado = rs.getString("estado");
+                String cep = rs.getString("cep");
 
-		} catch (SQLException e) {
-			System.out.println("Erro ao listar usuários: " + e.getMessage());
-		}
+                Usuario usuario = new Usuario(id, email, senha, nome, telefone, rua, cidade, estado, cep);
+                usuarios.add(usuario);
+            }
 
-		System.out.println(usuarios);
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar usuários: " + e.getMessage());
+        }
 
-		return usuarios;
-	}
+        System.out.println(usuarios);
+
+        return usuarios;
+    }
 
 }

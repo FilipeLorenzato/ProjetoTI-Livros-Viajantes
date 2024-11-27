@@ -10,14 +10,26 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Font Awesome para Ícones -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        crossorigin="anonymous">
     <!-- CSS Aprimorado -->
     <link rel="stylesheet" href="../style/trocas.css">
 </head>
 
 <body>
+
     <custom-header style="width: 90%"></custom-header>
     <div class="exchangeWrapper">
+        <h2>Veja se já possuimos seu livro para troca!</h2>
+        <div class="form-group">
+            <label for="book-image">Faça upload da Imagem do Livro:</label>
+            <div class="input-icon">
+                <i class="fas fa-upload icon"></i>
+                <input type="file" id="book-image" name="book-image" accept="image/*">
+            </div>
+            <button id="analyzeImageButton">Analisar Imagem</button>
+            <div id="imageAnalysisResult"></div>
+        </div>
         <h2>Escolha os livros e faça a troca!</h2>
         <div class="exchangeContainer">
             <div class="bookSelectWrapper">
@@ -53,6 +65,3 @@
 
 <script src="../pages/components/custom-header.js"></script>
 <script src="../js/trocas.js"></script>
-
-
-

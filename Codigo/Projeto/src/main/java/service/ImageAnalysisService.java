@@ -10,6 +10,64 @@ import com.azure.ai.vision.imageanalysis.models.ImageAnalysisResult;
 import com.azure.ai.vision.imageanalysis.models.VisualFeatures;
 import com.azure.core.credential.AzureKeyCredential;
 
+import dao.LivroDAO;
+import model.Livro;
+
+public class ImageAnalysisService {
+
+    public static String searchAndVerifyBook(String url) {
+        String endpoint = System.getenv("VISION_ENDPOINT");
+        String key = System.getenv("VISION_KEY");
+
+        if (endpoint == null || key == null) {
+            throw new IllegalStateException("As variáveis de ambiente VISION_ENDPOINT e VISION_KEY não foram configuradas.");
+        }
+
+        ImageAnalysisClient client = new ImageAnalysisClientBuilder()
+                .endpoint(endpoint)
+                .credential(new AzureKeyCredential(key))
+                .buildClient();
+
+        ImageAnalysisResult result = client.analyzeFromUrl(
+                url,
+                Arrays.asList(VisualFeatures.READ),
+                new ImageAnalysisOptions().setGenderNeutralCaption(true));
+
+        if (result.getRead() == null || result.getRead().getBlocks().isEmpty()) {
+            return "Nenhum texto detectado na imagem.";
+        }
+
+        StringBuilder textResult = new StringBuilder();
+        for (DetectedTextLine line : result.getRead().getBlocks().get(0).getLines()) {
+            textResult.append(line.getText()).append(" ");
+        }
+
+        String extractedText = textResult.toString().trim();
+        LivroDAO livroDAO = new LivroDAO();
+
+        // Verificar no banco de dados pelo título do livro extraído
+        Livro livro = livroDAO.buscarPorTitulo(extractedText);
+
+        if (livro != null) {
+            return "Livro encontrado: " + livro.getTitulo() + " - Autor: " + livro.getAutor();
+        } else {
+            return "Livro não encontrado no banco de dados.";
+        }
+    }
+}
+
+/*package service;
+
+import java.util.Arrays;
+
+import com.azure.ai.vision.imageanalysis.ImageAnalysisClient;
+import com.azure.ai.vision.imageanalysis.ImageAnalysisClientBuilder;
+import com.azure.ai.vision.imageanalysis.models.DetectedTextLine;
+import com.azure.ai.vision.imageanalysis.models.ImageAnalysisOptions;
+import com.azure.ai.vision.imageanalysis.models.ImageAnalysisResult;
+import com.azure.ai.vision.imageanalysis.models.VisualFeatures;
+import com.azure.core.credential.AzureKeyCredential;
+
 public class ImageAnalysisQuickStart {
 
     public static String searchText(String url) {
@@ -48,13 +106,6 @@ public class ImageAnalysisQuickStart {
     }
 }
 
-
-/*public class ImageAnalysisQuickStart {
-
-    public static void main(String[] args) {
-        
-        String endpoint = "https://ti2computacao.cognitiveservices.azure.com/";
-        String key = "A175xc6P52VJUqlUj6NRM1H7SxON2rVGU7KNMrxkwbcFda22VnUjJQQJ99AKACYeBjFXJ3w3AAAFACOGh8oq";
 
         // Create a synchronous Image Analysis client.
         ImageAnalysisClient client = new ImageAnalysisClientBuilder()
