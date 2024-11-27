@@ -11,6 +11,7 @@ import spark.Request;
 import spark.Response;
 
 public class UsuarioService {
+
     private UsuarioDAO usuarioDao;
 
     public UsuarioService() {
@@ -33,8 +34,8 @@ public class UsuarioService {
         String estado = request.queryParams("estado");
         String cep = request.queryParams("cep");
 
-        if (nome == null || email == null || senha == null || telefone == null ||
-                rua == null || cidade == null
+        if (nome == null || email == null || senha == null || telefone == null
+                || rua == null || cidade == null
                 || estado == null || cep == null) {
             return "Parâmetros obrigatórios ausentes!";
         }
@@ -75,8 +76,8 @@ public class UsuarioService {
             String cep = jsonBody.getString("cep");
 
             // Valida se os parâmetros não são nulos ou vazios
-            if (nome == null || email == null || senha == null || telefone == null ||
-                    rua == null || cidade == null || estado == null || cep == null) {
+            if (nome == null || email == null || senha == null || telefone == null
+                    || rua == null || cidade == null || estado == null || cep == null) {
                 response.status(400);
                 return "Parâmetros obrigatórios ausentes!";
             }
@@ -245,15 +246,15 @@ public class UsuarioService {
     public Object listarTodosUsuarios(Response response) {
         StringBuffer returnValue = new StringBuffer("<usuarios type=\"array\">");
         for (Usuario usuario : usuarioDao.getAll()) {
-            returnValue.append("\n<usuario>\n" +
-                    "\t<nome>" + usuario.getNome() + "</nome>\n" +
-                    "\t<email>" + usuario.getEmail() + "</email>\n" +
-                    "\t<telefone>" + usuario.getTelefone() + "</telefone>\n" +
-                    "\t<rua>" + usuario.getrua() + "</rua>\n" +
-                    "\t<cidade>" + usuario.getCidade() + "</cidade>\n" +
-                    "\t<estado>" + usuario.getEstado() + "</estado>\n" +
-                    "\t<cep>" + usuario.getCep() + "</cep>\n" +
-                    "</usuario>\n");
+            returnValue.append("\n<usuario>\n"
+                    + "\t<nome>" + usuario.getNome() + "</nome>\n"
+                    + "\t<email>" + usuario.getEmail() + "</email>\n"
+                    + "\t<telefone>" + usuario.getTelefone() + "</telefone>\n"
+                    + "\t<rua>" + usuario.getrua() + "</rua>\n"
+                    + "\t<cidade>" + usuario.getCidade() + "</cidade>\n"
+                    + "\t<estado>" + usuario.getEstado() + "</estado>\n"
+                    + "\t<cep>" + usuario.getCep() + "</cep>\n"
+                    + "</usuario>\n");
         }
         returnValue.append("</usuarios>");
         response.header("Content-Type", "application/xml");

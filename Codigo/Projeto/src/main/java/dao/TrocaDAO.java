@@ -13,6 +13,7 @@ import model.Troca;
 //import dao.DAO;
 
 public class TrocaDAO extends DAO {
+
     private Connection conexao;
 
     public static Connection conectar() {
@@ -42,8 +43,7 @@ public class TrocaDAO extends DAO {
     // Inserir nova troca
     public boolean inserir(Troca troca) {
         String sql = "INSERT INTO troca (id_livro_recebido, id_livro_enviado, usuario_ofertante, usuario_contemplado, status) VALUES (? , ?, ?, ?, ?)";
-        try (Connection conexao = this.conectar();
-                PreparedStatement stmt = conexao.prepareStatement(sql)) {
+        try (Connection conexao = this.conectar(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             // Inserir a linha para o livro enviado
             stmt.setInt(1, troca.getIdLivroRecebido());
@@ -65,8 +65,7 @@ public class TrocaDAO extends DAO {
     public boolean atualizarStatus(int idTroca, String novoStatus) {
         String sql = "UPDATE troca SET status = ? WHERE id_troca = ?";
 
-        try (Connection conn = this.conectar();
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = this.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, novoStatus);
             stmt.setInt(2, idTroca);
             stmt.executeUpdate();
@@ -83,8 +82,7 @@ public class TrocaDAO extends DAO {
         String sql = "SELECT * FROM troca WHERE id_troca = ?";
         Troca troca = null;
 
-        try (Connection conexao = this.conectar();
-                PreparedStatement stmt = conexao.prepareStatement(sql)) {
+        try (Connection conexao = this.conectar(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setInt(1, idTroca);
             ResultSet rs = stmt.executeQuery();
 
@@ -109,9 +107,7 @@ public class TrocaDAO extends DAO {
     public List<Troca> listarTodas() {
         List<Troca> lista = new ArrayList<>();
         String sql = "SELECT * FROM troca";
-        try (Connection conexao = this.conectar();
-                Statement stmt = conexao.createStatement();
-                ResultSet rs = stmt.executeQuery(sql)) {
+        try (Connection conexao = this.conectar(); Statement stmt = conexao.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 Troca troca = new Troca(
@@ -134,8 +130,7 @@ public class TrocaDAO extends DAO {
     public boolean remover(int idTroca) {
         String sql = "DELETE FROM troca WHERE id_troca = ?";
 
-        try (Connection conexao = this.conectar();
-                PreparedStatement stmt = conexao.prepareStatement(sql)) {
+        try (Connection conexao = this.conectar(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setInt(1, idTroca);
             stmt.executeUpdate();
             return true;
@@ -149,8 +144,7 @@ public class TrocaDAO extends DAO {
     public List<Troca> listarPorUsuario(int userId) {
         List<Troca> lista = new ArrayList<>();
         String sql = "SELECT * FROM troca WHERE usuario_ofertante = ? OR usuario_contemplado = ?";
-        try (Connection conexao = this.conectar();
-                PreparedStatement stmt = conexao.prepareStatement(sql)) {
+        try (Connection conexao = this.conectar(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setInt(1, userId);
             stmt.setInt(2, userId);

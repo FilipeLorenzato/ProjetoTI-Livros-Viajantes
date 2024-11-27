@@ -1,6 +1,7 @@
 package model;
 
 public class Troca {
+
     private int idTroca;
     private int idLivroEnviado;
     private int idLivroRecebido;

@@ -1,8 +1,7 @@
 package model;
 
-import java.util.Base64;
-
 public class Livro {
+
     private int idLivro;
     private String titulo;
     private String autor;
@@ -38,7 +37,6 @@ public class Livro {
     }
 
     // Getters e Setters
-
     public int getIdLivro() {
         return idLivro;
     }
@@ -97,7 +95,7 @@ public class Livro {
 
     @Override
     public String toString() {
-        return "Livro [idLivro=" + idLivro + ", titulo=" + titulo + ", autor=" + autor +
-                ", genero=" + genero + ", sinopse=" + sinopse + ", imagem=" + imagem + "]";
+        return "Livro [idLivro=" + idLivro + ", titulo=" + titulo + ", autor=" + autor
+                + ", genero=" + genero + ", sinopse=" + sinopse + ", imagem=" + imagem + "]";
     }
 }

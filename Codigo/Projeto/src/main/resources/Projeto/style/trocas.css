@@ -54,6 +54,19 @@ body {
     /* Permite que o overlay use o position absolute */
 }
 
+/* Grupos de Formulário */
+.form-group {
+    margin-bottom: var(--spacing-medium);
+    position: relative;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    color: #ffffff; /* Branco */
+    font-weight: 500;
+    display: block;
+}
+
 .exchangeWrapper{
     width:80%;
     height: 80%;
