@@ -3,21 +3,20 @@ package app;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.List;
+
+import org.mindrot.jbcrypt.BCrypt;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import dao.DAO;
 import dao.LivroDAO;
 import model.Livro;
 import service.LivroService;
-import service.UsuarioService; // Add this import statement
 import service.TrocaService;
+import service.UsuarioService;
 import spark.Spark;
 import static spark.Spark.before;
-import static spark.Spark.delete;
+import static spark.Spark.delete; // Add this import statement
 import static spark.Spark.get;
 import static spark.Spark.options;
 import static spark.Spark.port;
@@ -130,14 +129,19 @@ public class Main {
 
     }
 
-    private static boolean validaUsuario(String email, String senha, Connection conn) {
+ // Método para validar o login
+    public static boolean validaUsuario(String email, String senha, Connection conn) {
         try {
-            String query = "SELECT * FROM usuario WHERE email = ? AND senha = ?";
+            String query = "SELECT senha FROM usuario WHERE email = ?";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setString(1, email);
-            stmt.setString(2, senha);
             ResultSet rs = stmt.executeQuery();
-            return rs.next();
+
+            if (rs.next()) {
+                String senhaCriptografada = rs.getString("senha");
+                return BCrypt.checkpw(senha, senhaCriptografada);
+            }
+            return false;
         } catch (Exception e) {
             e.printStackTrace();
             return false;

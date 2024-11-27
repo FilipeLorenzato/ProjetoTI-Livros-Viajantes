@@ -1,5 +1,7 @@
 package dao;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -156,23 +158,26 @@ public class UsuarioDAO extends DAO {
 	}
 
 	public boolean inserirUsuario(Usuario usuario) {
-		String sql = "INSERT INTO usuario (nome, email, senha, telefone, rua, cidade, estado, cep) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-		try (Connection connection = conectar();
-				PreparedStatement statement = connection.prepareStatement(sql)) {
+    String sql = "INSERT INTO usuario (nome, email, senha, telefone, rua, cidade, estado, cep) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    try (Connection connection = conectar();
+         PreparedStatement statement = connection.prepareStatement(sql)) {
 
-			statement.setString(1, usuario.getNome());
-			statement.setString(2, usuario.getEmail());
-			statement.setString(3, usuario.getSenha());
-			statement.setString(4, usuario.getTelefone());
-			statement.setString(5, usuario.getrua());
-			statement.setString(6, usuario.getCidade());
-			statement.setString(7, usuario.getEstado());
-			statement.setString(8, usuario.getCep());
+        // Criptografar a senha antes de salvar
+        String senhaCriptografada = BCrypt.hashpw(usuario.getSenha(), BCrypt.gensalt());
 
-			int rowsAffected = statement.executeUpdate();
-			return rowsAffected > 0;
-		} catch (SQLException e) {
-			System.out.println("Erro ao inserir usuário: " + e.getMessage());
+        statement.setString(1, usuario.getNome());
+        statement.setString(2, usuario.getEmail());
+        statement.setString(3, senhaCriptografada); // Senha criptografada
+        statement.setString(4, usuario.getTelefone());
+        statement.setString(5, usuario.getrua());
+        statement.setString(6, usuario.getCidade());
+        statement.setString(7, usuario.getEstado());
+        statement.setString(8, usuario.getCep());
+
+        int rowsAffected = statement.executeUpdate();
+        return rowsAffected > 0;
+    } catch (SQLException e) {
+        System.out.println("Erro ao inserir usuário: " + e.getMessage());
 			return false;
 		}
 	}
