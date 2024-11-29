@@ -39,6 +39,10 @@ public class LivroDAO extends DAO {
         return conn;
     }
 
+    private static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres";
+    private static final String USER = "ti2cc";
+    private static final String PASS = "ti@cc";
+
     /**
      * Insere um novo livro no banco de dados.
      */
@@ -99,13 +103,67 @@ public class LivroDAO extends DAO {
         return livro;
     }
 
-    public Livro buscarPorTitulo(String titulo) {
-        String sql = "SELECT * FROM livros WHERE titulo = ?";
-        try (Connection conn = this.conectarLivro(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, titulo);
-            ResultSet rs = stmt.executeQuery();
+    // Método para salvar o livro com a imagem base64
+    public static void salvarLivroComImagem(String titulo, String autor, String genero, String sinopse, String imagemBase64, int idUsuario) {
+        String sql = "INSERT INTO livro (titulo, autor, genero, sinopse, imagem, id_usuario) VALUES (?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, titulo);
+            pstmt.setString(2, autor);
+            pstmt.setString(3, genero);
+            pstmt.setString(4, sinopse);
+            pstmt.setString(5, imagemBase64);  // Armazenar a base64 da imagem
+            pstmt.setInt(6, idUsuario);
+
+            pstmt.executeUpdate();
+            System.out.println("Livro salvo com sucesso!");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Método para buscar o livro com a imagem base64
+    public static boolean buscarLivroPorImagem(String imagemBase64) {
+        String sql = "SELECT * FROM livro WHERE imagem = ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, imagemBase64); // Comparar a base64 da imagem
+
+            ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return new Livro(
+                // Livro encontrado
+                System.out.println("Livro encontrado: " + rs.getString("titulo"));
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false; // Livro não encontrado
+    }
+
+    // Método para buscar livros por título
+    public Livro buscarPorTitulo(String titulo) {
+        Livro livro = null;
+        String sql = "SELECT * FROM public.livro WHERE titulo = ?"; // Busca exata
+
+        try (Connection conn = this.conectarLivro(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            // Normalizar o título antes de buscar: remover espaços extras, converter para minúsculas
+            titulo = titulo.replaceAll("\\s+", " ").trim();  // Remove espaços extras
+            titulo = titulo.toLowerCase(); // Converte para minúsculas
+            System.out.println("Título enviado para a consulta (após normalização): '" + titulo + "'");
+
+            // Buscar no banco com correspondência exata
+            stmt.setString(1, titulo);  // Passa o título normalizado
+
+            // Executa a consulta
+            ResultSet rs = stmt.executeQuery();
+
+            // Verifica se encontrou o livro
+            if (rs.next()) {
+                livro = new Livro(
                         rs.getInt("id_livro"),
                         rs.getString("titulo"),
                         rs.getString("autor"),
@@ -114,11 +172,15 @@ public class LivroDAO extends DAO {
                         rs.getString("imagem"),
                         rs.getInt("id_usuario")
                 );
+                System.out.println("Livro encontrado: " + livro.getTitulo());
+            } else {
+                System.out.println("Livro não encontrado com o título exato: " + titulo);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Erro ao buscar livro por título: " + e.getMessage());
         }
-        return null;
+
+        return livro;
     }
 
     /**
@@ -145,7 +207,7 @@ public class LivroDAO extends DAO {
                 livros.add(livro);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erro ao buscar livros por ID de usuário: " + e.getMessage());
         }
 
         return livros;
@@ -175,7 +237,7 @@ public class LivroDAO extends DAO {
                 livrosEmAlta.add(livro);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erro ao buscar livros em alta: " + e.getMessage());
         }
 
         return livrosEmAlta;
@@ -255,7 +317,7 @@ public class LivroDAO extends DAO {
     // Método para buscar todos os livros no banco de dados
     public List<Livro> buscarTodos() {
         List<Livro> livros = new ArrayList<>(); // Lista para armazenar os livros
-        String sql = "SELECT * FROM livros"; // Consulta SQL para buscar todos os livros
+        String sql = "SELECT * FROM livro"; // Consulta SQL para buscar todos os livros
 
         try (Connection conn = this.conectarLivro(); PreparedStatement statement = conn.prepareStatement(sql); ResultSet resultSet = statement.executeQuery()) { // Executa a consulta
 
@@ -271,7 +333,7 @@ public class LivroDAO extends DAO {
                 livros.add(livro); // Adiciona o livro à lista
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // Exibe erro, se houver
+            System.err.println("Erro ao buscar livros: " + e.getMessage()); // Exibe erro, se houver
             throw new RuntimeException("Erro ao buscar livros: " + e.getMessage());
         }
 
@@ -293,6 +355,26 @@ public class LivroDAO extends DAO {
             System.err.println("Erro ao atualizar id_usuario do livro: " + e.getMessage());
             return false;
         }
+    }
+
+    // Método público para verificar se a imagem está no banco de dados
+    public boolean isImageInDatabase(String imageName) {
+        String sql = "SELECT COUNT(*) FROM livro WHERE imagem = ?";
+
+        try (Connection conn = conectarLivro(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, imageName.trim());  // Remover espaços extras
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt(1);  // Obtém o valor de COUNT(*)
+                    System.out.println("Contagem de imagens encontradas: " + count);  // Para debug
+                    return count > 0;  // Retorna verdadeiro se a imagem existir
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;  // Caso contrário, retorna falso
     }
 }
 

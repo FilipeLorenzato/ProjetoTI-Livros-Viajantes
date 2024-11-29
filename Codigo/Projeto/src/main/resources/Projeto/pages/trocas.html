@@ -17,6 +17,7 @@
 </head>
 
 <body>
+    <div class="userInformations"></div>
 
     <custom-header style="width: 90%"></custom-header>
     <div class="exchangeWrapper">
@@ -26,9 +27,11 @@
             <div class="input-icon">
                 <i class="fas fa-upload icon"></i>
                 <input type="file" id="book-image" name="book-image" accept="image/*">
+                <button id="analyzeImageButton">Analisar Imagem</button>
+                <div id="imageAnalysisResult"></div>
+                <div id="checkImageForm"></div>
+                <img src="data:image/;base64,{{imagemBase64}}" /> <!--AQUI? -->
             </div>
-            <button id="analyzeImageButton">Analisar Imagem</button>
-            <div id="imageAnalysisResult"></div>
         </div>
         <h2>Escolha os livros e faça a troca!</h2>
         <div class="exchangeContainer">

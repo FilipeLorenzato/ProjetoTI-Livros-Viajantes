@@ -8,11 +8,25 @@
     <version>1.0-SNAPSHOT</version>
 
     <repositories>
-        <!--Repositório do Azure SDK--> 
+
+        <!-- Repositório do Maven Central, já incluído por padrão, mas pode ser especificado -->
+        <repository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+
+        <!-- Remover o repositório Azure SDK se não for necessário -->
+        <!--
         <repository>
             <id>azure-sdk</id>
             <url>https://pkgs.dev.azure.com/azure-sdk/public/_packaging/azure-sdk-for-java/maven/v1</url>
         </repository>
+        -->
+        <repository>
+            <id>azure-sdk-repo</id>
+            <url>https://maven.pkg.github.com/Azure/azure-sdk-for-java</url>
+        </repository>
+      
     </repositories>
 
     <dependencies>
@@ -27,8 +41,9 @@
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity-engine-core</artifactId>
-            <version>2.3</version>
+            <version>2.4.1</version>
         </dependency>
+
         <dependency>
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-template-velocity</artifactId>
@@ -46,7 +61,7 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.8.9</version>
+            <version>2.11.0</version>
         </dependency>
 
         <!-- PostgreSQL Connector -->
@@ -64,11 +79,50 @@
         </dependency>
 
         <!-- Azure AI Vision -->
-        <!-- https://mvnrepository.com/artifact/com.azure/azure-ai-vision-imageanalysis -->
         <dependency>
             <groupId>com.azure</groupId>
             <artifactId>azure-ai-vision-imageanalysis</artifactId>
             <version>1.0.0-beta.2</version>
+        </dependency>
+
+        <!--<dependency>
+            <groupId>com.microsoft.azure.cognitiveservices</groupId>
+            <artifactId>azure-cognitiveservices-spellcheck</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.azure.cognitiveservices</groupId>
+            <artifactId>azure-cognitiveservices-textanalytics</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.azure.resourcemanager</groupId>
+            <artifactId>azure-resourcemanager-cognitiveservices</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+        <dependency> 
+            <groupId>com.azure</groupId>
+            <artifactId>azure-ai-vision</artifactId>
+            <version>1.0.0-beta.7</version>  Versão mais recente disponível 
+        </dependency>  
+      
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-ai-vision</artifactId>
+            <version>5.6.0</version>  Or the latest stable version 
+        </dependency>-->
+
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-identity</artifactId>
+            <version>1.13.3</version>
+        </dependency>
+        <!--Trasnforma o json -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Azure Core -->
@@ -77,12 +131,6 @@
             <artifactId>azure-core</artifactId>
             <version>1.44.0</version>
         </dependency>
-
-        <!--<dependency>
-            <groupId>com.azure</groupId>
-            <artifactId>azure-core-http-netty</artifactId>
-            <version>1.12.0</version>
-        </dependency>-->
 
         <!-- BCrypt para senhas -->
         <dependency>
@@ -97,14 +145,16 @@
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.36</version>
         </dependency>
+
+        <!-- Add your existing dependencies here -->
+
+        
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-storage-blob</artifactId>
+            <version>12.29.0</version>
+        </dependency>
     </dependencies>
-
-    <dependency>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-servlets</artifactId>
-        <version>11.0.15</version>
-    </dependency>
-
 
     <build>
         <plugins>

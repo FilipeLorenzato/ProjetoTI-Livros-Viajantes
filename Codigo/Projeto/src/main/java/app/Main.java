@@ -1,34 +1,30 @@
 package app;
 
-import java.io.File;
-import java.nio.file.Files;
+import java.io.InputStream;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.Part;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-import com.google.gson.Gson;
-
 import dao.DAO;
 import dao.LivroDAO;
-import model.Livro;
-import service.ImageAnalysisService;
 import service.LivroService;
 import service.TrocaService;
 import service.UsuarioService;
-import spark.Spark;
-import static spark.Spark.before;
+import static spark.Spark.after;
 import static spark.Spark.delete;
 import static spark.Spark.get;
 import static spark.Spark.options;
 import static spark.Spark.port;
 import static spark.Spark.post;
 import static spark.Spark.put;
+import static spark.Spark.staticFiles;
 
 public class Main {
 
@@ -43,10 +39,17 @@ public class Main {
         // Initialize the connection
         connDAO = DAO.conectar();
         port(4567);
-        // staticFiles.location("../Projeto");
-        Spark.staticFiles.location("/public");
+// Static files location
+        staticFiles.location("/public");
 
-        // Configurar CORS
+// Habilitar CORS
+        after((req, res) -> {
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+            res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
+        });
+
+// Configurar CORS para OPTIONS (preflight request)
         options("/*", (request, response) -> {
             String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
             if (accessControlRequestHeaders != null) {
@@ -58,10 +61,41 @@ public class Main {
                 response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
             }
 
-            return "OK";
+            return "OK"; // Necessário para a resposta OPTIONS
+        });
+        // ----------------- Rotas de Livros -----------------//
+        post("/analyze-image", (req, res) -> {
+            // Configuração do Multipart
+            req.raw().setAttribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/tmp"));
+
+            // Obtém o arquivo enviado
+            Part filePart = req.raw().getPart("image");
+
+            if (filePart == null) {
+                res.status(400);
+                return "{\"status\": \"error\", \"message\": \"Nenhum arquivo recebido.\"}";
+            }
+
+            // Nome do arquivo
+            String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+            System.out.println("Arquivo recebido: " + fileName); // Verifique o nome do arquivo
+
+            // Instancia o LivroDAO
+            LivroDAO livroDAO = new LivroDAO();
+
+            // Verifica se a imagem já está no banco
+            boolean imageExists = livroDAO.isImageInDatabase(fileName);
+
+            if (imageExists) {
+                res.status(400);
+                return "{\"status\": \"error\", \"message\": \"Imagem já existe no banco de dados.\"}";
+            } else {
+                return "{\"status\": \"success\", \"message\": \"Imagem não encontrada. Pode ser cadastrada.\"}";
+            }
         });
 
-        before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
+        // Teste simples de rota para ver se o servidor está funcionando
+        get("/test", (req, res) -> "Servidor funcionando");
 
         // ----------------- Rotas de Usuário -----------------
         // Criar novo usuário (Cadastro)
@@ -85,8 +119,6 @@ public class Main {
 
         // ----------------- Rotas de Livros -----------------
         post("/cadastrar-livro", (req, res) -> {
-            String body = req.body();
-            Livro livro = new Gson().fromJson(body, Livro.class);
             // Salvar livro no banco de dados
             livroService.cadastrarLivro(req, res);
             res.status(201); // Código de sucesso
@@ -135,38 +167,21 @@ public class Main {
             request.attribute("org.eclipse.jetty.multipartConfig",
                     new MultipartConfigElement("/tmp"));
         });*/
-        // IA
-        post("/analyze-image", (request, response) -> {
-            // Diretório temporário dinâmico
-            String tempDir = System.getProperty("java.io.tmpdir") + "/uploads";
-            File dir = new File(tempDir);
-            if (!dir.exists()) {
-                dir.mkdirs(); // Cria o diretório se não existir
-            }
-
-            // Configuração do multipart
-            request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement(tempDir));
-
-            // Processa o arquivo
-            Part filePart = request.raw().getPart("file");
-            String filePath = tempDir + "/" + filePart.getSubmittedFileName();
-            Files.copy(filePart.getInputStream(), Paths.get(filePath));
-
-            try {
-                // Seu serviço de análise
-                String result = ImageAnalysisService.searchAndVerifyBook(filePath);
-                response.status(200);
-                return result;
-            } catch (Exception e) {
-                response.status(500);
-                return "Erro ao processar a imagem: " + e.getMessage();
-            } finally {
-                // Remove arquivo temporário
-                Files.deleteIfExists(Paths.get(filePath));
-            }
-        });
     }
+
     // Método para validar o login
+    // Método para extrair texto de imagem
+    private static String extrairTextoDeImagem(byte[] fileBytes) {
+        // Implementação fictícia para extrair texto de imagem
+        // Substitua esta lógica pela implementação real
+        return "Texto extraído da imagem";
+    }
+
+    // Método para converter InputStream para String
+    private static String convertStreamToString(InputStream is) {
+        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
+    }
 
     public static boolean validaUsuario(String email, String senha, Connection conn) {
         try {
@@ -180,8 +195,8 @@ public class Main {
                 return BCrypt.checkpw(senha, senhaCriptografada);
             }
             return false;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException | IllegalArgumentException e) {
+            System.err.println("Error: " + e.getMessage());
             return false;
         }
     }

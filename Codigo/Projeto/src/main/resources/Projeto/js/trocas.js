@@ -262,43 +262,42 @@ function renderTrocaHistory(trocaHistory) {
   historyContainer.appendChild(table);
 }
 
-// IA
-document.getElementById("analyzeImageButton").addEventListener("click", async function () {
+
+// Lida com a análise de imagem
+document.getElementById("analyzeImageButton").addEventListener("click", function () {
   const fileInput = document.getElementById("book-image");
   const resultDiv = document.getElementById("imageAnalysisResult");
 
   if (!fileInput.files || fileInput.files.length === 0) {
-      alert("Por favor, selecione uma imagem para analisar.");
-      return;
+    alert("Por favor, selecione uma imagem para analisar.");
+    return;
   }
 
   const file = fileInput.files[0];
 
-  // Crie um FormData para enviar a imagem
   const formData = new FormData();
-  formData.append("file", file);
+  formData.append("image", file); // 'image' é o nome do campo do arquivo
 
-  try {
-      const response = await fetch("http://localhost:4567/analyze-image", {
-          method: "POST",
-          body: formData,
-      });
-
-      if (response.ok) {
-          const data = await response.text();
-          resultDiv.innerText = data;
-
-          if (data.includes("Livro encontrado:")) {
-              alert("Livro identificado e disponível para troca!");
-          } else {
-              alert("O livro não foi encontrado no banco de dados.");
-          }
-      } else {
-          console.error("Erro ao analisar a imagem:", response.status, response.statusText);
-          resultDiv.innerText = "Erro ao processar a imagem.";
-      }
-  } catch (error) {
-      console.error("Erro na requisição:", error);
-      resultDiv.innerText = "Erro ao processar a imagem.";
+  if (resultDiv) {
+    resultDiv.innerText = "Processando a imagem...";
   }
+
+  fetch("http://localhost:4567/analyze-image", {
+    method: "POST",
+    body: formData,
+  })
+    .then(response => response.json())  // Agora estamos esperando um JSON
+    .then(data => {
+      if (data.status === "error") {
+        resultDiv.innerText = "Erro: " + data.message;
+      } else {
+        resultDiv.innerText = "Resultado: " + data.message;
+      }
+    })
+    .catch(error => {
+      console.error("Erro na requisição:", error);
+      if (resultDiv) {
+        resultDiv.innerText = "Erro ao processar a imagem. Por favor, tente novamente.";
+      }
+    });
 });

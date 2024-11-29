@@ -9,6 +9,7 @@ public class Livro {
     private String sinopse;
     private String imagem; // Adiciona um atributo para a imagem
     private Integer id_usuario;
+    private String imagemBase64; // Add this field
 
     // Construtor vazio
     public Livro() {
@@ -37,6 +38,18 @@ public class Livro {
     }
 
     // Getters e Setters
+    public String getImagemBase64() {
+
+        return imagemBase64;
+
+    }
+
+    public void setImagemBase64(String imagemBase64) {
+
+        this.imagemBase64 = imagemBase64;
+
+    }
+
     public int getIdLivro() {
         return idLivro;
     }

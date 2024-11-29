@@ -2,10 +2,6 @@ package service;
 
 import java.util.List;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,6 +11,7 @@ import spark.Request;
 import spark.Response;
 
 public class LivroService {
+
     private LivroDAO livroDAO;
 
     public LivroService() {
@@ -76,6 +73,26 @@ public class LivroService {
         } catch (Exception e) {
             response.status(500); // Internal Server Error
             return "Erro ao processar a solicitação.";
+        }
+    }
+    
+
+    // Método que chama o DAO para buscar livro pelo título
+    public String buscarLivroPorTitulo(String titulo) {
+        // Normaliza o título recebido (caso necessário)
+        titulo = titulo.replaceAll("[\\s]+", " ").trim();  // Remove espaços extras, mas mantém espaços entre palavras
+        titulo = titulo.toLowerCase();  // Converte para minúsculas
+
+        System.out.println("Título enviado para a consulta: '" + titulo + "'");
+
+        // Chama o método do DAO para buscar o livro
+        Livro livro = livroDAO.buscarPorTitulo(titulo);
+
+        // Verifica se o livro foi encontrado e retorna o resultado adequado
+        if (livro != null) {
+            return "Livro encontrado: " + livro.getTitulo() + " - Autor: " + livro.getAutor();
+        } else {
+            return "Livro não encontrado no banco de dados.";
         }
     }
 
