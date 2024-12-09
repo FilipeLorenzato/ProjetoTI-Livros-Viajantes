@@ -20,8 +20,8 @@ import java.sql.SQLException;
 public class ImageAnalysisService {
 
     public static String searchAndVerifyBook(String base64Image) {
-        String endpoint = "https://ti2computacao.cognitiveservices.azure.com/";
-        String key = "A175xc6P52VJUqlUj6NRM1H7SxON2rVGU7KNMrxkwbcFda22VnUjJQQJ99AKACYeBjFXJ3w3AAAFACOGh8oq";
+        String endpoint = "Seu Endpoint";
+        String key = "Sua Chave";
 
         try {
             // Verificar e logar a string Base64 recebida
